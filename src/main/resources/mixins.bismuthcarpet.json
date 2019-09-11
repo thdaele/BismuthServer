@@ -14,6 +14,7 @@
     "PlayerInteractionManager_cactusMixin",
     "PlayerInteractionManagerMixin",
     "PlayerListMixin",
+    "ContainerMixin",
 
     "ISPacketPlayerListHeaderFooterMixin"
   ]
