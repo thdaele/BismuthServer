@@ -2,6 +2,7 @@ package carpet.bismuth.mixins;
 
 import carpet.bismuth.commands.CommandCarpet;
 import carpet.bismuth.commands.CommandLog;
+import carpet.bismuth.commands.CommandPlayer;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandListener;
 import net.minecraft.command.ServerCommandManager;
@@ -19,5 +20,6 @@ public abstract class ServerCommandManagerMixin extends CommandHandler implement
     {
         this.registerCommand(new CommandCarpet());
         this.registerCommand(new CommandLog());
+        this.registerCommand(new CommandPlayer());
     }
 }

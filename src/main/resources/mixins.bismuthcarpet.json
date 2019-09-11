@@ -13,6 +13,7 @@
     "EnumFacingMixin",
     "PlayerInteractionManager_cactusMixin",
     "PlayerInteractionManagerMixin",
+    "PlayerListMixin",
 
     "ISPacketPlayerListHeaderFooterMixin"
   ]

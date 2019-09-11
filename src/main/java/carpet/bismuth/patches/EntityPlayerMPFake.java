@@ -5,12 +5,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.EnumPacketDirection;
 import net.minecraft.network.play.server.SPacketEntityHeadLook;
 import net.minecraft.network.play.server.SPacketEntityTeleport;
-import net.minecraft.network.play.server.SPacketPlayerListItem;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerInteractionManager;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
 
@@ -57,31 +55,7 @@ public class EntityPlayerMPFake extends EntityPlayerMP
         instance.dataManager.set(PLAYER_MODEL_FLAG, (byte) 0x7f); // show all model layers (incl. capes)
         return instance;
     }
-
-    public static EntityPlayerMPFake createShadow(MinecraftServer server, EntityPlayerMP player)
-    {
-        player.getServer().getPlayerList().playerLoggedOut(player);
-        player.connection.disconnect(new TextComponentTranslation("multiplayer.disconnect.duplicate_login"));
-        WorldServer worldIn = server.getWorld(player.dimension);
-        PlayerInteractionManager interactionManagerIn = new PlayerInteractionManager(worldIn);
-        GameProfile gameprofile = player.getGameProfile();
-        gameprofile = fixSkin(gameprofile);
-        EntityPlayerMPFake playerShadow = new EntityPlayerMPFake(server, worldIn, gameprofile, interactionManagerIn);
-        playerShadow.setSetPosition(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
-        server.getPlayerList().initializeConnectionToPlayer(new NetworkManagerFake(EnumPacketDirection.CLIENTBOUND), playerShadow);
-
-        playerShadow.setHealth(player.getHealth());
-        playerShadow.connection.setPlayerLocation(player.posX, player.posY,player.posZ, player.rotationYaw, player.rotationPitch);
-        interactionManagerIn.setGameType(player.interactionManager.getGameType());
-        playerShadow.actionPack.copyFrom(player.actionPack);
-        playerShadow.stepHeight = 0.6F;
-
-        server.getPlayerList().sendPacketToAllPlayersInDimension(new SPacketEntityHeadLook(playerShadow, (byte)(player.rotationYawHead * 256 / 360) ),playerShadow.dimension);
-        server.getPlayerList().sendPacketToAllPlayers(new SPacketPlayerListItem(SPacketPlayerListItem.Action.ADD_PLAYER, playerShadow));
-        server.getPlayerList().serverUpdateMovingPlayer(playerShadow);
-        return playerShadow;
-    }
-
+    
     private EntityPlayerMPFake(MinecraftServer server, WorldServer worldIn, GameProfile profile, PlayerInteractionManager interactionManagerIn)
     {
         super(server, worldIn, profile, interactionManagerIn);
@@ -90,7 +64,7 @@ public class EntityPlayerMPFake extends EntityPlayerMP
     private static GameProfile fixSkin(GameProfile gameProfile)
     {
         if (!gameProfile.getProperties().containsKey("texture"))
-            return TileEntitySkull.updateGameprofile(gameProfile);
+            return TileEntitySkull.updateGameProfile(gameProfile);
         else
             return gameProfile;
     }
