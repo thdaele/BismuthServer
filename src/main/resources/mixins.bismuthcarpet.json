@@ -1,0 +1,19 @@
+{
+  "package": "carpet.bismuth.mixins",
+  "refmap": "mixins.bismuthcarpet.refmap.json",
+  "minVersion": "0.7.3",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MinecraftServer_coreMixin",
+    "PlayerList_coreMixin",
+    "ServerCommandManagerMixin",
+
+    "BlockHopperMixin",
+    "EntityMixin",
+    "EnumFacingMixin",
+    "PlayerInteractionManager_cactusMixin",
+    "PlayerInteractionManagerMixin",
+
+    "ISPacketPlayerListHeaderFooterMixin"
+  ]
+}
