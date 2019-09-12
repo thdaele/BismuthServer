@@ -61,6 +61,10 @@ public class CarpetSettings
     @Rule(desc = "Players go invisible after using portals.", category = FIX)
     public static boolean portalTurningPlayersInvisibleFix;
     
+    @Rule(desc = "Chunk saving issues that causes entites and blocks to duplicate or disappear", category = FIX, extra = "By Theosib")
+    @BugFixDefault
+    public static boolean entityDuplicationFix = false;
+    
     
     
     

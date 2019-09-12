@@ -18,6 +18,7 @@
     "BiomeSpawnListEntryMixin",
     "WorldEntitySpawnerMixin",
     "TileEntityPistonMixin",
+    "AnvilChunkLoaderMixin",
 
     "ISPacketPlayerListHeaderFooterMixin",
     "WorldServerMixin"
