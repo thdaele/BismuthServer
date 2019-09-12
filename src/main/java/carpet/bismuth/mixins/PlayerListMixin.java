@@ -1,7 +1,10 @@
 package carpet.bismuth.mixins;
 
+import carpet.bismuth.CarpetSettings;
+import carpet.bismuth.interfaces.IWorldServer;
 import carpet.bismuth.patches.EntityPlayerMPFake;
 import carpet.bismuth.patches.NetHandlerPlayServerFake;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
@@ -9,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.WorldServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -63,6 +67,22 @@ public abstract class PlayerListMixin
         else
         {
             mycopy.connection.disconnect(new TextComponentTranslation("multiplayer.disconnect.duplicate_login", new Object[0]));
+        }
+    }
+    
+    @Inject(
+            method = "transferEntityToWorld",
+            at = @At(value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 0,
+                    target = "Lnet/minecraft/profiler/Profiler;endSection()V")
+    )
+    private void onTransferEntityToWorld(Entity entityIn, int lastDimension, WorldServer oldWorldIn, WorldServer toWorldIn, CallbackInfo ci)
+    {
+        if (CarpetSettings.portalTurningPlayersInvisibleFix && entityIn.addedToChunk && ((IWorldServer)oldWorldIn).isChunkLoadedC(entityIn.chunkCoordX, entityIn.chunkCoordZ, true))
+        {
+            if (entityIn.addedToChunk && ((IWorldServer) oldWorldIn).isChunkLoadedC(entityIn.chunkCoordX, entityIn.chunkCoordZ, true))
+            {
+                oldWorldIn.getChunk(entityIn.chunkCoordX, entityIn.chunkCoordZ).removeEntityAtIndex(entityIn, entityIn.chunkCoordY);
+            }
         }
     }
 }

@@ -58,6 +58,10 @@ public class CarpetSettings
     @BugFixDefault
     public static boolean pistonGhostBlocksFix = false;
     
+    @Rule(desc = "Players go invisible after using portals.", category = FIX)
+    public static boolean portalTurningPlayersInvisibleFix;
+    
+    
     
     
     
