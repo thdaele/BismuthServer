@@ -19,6 +19,8 @@
     "WorldEntitySpawnerMixin",
     "TileEntityPistonMixin",
     "AnvilChunkLoaderMixin",
+    "ChunkMixin",
+    "BlockPistonBaseMixin",
 
     "ISPacketPlayerListHeaderFooterMixin",
     "WorldServerMixin"

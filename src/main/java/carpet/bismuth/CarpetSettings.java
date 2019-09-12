@@ -64,8 +64,9 @@ public class CarpetSettings
     @Rule(desc = "Chunk saving issues that causes entites and blocks to duplicate or disappear", category = FIX, extra = "By Theosib")
     @BugFixDefault
     public static boolean entityDuplicationFix = false;
-    
-    
+
+    @Rule(desc = "Movable tile entities.", category = FEATURE)
+    public static boolean movableTileEntities = false;
     
     
     
