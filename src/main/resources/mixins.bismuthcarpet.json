@@ -17,6 +17,7 @@
     "ContainerMixin",
     "BiomeSpawnListEntryMixin",
     "WorldEntitySpawnerMixin",
+    "TileEntityPistonMixin",
 
     "ISPacketPlayerListHeaderFooterMixin"
   ]

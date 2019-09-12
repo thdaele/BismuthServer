@@ -52,6 +52,12 @@ public class CarpetSettings
     @SurvivalDefault
     public static boolean ctrlQCraftingFix = false;
     
+    @Rule(desc = "Fix for piston ghost blocks", category = FIX, extra = {
+            "Does not work properly on vanilla clients with non-vanilla push limits"
+    })
+    @BugFixDefault
+    public static boolean pistonGhostBlocksFix = false;
+    
     
     
     
