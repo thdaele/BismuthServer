@@ -1,12 +1,13 @@
 package carpet.bismuth.utils;
 
 import carpet.bismuth.logging.LoggerRegistry;
-import carpet.bismuth.logging.logHelpers.PacketCounter;
 import carpet.bismuth.mixins.ISPacketPlayerListHeaderFooterMixin;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketPlayerListHeaderFooter;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -48,9 +49,9 @@ public class HUDController
         
         if (LoggerRegistry.__tps)
             log_tps(server);
-        
-        if (LoggerRegistry.__packets)
-            LoggerRegistry.getLogger("packets").log(() -> packetCounter(), "TOTAL_IN", PacketCounter.totalIn, "TOTAL_OUT", PacketCounter.totalOut);
+    
+        if (LoggerRegistry.__mobcaps)
+            log_mobcaps();
         
         for (EntityPlayer player : player_huds.keySet())
         {
@@ -70,10 +71,48 @@ public class HUDController
         LoggerRegistry.getLogger("tps").log(() -> message, "MSPT", MSPT, "TPS", TPS);
     }
     
-    private static ITextComponent[] packetCounter()
+    private static void log_mobcaps()
     {
-        ITextComponent[] ret = new ITextComponent[]{Messenger.m(null, "w I/" + PacketCounter.totalIn + " O/" + PacketCounter.totalOut),};
-        PacketCounter.reset();
-        return ret;
+        List<Object> commandParams = new ArrayList<>();
+        for (int dim = -1; dim <= 1; dim++)
+        {
+            for (EnumCreatureType type : EnumCreatureType.values())
+            {
+                Tuple<Integer, Integer> counts = SpawnReporter.mobcaps.get(dim).getOrDefault(type, new Tuple<>(0, 0));
+                int actual = counts.getFirst(), limit = counts.getSecond();
+                Collections.addAll(commandParams, type.name() + "_ACTUAL_DIM_" + dim, actual, type.name() + "_ACTUAL_LIMIT_" + dim, limit);
+            }
+        }
+        LoggerRegistry.getLogger("mobcaps").log((option, player) -> {
+            int dim = player.dimension;
+            switch (option)
+            {
+                case "overworld":
+                    dim = 0;
+                    break;
+                case "nether":
+                    dim = -1;
+                    break;
+                case "end":
+                    dim = 1;
+                    break;
+            }
+            return send_mobcap_display(dim);
+        }, commandParams.toArray());
+    }
+    
+    private static ITextComponent[] send_mobcap_display(int dim)
+    {
+        List<ITextComponent> components = new ArrayList<>();
+        for (EnumCreatureType type : EnumCreatureType.values())
+        {
+            Tuple<Integer, Integer> counts = SpawnReporter.mobcaps.get(dim).getOrDefault(type, new Tuple<>(0, 0));
+            int actual = counts.getFirst();
+            int limit = counts.getSecond();
+            components.add(Messenger.m(null, (actual + limit == 0) ? "g -" : Messenger.heatmap_color(actual, limit) + " " + actual, Messenger.creatureTypeColor(type) + " /" + ((actual + limit == 0) ? "-" : limit)));
+            components.add(Messenger.m(null, "w  "));
+        }
+        components.remove(components.size() - 1);
+        return new ITextComponent[]{Messenger.m(null, components.toArray(new Object[0]))};
     }
 }

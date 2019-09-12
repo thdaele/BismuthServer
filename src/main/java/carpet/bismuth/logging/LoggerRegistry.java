@@ -2,11 +2,9 @@ package carpet.bismuth.logging;
 
 import carpet.bismuth.CarpetSettings;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.server.MinecraftServer;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -18,33 +16,12 @@ public class LoggerRegistry
     // Map from player names to the set of names of the logs that player is subscribed to.
     private static Map<String, Map<String, String>> playerSubscriptions = new HashMap<>();
     //statics to quickly asses if its worth even to call each one
-    public static boolean __tnt;
-    public static boolean __projectiles;
-    public static boolean __fallingBlocks;
-    public static boolean __kills;
     public static boolean __tps;
-    public static boolean __counter;
     public static boolean __mobcaps;
-    public static boolean __damage;
-    public static boolean __packets;
-    public static boolean __weather;
-    public static boolean __tileTickLimit;
-    public static boolean __portalCaching;
     
     public static void initLoggers(MinecraftServer server)
     {
-        registerLogger("tnt", new Logger(server, "tnt", "brief", new String[]{"brief", "full"}, LogHandler.CHAT));
-        registerLogger("projectiles", new Logger(server, "projectiles", "full", new String[]{"brief", "full"}, LogHandler.CHAT));
-        registerLogger("fallingBlocks", new Logger(server, "fallingBlocks", "brief", new String[]{"brief", "full"}, LogHandler.CHAT));
-        registerLogger("kills", new Logger(server, "kills", null, null, LogHandler.CHAT));
-        registerLogger("damage", new Logger(server, "damage", "all", new String[]{"all", "players", "me"}, LogHandler.CHAT));
-        registerLogger("weather", new Logger(server, "weather", null, null, LogHandler.CHAT));
-        registerLogger("tileTickLimit", new Logger(server, "tileTickLimit", null, null, LogHandler.CHAT));
-        registerLogger("portalCaching", new Logger(server, "portalCaching", "brief", new String[]{"brief", "full"}, LogHandler.CHAT));
-        
         registerLogger("tps", new Logger(server, "tps", null, null, LogHandler.HUD));
-        registerLogger("packets", new Logger(server, "packets", null, null, LogHandler.HUD));
-        registerLogger("counter", new Logger(server, "counter", "white", Arrays.stream(EnumDyeColor.values()).map(Object::toString).toArray(String[]::new), LogHandler.HUD));
         registerLogger("mobcaps", new Logger(server, "mobcaps", "dynamic", new String[]{"dynamic", "overworld", "nether", "end"}, LogHandler.HUD));
     }
     
@@ -166,6 +143,4 @@ public class LoggerRegistry
             log.onPlayerDisconnect(player);
         }
     }
-    
-    
 }
