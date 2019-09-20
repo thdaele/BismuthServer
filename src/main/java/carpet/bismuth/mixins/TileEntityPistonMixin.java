@@ -11,10 +11,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityPiston;
+import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -23,6 +25,8 @@ public abstract class TileEntityPistonMixin extends TileEntity implements ITileE
 {
     @Shadow
     private IBlockState pistonState;
+    @Shadow private float lastProgress;
+    @Shadow private float progress;
     private TileEntity carriedTileEntity;
 
     @Inject(
@@ -109,5 +113,18 @@ public abstract class TileEntityPistonMixin extends TileEntity implements ITileE
         if (this.carriedTileEntity != null) {
             compound.setTag("carriedTileEntity", this.carriedTileEntity.writeToNBT(new NBTTagCompound()));
         }
+    }
+
+    @Inject(method = "readFromNBT", at = @At(value = "FIELD", target = "Lnet/minecraft/tileentity/TileEntityPiston;lastProgress:F", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
+    private void readPistonSerialization(NBTTagCompound compound, CallbackInfo ci) {
+        if(compound.hasKey("lastProgress", 5)) {
+            this.lastProgress = this.progress;
+        }
+    }
+
+    @Redirect(method = "writeToNBT", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NBTTagCompound;setFloat(Ljava/lang/String;F)V"))
+    private void writePistonSerialization(NBTTagCompound compound, String key, float value) {
+        compound.setFloat("progress", this.progress);
+        compound.setFloat("lastProgress", this.lastProgress);
     }
 }
