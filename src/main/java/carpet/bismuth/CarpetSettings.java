@@ -4,7 +4,12 @@ import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,68 +17,26 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import static carpet.bismuth.CarpetSettings.RuleCategory.*;
 
 public class CarpetSettings
 {
     public static boolean locked = false;
-    
+
     public static final String carpetVersion = "v1.0.0";
     public static final String minecraftVersion = "1.12";
-    
-    public static final Logger LOG = LogManager.getLogger();
-    
-    @Rule(desc = "Players can flip and rotate blocks when holding cactus", category = {CREATIVE, SURVIVAL}, extra = {
-            "Doesn't cause block updates when rotated/flipped",
-            "Applies to pistons, observers, droppers, repeaters, stairs, glazed terracotta etc..."
-    })
-    @CreativeDefault
-    @SurvivalDefault
-    public static boolean flippinCactus = false;
-    
-    @Rule(
-            desc = "Remove ghost blocks when mining too fast",
-            category = FIX,
-            extra = "Fixed in 1.13"
-    )
-    @SurvivalDefault
-    public static boolean miningGhostBlocksFix = false;
-    
-    @Rule(desc = "Enables /log command to monitor events in the game via chat and overlays", category = COMMANDS)
-    public static boolean commandLog = true;
-    
-    @Rule(desc = "Enables /player command to control/spawn players", category = COMMANDS)
-    public static boolean commandPlayer = true;
-    
-    @Rule(desc = "Dropping entire stacks works also from on the crafting UI result slot", category = {FIX, SURVIVAL})
-    @SurvivalDefault
-    public static boolean ctrlQCraftingFix = false;
-    
-    @Rule(desc = "Fix for piston ghost blocks", category = FIX, extra = {
-            "Does not work properly on vanilla clients with non-vanilla push limits"
-    })
-    @BugFixDefault
-    public static boolean pistonGhostBlocksFix = false;
-    
-    @Rule(desc = "Players go invisible after using portals.", category = FIX)
-    public static boolean portalTurningPlayersInvisibleFix;
-    
-    @Rule(desc = "Chunk saving issues that causes entites and blocks to duplicate or disappear", category = FIX, extra = "By Theosib")
-    @BugFixDefault
-    public static boolean entityDuplicationFix = false;
 
-    @Rule(desc = "Movable tile entities.", category = FEATURE)
-    public static boolean movableTileEntities = false;
-    
-    
-    
-    
-    
+    public static final Logger LOG = LogManager.getLogger();
+
     // ===== API ===== //
-    
+
     /**
      * Any field in this class annotated with this class is interpreted as a carpet rule.
      * The field must be static and have a type of one of:
@@ -92,28 +55,28 @@ public class CarpetSettings
          * The rule name, by default the same as the field name
          */
         String name() default ""; // default same as field name
-        
+
         /**
          * A description of the rule
          */
         String desc();
-        
+
         /**
          * Extra information about the rule
          */
         String[] extra() default {};
-        
+
         /**
          * A list of categories the rule is in
          */
         RuleCategory[] category();
-        
+
         /**
          * Options to select in menu and in carpet client.
          * Inferred for booleans and enums. Otherwise, must be present.
          */
         String[] options() default {};
-        
+
         /**
          * The name of the validator method called when the rule is changed.
          * The validator method must:
@@ -125,49 +88,49 @@ public class CarpetSettings
          */
         String validator() default ""; // default no method
     }
-    
+
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     private static @interface CreativeDefault
     {
         String value() default "true";
     }
-    
+
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     private static @interface SurvivalDefault
     {
         String value() default "true";
     }
-    
+
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     private static @interface BugFixDefault
     {
         String value() default "true";
     }
-    
+
     public static enum RuleCategory
     {
         TNT, FIX, SURVIVAL, CREATIVE, EXPERIMENTAL, OPTIMIZATIONS, FEATURE, COMMANDS
     }
-    
+
     private static boolean validatePositive(int value)
     {
         return value > 0;
     }
-    
+
     private static boolean validateNonNegative(int value)
     {
         return value >= 0;
     }
-    
-    
+
+
     // ===== IMPLEMENTATION ===== //
-    
+
     private static Map<String, Field> rules = new HashMap<>();
     private static Map<String, String> defaults = new HashMap<>();
-    
+
     static
     {
         for (Field field : CarpetSettings.class.getFields())
@@ -176,15 +139,15 @@ public class CarpetSettings
             {
                 Rule rule = field.getAnnotation(Rule.class);
                 String name = rule.name().isEmpty() ? field.getName() : rule.name();
-                
+
                 if (field.getModifiers() != (Modifier.PUBLIC | Modifier.STATIC))
                     throw new AssertionError("Access modifiers of rule field for \"" + name + "\" should be \"public static\"");
-                
+
                 if (field.getType() != boolean.class && field.getType() != int.class && field.getType() != double.class && field.getType() != String.class && !field.getType().isEnum())
                 {
                     throw new AssertionError("Rule \"" + name + "\" has invalid type");
                 }
-                
+
                 Object def;
                 try
                 {
@@ -196,7 +159,7 @@ public class CarpetSettings
                 }
                 if (def == null)
                     throw new AssertionError("Rule \"" + name + "\" has null default value");
-                
+
                 if (field.getType() != boolean.class && !field.getType().isEnum())
                 {
                     boolean containsDefault = false;
@@ -237,7 +200,7 @@ public class CarpetSettings
                         throw new AssertionError("Default value of \"" + def + "\" for rule \"" + name + "\" is not included in its options. This is required for Carpet Client to work.");
                     }
                 }
-                
+
                 String validator = rule.validator();
                 if (!validator.isEmpty())
                 {
@@ -255,18 +218,18 @@ public class CarpetSettings
                         throw new AssertionError("Validator \"" + validator + "\" for rule \"" + name + "\" must be a static method returning a boolean");
                     }
                 }
-                
+
                 rules.put(name.toLowerCase(Locale.ENGLISH), field);
                 defaults.put(name.toLowerCase(Locale.ENGLISH), String.valueOf(def));
             }
         }
     }
-    
+
     public static boolean hasRule(String ruleName)
     {
         return rules.containsKey(ruleName.toLowerCase(Locale.ENGLISH));
     }
-    
+
     public static String get(String ruleName)
     {
         Field field = rules.get(ruleName.toLowerCase(Locale.ENGLISH));
@@ -281,7 +244,7 @@ public class CarpetSettings
             throw new AssertionError(e);
         }
     }
-    
+
     public static String getDescription(String ruleName)
     {
         Field field = rules.get(ruleName.toLowerCase(Locale.ENGLISH));
@@ -289,7 +252,7 @@ public class CarpetSettings
             return "Error";
         return field.getAnnotation(Rule.class).desc();
     }
-    
+
     public static RuleCategory[] getCategories(String ruleName)
     {
         Field field = rules.get(ruleName.toLowerCase(Locale.ENGLISH));
@@ -297,13 +260,13 @@ public class CarpetSettings
             return new RuleCategory[0];
         return field.getAnnotation(Rule.class).category();
     }
-    
+
     public static String getDefault(String ruleName)
     {
         String def = defaults.get(ruleName.toLowerCase(Locale.ENGLISH));
         return def == null ? "false" : locked && ruleName.startsWith("command") ? "false" : def;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static String[] getOptions(String ruleName)
     {
@@ -321,7 +284,7 @@ public class CarpetSettings
             return field.getAnnotation(Rule.class).options();
         }
     }
-    
+
     public static String[] getExtraInfo(String ruleName)
     {
         Field field = rules.get(ruleName.toLowerCase(Locale.ENGLISH));
@@ -329,7 +292,7 @@ public class CarpetSettings
             return new String[0];
         return field.getAnnotation(Rule.class).extra();
     }
-    
+
     public static String getActualName(String ruleName)
     {
         Field field = rules.get(ruleName.toLowerCase(Locale.ENGLISH));
@@ -338,7 +301,7 @@ public class CarpetSettings
         String name = field.getAnnotation(Rule.class).name();
         return name.isEmpty() ? field.getName() : name;
     }
-    
+
     public static boolean isDouble(String ruleName)
     {
         Field field = rules.get(ruleName.toLowerCase(Locale.ENGLISH));
@@ -347,14 +310,14 @@ public class CarpetSettings
         else
             return field.getType() == double.class;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static boolean set(String ruleName, String value)
     {
         Field field = rules.get(ruleName.toLowerCase(Locale.ENGLISH));
         if (field == null)
             return false;
-        
+
         Class<?> fieldType = field.getType();
         Object newValue;
         if (fieldType == boolean.class)
@@ -410,7 +373,7 @@ public class CarpetSettings
         {
             throw new AssertionError("Rule \"" + ruleName + "\" has an invalid type");
         }
-        
+
         String validatorMethod = field.getDeclaredAnnotation(Rule.class).validator();
         if (!validatorMethod.isEmpty())
         {
@@ -425,7 +388,7 @@ public class CarpetSettings
                 throw new AssertionError(e);
             }
         }
-        
+
         try
         {
             field.set(null, newValue);
@@ -434,12 +397,12 @@ public class CarpetSettings
         {
             throw new AssertionError(e);
         }
-        
+
         // CarpetClientRuleChanger.updateCarpetClientsRule(ruleName, value);
-        
+
         return true;
     }
-    
+
     public static String[] findNonDefault()
     {
         List<String> rules = new ArrayList<>();
@@ -449,7 +412,7 @@ public class CarpetSettings
         Collections.sort(rules);
         return rules.toArray(new String[0]);
     }
-    
+
     public static String[] findAll(String filter)
     {
         String actualFilter = filter == null ? null : filter.toLowerCase(Locale.ENGLISH);
@@ -464,13 +427,13 @@ public class CarpetSettings
             return false;
         }).map(CarpetSettings::getActualName).sorted().toArray(String[]::new);
     }
-    
+
     public static void resetToUserDefaults(MinecraftServer server)
     {
         resetToVanilla();
         applySettingsFromConf(server);
     }
-    
+
     public static void resetToVanilla()
     {
         for (String rule : rules.keySet())
@@ -478,7 +441,7 @@ public class CarpetSettings
             set(rule, getDefault(rule));
         }
     }
-    
+
     public static void resetToBugFixes()
     {
         resetToVanilla();
@@ -489,7 +452,7 @@ public class CarpetSettings
             }
         });
     }
-    
+
     public static void resetToCreative()
     {
         resetToBugFixes();
@@ -500,7 +463,7 @@ public class CarpetSettings
             }
         });
     }
-    
+
     public static void resetToSurvival()
     {
         resetToBugFixes();
@@ -511,10 +474,10 @@ public class CarpetSettings
             }
         });
     }
-    
-    
+
+
     // ===== CONFIG ===== //
-    
+
     public static void applySettingsFromConf(MinecraftServer server)
     {
         Map<String, String> conf = readConf(server);
@@ -533,7 +496,7 @@ public class CarpetSettings
         }
         locked = is_locked;
     }
-    
+
     private static Map<String, String> readConf(MinecraftServer server)
     {
         try
@@ -572,9 +535,9 @@ public class CarpetSettings
             e.printStackTrace();
             return new HashMap<String, String>();
         }
-        
+
     }
-    
+
     private static void writeConf(MinecraftServer server, Map<String, String> values)
     {
         if (locked)
@@ -595,7 +558,7 @@ public class CarpetSettings
             LOG.error("[CM]: failed write the carpet.conf");
         }
     }
-    
+
     // stores different defaults in the file
     public static boolean addOrSetPermarule(MinecraftServer server, String setting_name, String string_value)
     {
@@ -610,7 +573,7 @@ public class CarpetSettings
         }
         return false;
     }
-    
+
     // removes overrides of the default values in the file
     public static boolean removePermarule(MinecraftServer server, String setting_name)
     {
@@ -625,7 +588,7 @@ public class CarpetSettings
         }
         return false;
     }
-    
+
     public static String[] findStartupOverrides(MinecraftServer server)
     {
         ArrayList<String> res = new ArrayList<String>();

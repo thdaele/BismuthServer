@@ -1,6 +1,5 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.CarpetSettings;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -79,7 +78,7 @@ public abstract class AnvilChunkLoaderMixin
         NBTTagCompound data = chunksToSave.get(pos);
         if (data != null)
             return data;
-        return (CarpetSettings.entityDuplicationFix) ? chunksInWrite.get(pos) : data;
+        return chunksInWrite.get(pos);
     }
     
     @Inject(method = "loadChunk", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILHARD)
@@ -114,7 +113,7 @@ public abstract class AnvilChunkLoaderMixin
     @Inject(method = "addChunkToPending", at = @At("HEAD"), cancellable = true)
     private void onAddChunkToPending(ChunkPos pos, NBTTagCompound compound, CallbackInfo ci)
     {
-        if (CarpetSettings.entityDuplicationFix || !chunksInWrite.containsKey(pos))
+        if (!chunksInWrite.containsKey(pos))
         {
             queueChunkToRemove(pos, compound);
         }

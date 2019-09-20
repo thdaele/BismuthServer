@@ -1,6 +1,5 @@
 package carpet.bismuth.commands;
 
-import carpet.bismuth.CarpetSettings;
 import carpet.bismuth.patches.EntityPlayerMPFake;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,7 +12,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CommandPlayer extends CommandCarpetBase
 {
@@ -129,10 +132,6 @@ public class CommandPlayer extends CommandCarpetBase
 
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
-        if (!CarpetSettings.commandPlayer)
-        {
-            return Collections.emptyList();
-        }
         if (args.length == 1)
         {
             Set<String> players = new HashSet<>(Arrays.asList(server.getOnlinePlayerNames()));

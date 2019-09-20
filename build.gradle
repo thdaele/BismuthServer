@@ -21,7 +21,7 @@ group = "carpet.bismuth" // http://maven.apache.org/guides/mini/guide-naming-con
 archivesBaseName = "bismuthcarpet"
 
 minecraft {
-	version = "1.12"
+	version = "1.12.2"
 	mappings = "stable_39"
 	runDir = "run"
 	tweakClass = "carpet.bismuth.launch.BismuthCarpetTweaker"

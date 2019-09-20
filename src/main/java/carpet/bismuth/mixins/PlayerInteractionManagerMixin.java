@@ -1,6 +1,5 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.CarpetSettings;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.server.management.PlayerInteractionManager;
@@ -33,9 +32,6 @@ public abstract class PlayerInteractionManagerMixin
     )
     private void notifyUpdate(BlockPos pos, EnumFacing side, CallbackInfo ci)
     {
-        if (CarpetSettings.miningGhostBlocksFix)
-        {
-            this.player.connection.sendPacket(new SPacketBlockChange(world, destroyPos));
-        }
+        this.player.connection.sendPacket(new SPacketBlockChange(world, destroyPos));
     }
 }

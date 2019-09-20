@@ -1,6 +1,5 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.CarpetSettings;
 import carpet.bismuth.utils.ITileEntityPiston;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -16,8 +15,6 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
@@ -32,10 +29,8 @@ public abstract class BlockPistonBaseMixin {
     private static boolean canPushTE(Block block) {
         if (!block.hasTileEntity()) {
             return !true;
-        } else if (CarpetSettings.movableTileEntities) {
-            return !isPushableTileEntityBlock(block);
         } else {
-            return !false;
+            return !isPushableTileEntityBlock(block);
         }
     }
 
@@ -47,27 +42,23 @@ public abstract class BlockPistonBaseMixin {
 
     @Inject(method = "doMove", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Ljava/util/List;size()I", remap = false, ordinal = 4), locals = LocalCapture.CAPTURE_FAILHARD)
     private void doMoveTE(World world, BlockPos p, EnumFacing d, boolean e, CallbackInfoReturnable<Boolean> cir, BlockPistonStructureHelper bpsh, List<BlockPos> list) {
-        if (CarpetSettings.movableTileEntities) {
-            this.tileEntitiesList = Lists.newArrayList();
-            for (final BlockPos blockPos : list) {
-                final TileEntity tileEntity = world.getTileEntity(blockPos);
-                this.tileEntitiesList.add(tileEntity);
-                if (tileEntity != null) {
-                    world.removeTileEntity(blockPos);
-                    tileEntity.markDirty();
-                }
+        this.tileEntitiesList = Lists.newArrayList();
+        for (final BlockPos blockPos : list) {
+            final TileEntity tileEntity = world.getTileEntity(blockPos);
+            this.tileEntitiesList.add(tileEntity);
+            if (tileEntity != null) {
+                world.removeTileEntity(blockPos);
+                tileEntity.markDirty();
             }
         }
     }
 
     @Inject(method = "doMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setTileEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
     private void setTileEntityTE(World world, BlockPos p, EnumFacing d, boolean ex, CallbackInfoReturnable<Boolean> cir, BlockPistonStructureHelper bpsh, List<BlockPos> list, List<IBlockState> lbs, List<BlockPos> lbp, int i, IBlockState[] abs, EnumFacing enumfacing, int l, BlockPos pos) {
-        if (CarpetSettings.movableTileEntities) {
-            // For movableTE
-            final TileEntity e = world.getTileEntity(pos);
-            if (e instanceof TileEntityPiston) {
-                ((ITileEntityPiston) e).setCarriedTileEntity(tileEntitiesList.get(l));
-            }
+        // For movableTE
+        final TileEntity e = world.getTileEntity(pos);
+        if (e instanceof TileEntityPiston) {
+            ((ITileEntityPiston) e).setCarriedTileEntity(tileEntitiesList.get(l));
         }
     }
 }

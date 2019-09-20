@@ -1,7 +1,20 @@
 package carpet.bismuth.helpers;
 
-import carpet.bismuth.CarpetSettings;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.BlockEndRod;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockGlazedTerracotta;
+import net.minecraft.block.BlockHopper;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockObserver;
+import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRedstoneDiode;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +30,7 @@ public class BlockRotator
 {
     public static boolean flipBlockWithCactus(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (!playerIn.capabilities.allowEdit || !CarpetSettings.flippinCactus || !player_holds_cactus_mainhand(playerIn))
+        if (!playerIn.capabilities.allowEdit || !player_holds_cactus_mainhand(playerIn))
         {
             return false;
         }
@@ -127,7 +140,7 @@ public class BlockRotator
     
     public static boolean flippinEligibility(Entity entity)
     {
-        if (CarpetSettings.flippinCactus && (entity instanceof EntityPlayer))
+        if (entity instanceof EntityPlayer)
         {
             EntityPlayer player = (EntityPlayer) entity;
             return (!player.getHeldItemOffhand().isEmpty() && player.getHeldItemOffhand().getItem() instanceof ItemBlock && ((ItemBlock) (player.getHeldItemOffhand().getItem())).getBlock() == Blocks.CACTUS);

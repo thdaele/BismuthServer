@@ -2,7 +2,11 @@
 package carpet.bismuth.utils;
 
 import carpet.bismuth.interfaces.IBiomeSpawnListEntry;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.Tuple;

@@ -1,6 +1,5 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.CarpetSettings;
 import carpet.bismuth.helpers.CtrlQCrafting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
@@ -24,7 +23,7 @@ public abstract class ContainerMixin
     @Inject(method = "slotClick", at = @At("HEAD"), cancellable = true)
     private void onSlotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player, CallbackInfoReturnable<ItemStack> cir)
     {
-        if (clickTypeIn == ClickType.THROW && CarpetSettings.ctrlQCraftingFix && player.inventory.getItemStack().isEmpty() && slotId >= 0)
+        if (clickTypeIn == ClickType.THROW && player.inventory.getItemStack().isEmpty() && slotId >= 0)
         {
             ItemStack itemStack = ItemStack.EMPTY;
             Slot slot = inventorySlots.get(slotId);

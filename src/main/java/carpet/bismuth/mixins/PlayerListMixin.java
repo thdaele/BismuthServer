@@ -1,6 +1,5 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.CarpetSettings;
 import carpet.bismuth.interfaces.IWorldServer;
 import carpet.bismuth.patches.EntityPlayerMPFake;
 import carpet.bismuth.patches.NetHandlerPlayServerFake;
@@ -77,7 +76,8 @@ public abstract class PlayerListMixin
     )
     private void onTransferEntityToWorld(Entity entityIn, int lastDimension, WorldServer oldWorldIn, WorldServer toWorldIn, CallbackInfo ci)
     {
-        if (CarpetSettings.portalTurningPlayersInvisibleFix && entityIn.addedToChunk && ((IWorldServer)oldWorldIn).isChunkLoadedC(entityIn.chunkCoordX, entityIn.chunkCoordZ, true))
+        if (entityIn.addedToChunk && ((IWorldServer)oldWorldIn).
+                isChunkLoadedC(entityIn.chunkCoordX, entityIn.chunkCoordZ, true))
         {
             if (entityIn.addedToChunk && ((IWorldServer) oldWorldIn).isChunkLoadedC(entityIn.chunkCoordX, entityIn.chunkCoordZ, true))
             {
