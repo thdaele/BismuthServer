@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerRecipeBookHelper.class)
-public abstract class ServerRecipeBookHelperMixin {
+abstract class ServerRecipeBookHelperMixin {
 	@Shadow
 	private InventoryCraftResult field_194335_f;
 
@@ -28,15 +28,18 @@ public abstract class ServerRecipeBookHelperMixin {
 
 	private void craftingWindowDupingBugAddedBack(EntityPlayerMP player) {
 		int slot = ((IRecipeBookItemDuper) player).getDupeItem();
-		if (slot == Integer.MIN_VALUE) return;
+		if (slot == Integer.MIN_VALUE) {
+			return;
+		}
+
 		ItemStack dupeItem = player.inventory.getStackInSlot(slot);
-		if (dupeItem.isEmpty()) return;
+		if (dupeItem.isEmpty()) {
+			return;
+		}
 
 		int size = dupeItem.getCount();
-
 		for (int j = 0; j < this.field_194336_g.getSizeInventory(); ++j) {
 			ItemStack itemstack = this.field_194336_g.getStackInSlot(j);
-
 			if (!itemstack.isEmpty()) {
 				size += itemstack.getCount();
 				itemstack.setCount(0);

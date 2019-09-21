@@ -14,35 +14,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(BlockHopper.class)
-public abstract class BlockHopperMixin extends BlockContainer
-{
-    protected BlockHopperMixin(Material materialIn, MapColor color)
-    {
-        super(materialIn, color);
-    }
-    
-    @Redirect(
-            method = "getStateForPlacement",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/util/EnumFacing;getOpposite()Lnet/minecraft/util/EnumFacing;")
-    )
-    private EnumFacing onGetStateForPlacement(
-            EnumFacing enumFacing,
-            World worldIn,
-            BlockPos pos,
-            EnumFacing facing,
-            float hitX,
-            float hitY,
-            float hitZ,
-            int meta,
-            EntityLivingBase placer
-    )
-    {
-        if (BlockRotator.flippinEligibility(placer))
-        {
-            return enumFacing.getOpposite().getOpposite();
-        }
-        return enumFacing.getOpposite();
-    }
-    
+abstract class BlockHopperMixin extends BlockContainer {
+	protected BlockHopperMixin(Material materialIn, MapColor color) {
+		super(materialIn, color);
+	}
+
+	@Redirect(method = "getStateForPlacement", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/EnumFacing;getOpposite()Lnet/minecraft/util/EnumFacing;"))
+	private EnumFacing onGetStateForPlacement(EnumFacing enumFacing, World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		if (BlockRotator.flippinEligibility(placer)) {
+			return enumFacing.getOpposite().getOpposite();
+		}
+
+		return enumFacing.getOpposite();
+	}
 }

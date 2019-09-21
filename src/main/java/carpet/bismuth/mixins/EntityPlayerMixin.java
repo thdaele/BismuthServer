@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(EntityPlayer.class)
-public abstract class EntityPlayerMixin {
+abstract class EntityPlayerMixin {
 	@Redirect(method = "onLivingUpdate", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/EntityPlayer;fallDistance:F", opcode = Opcodes.GETFIELD))
 	private float neverDismountParrots(EntityPlayer entityPlayer) {
 		return 0F;
@@ -15,5 +15,6 @@ public abstract class EntityPlayerMixin {
 
 	@Redirect(method = "attackEntityFrom", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;spawnShoulderEntities()V"))
 	private void neverEverDismountParrots(EntityPlayer entityPlayer) {
+		// noop
 	}
 }

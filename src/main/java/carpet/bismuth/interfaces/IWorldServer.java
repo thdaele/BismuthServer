@@ -1,6 +1,5 @@
 package carpet.bismuth.interfaces;
 
-public interface IWorldServer
-{
-    boolean isChunkLoadedC(int x, int z, boolean allowEmpty);
+public interface IWorldServer {
+	boolean isChunkLoadedC(int x, int z, boolean allowEmpty);
 }

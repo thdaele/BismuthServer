@@ -18,10 +18,9 @@
 		"EntityPlayerMPMixin",
 		"EnumFacingMixin",
 		"IEntityItemMixin",
-		"IItemStackMixin",
 		"InventoryPlayerMixin",
 		"ISPacketPlayerListHeaderFooterMixin",
-		"MinecraftServer_coreMixin",
+		"MinecraftServerMixin",
 		"PlayerInteractionManager_cactusMixin",
 		"PlayerInteractionManagerMixin",
 		"PlayerList_coreMixin",
@@ -30,6 +29,7 @@
 		"ServerRecipeBookHelperMixin",
 		"TileEntityPistonMixin",
 		"WorldEntitySpawnerMixin",
+		"WorldMixin",
 		"WorldServerMixin"
 	]
 }

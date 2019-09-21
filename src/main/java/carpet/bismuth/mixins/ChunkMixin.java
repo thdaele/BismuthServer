@@ -11,11 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Chunk.class)
-public abstract class ChunkMixin {
-    @Shadow @Final private World world;
+abstract class ChunkMixin {
+	@Shadow
+	@Final
+	private World world;
 
-    @Redirect(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getTileEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/Chunk$EnumCreateEntityType;)Lnet/minecraft/tileentity/TileEntity;", ordinal = 1))
-    private TileEntity worldGetTileEntity(Chunk chunk, BlockPos pos, Chunk.EnumCreateEntityType creationMode) {
-        return this.world.getTileEntity(pos);
-    }
+	@Redirect(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getTileEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/chunk/Chunk$EnumCreateEntityType;)Lnet/minecraft/tileentity/TileEntity;", ordinal = 1))
+	private TileEntity worldGetTileEntity(Chunk chunk, BlockPos pos, Chunk.EnumCreateEntityType creationMode) {
+		return this.world.getTileEntity(pos);
+	}
 }

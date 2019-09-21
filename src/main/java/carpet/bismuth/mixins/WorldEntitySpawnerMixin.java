@@ -15,20 +15,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(WorldEntitySpawner.class)
-public abstract class WorldEntitySpawnerMixin
-{
-    @Shadow
-    @Final
-    private static int MOB_COUNT_DIV;
-    
-    @Inject(
-            method = "findChunksForSpawning",
-            at = @At(value = "FIELD", shift = At.Shift.AFTER,
-                    target = "Lnet/minecraft/world/WorldEntitySpawner;MOB_COUNT_DIV:I"),
-            locals = LocalCapture.CAPTURE_FAILHARD)
-    private void getMobcaps(WorldServer worldServerIn, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, CallbackInfoReturnable<Integer> cir, int i, int j4, BlockPos blockpos1, EnumCreatureType var8[], int var9, int var10, EnumCreatureType enumcreaturetype, int k4)
-    {
-        int l4 = enumcreaturetype.getMaxNumberOfCreature() * i / MOB_COUNT_DIV;
-        SpawnReporter.mobcaps.get(worldServerIn.provider.getDimensionType().getId()).put(enumcreaturetype, new Tuple<>(k4, l4));
-    }
+abstract class WorldEntitySpawnerMixin {
+	@Shadow
+	@Final
+	private static int MOB_COUNT_DIV;
+
+	@Inject(method = "findChunksForSpawning", at = @At(value = "FIELD", target = "Lnet/minecraft/world/WorldEntitySpawner;MOB_COUNT_DIV:I", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+	private void getMobcaps(WorldServer worldServerIn, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, CallbackInfoReturnable<Integer> cir, int i, int j4, BlockPos blockpos1, EnumCreatureType[] var8, int var9, int var10, EnumCreatureType enumcreaturetype, int k4) {
+		int l4 = enumcreaturetype.getMaxNumberOfCreature() * i / MOB_COUNT_DIV;
+		SpawnReporter.mobcaps.get(worldServerIn.provider.getDimensionType().getId()).put(enumcreaturetype, new Tuple<>(k4, l4));
+	}
 }

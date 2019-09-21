@@ -25,6 +25,9 @@ public abstract class InventoryPlayerMixin {
 	@Shadow
 	protected abstract int addResource(int p_191973_1_, ItemStack p_191973_2_);
 
+	/**
+	 * @author nessie
+	 */
 	@Overwrite
 	private int storePartialItemStack(ItemStack itemStackIn) {
 		int i = this.storeItemStack(itemStackIn);

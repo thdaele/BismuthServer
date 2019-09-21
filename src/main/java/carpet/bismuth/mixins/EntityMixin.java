@@ -11,16 +11,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin
-{
-    @Shadow public float rotationYaw;
+abstract class EntityMixin {
+	@Shadow
+	public float rotationYaw;
 
-    @Inject(method = "getHorizontalFacing", at = @At("HEAD"), cancellable = true)
-    private void onGetHorizontalFacing(CallbackInfoReturnable<EnumFacing> cir)
-    {
-        if (BlockRotator.flippinEligibility((Entity)(Object)this))
-        {
-            cir.setReturnValue(EnumFacing.byHorizontalIndex(MathHelper.floor((double)(this.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite());
-        }
-    }
+	@Inject(method = "getHorizontalFacing", at = @At("HEAD"), cancellable = true)
+	private void onGetHorizontalFacing(CallbackInfoReturnable<EnumFacing> cir) {
+		if (BlockRotator.flippinEligibility((Entity) (Object) this)) {
+			cir.setReturnValue(EnumFacing.byHorizontalIndex(MathHelper.floor((double) (this.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite());
+		}
+	}
 }

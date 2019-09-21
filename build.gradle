@@ -28,6 +28,9 @@ minecraft {
 	serverJvmArgs.addAll("-Dmixin.debug=true")
 
 	makeObfSourceJar = false
+
+	replaceIn "launch/BismuthCarpet.java"
+	replace "@MCVERSION@", version
 }
 
 reobf {
@@ -44,7 +47,6 @@ mixin {
 }
 
 sourceSets.main.ext.refMap = "mixins.bismuthcarpet.refmap.json"
-
 
 repositories {
 	maven { url = "https://repo.spongepowered.org/maven" }
@@ -91,5 +93,5 @@ tasks.build.dependsOn(shadowJar)
 
 jar.manifest.attributes(
 		"Main-Class": "carpet.bismuth.launch.BismuthCarpet",
-		"Class-Path": "minecraft_server.1.12.jar libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"
+		"Class-Path": "minecraft_server.${minecraft.version}.jar libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"
 )

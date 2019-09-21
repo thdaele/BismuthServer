@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(BlockShulkerBox.class)
-public abstract class BlockShulkerBoxMixin {
+abstract class BlockShulkerBoxMixin {
 	private NBTTagCompound mynbttagcompound1;
 
 	@Inject(method = "breakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NBTTagCompound;setTag(Ljava/lang/String;Lnet/minecraft/nbt/NBTBase;)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
@@ -26,7 +26,7 @@ public abstract class BlockShulkerBoxMixin {
 
 	@Redirect(method = "breakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setTagCompound(Lnet/minecraft/nbt/NBTTagCompound;)V"))
 	private void test(ItemStack itemStack, NBTTagCompound nbt) {
-		if(this.mynbttagcompound1.getSize() > 0) {
+		if (this.mynbttagcompound1.getSize() > 0) {
 			itemStack.setTagCompound(nbt);
 		}
 	}

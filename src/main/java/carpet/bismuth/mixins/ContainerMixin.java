@@ -15,32 +15,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(Container.class)
-public abstract class ContainerMixin
-{
-    @Shadow
-    public List<Slot> inventorySlots;
-    
-    @Inject(method = "slotClick", at = @At("HEAD"), cancellable = true)
-    private void onSlotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player, CallbackInfoReturnable<ItemStack> cir)
-    {
-        if (clickTypeIn == ClickType.THROW && player.inventory.getItemStack().isEmpty() && slotId >= 0)
-        {
-            ItemStack itemStack = ItemStack.EMPTY;
-            Slot slot = inventorySlots.get(slotId);
-            if (slot != null && slot.canTakeStack(player))
-            {
-                if (slotId == 0 && dragType == 1)
-                {
-                    ItemStack itemStackDropAll = CtrlQCrafting.dropAllCrafting(player, slotId, inventorySlots);
-                    while (!itemStackDropAll.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemStackDropAll))
-                    {
-                        itemStack = itemStackDropAll.copy();
-                        itemStackDropAll = CtrlQCrafting.dropAllCrafting(player, slotId, inventorySlots);
-                    }
-                    cir.setReturnValue(itemStack);
-                    cir.cancel();
-                }
-            }
-        }
-    }
+abstract class ContainerMixin {
+	@Shadow
+	public List<Slot> inventorySlots;
+
+	@Inject(method = "slotClick", at = @At("HEAD"), cancellable = true)
+	private void onSlotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player, CallbackInfoReturnable<ItemStack> cir) {
+		if (clickTypeIn == ClickType.THROW && player.inventory.getItemStack().isEmpty() && slotId >= 0) {
+			ItemStack itemStack = ItemStack.EMPTY;
+			Slot slot = inventorySlots.get(slotId);
+			if (slot != null && slot.canTakeStack(player)) {
+				if (slotId == 0 && dragType == 1) {
+					ItemStack itemStackDropAll = CtrlQCrafting.dropAllCrafting(player, slotId, inventorySlots);
+					while (!itemStackDropAll.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemStackDropAll)) {
+						itemStack = itemStackDropAll.copy();
+						itemStackDropAll = CtrlQCrafting.dropAllCrafting(player, slotId, inventorySlots);
+					}
+
+					cir.setReturnValue(itemStack);
+					cir.cancel();
+				}
+			}
+		}
+	}
 }
