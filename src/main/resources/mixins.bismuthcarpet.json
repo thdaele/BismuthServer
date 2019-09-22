@@ -6,6 +6,8 @@
 	"mixins": [
 		"AnvilChunkLoaderMixin",
 		"BiomeSpawnListEntryMixin",
+		"BlockFarmlandMixin",
+		"BlockGrassPathMixin",
 		"BlockHopperMixin",
 		"BlockPistonBaseMixin",
 		"BlockShulkerBoxMixin",
