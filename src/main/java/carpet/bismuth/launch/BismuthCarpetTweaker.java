@@ -13,7 +13,6 @@ public class BismuthCarpetTweaker implements ITweaker {
 	@Override
 	public void injectIntoClassLoader(LaunchClassLoader loader) {
 		MixinBootstrap.init();
-		MixinEnvironment.getDefaultEnvironment();
 		MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.SERVER);
 		Mixins.addConfiguration("mixins.bismuthcarpet.json");
 	}
