@@ -12,7 +12,10 @@ import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -25,7 +28,7 @@ public abstract class EntityItemMixin extends Entity implements IRecipeBookItemD
 	@Shadow
 	public abstract ItemStack getItem();
 
-	@Inject(method = "combineItems", at = @At(value = "RETURN", ordinal = 7), cancellable = true)
+	@Inject(method = "combineItems", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getMaxStackSize()I")), at = @At(value = "RETURN", ordinal = 0), cancellable = true)
 	private void stackShulkerboxes(EntityItem other, CallbackInfoReturnable<Boolean> cir) {
 		final ItemStack itemstack = this.getItem();
 		final ItemStack itemstack1 = other.getItem();
