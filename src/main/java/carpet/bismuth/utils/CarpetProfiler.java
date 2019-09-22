@@ -27,17 +27,44 @@ public class CarpetProfiler {
 		time_repo.put("autosave", 0L);
 
 		time_repo.put("overworld.spawning", 0L);
-		time_repo.put("overworld.blocks", 0L);
+		time_repo.put("overworld.tickupdates", 0L);
+		time_repo.put("overworld.chunkmap", 0L);
+		time_repo.put("overworld.villages", 0L);
+		time_repo.put("overworld.portals", 0L);
+		time_repo.put("overworld.blockevents", 0L);
+		time_repo.put("overworld.checknextlight", 0L);
+		time_repo.put("overworld.tickchunk", 0L);
+		time_repo.put("overworld.thunder", 0L);
+		time_repo.put("overworld.iceandsnow", 0L);
+		time_repo.put("overworld.randomticks", 0L);
 		time_repo.put("overworld.entities", 0L);
 		time_repo.put("overworld.tileentities", 0L);
 
 		time_repo.put("the_nether.spawning", 0L);
-		time_repo.put("the_nether.blocks", 0L);
+		time_repo.put("the_nether.tickupdates", 0L);
+		time_repo.put("the_nether.chunkmap", 0L);
+		time_repo.put("the_nether.villages", 0L);
+		time_repo.put("the_nether.portals", 0L);
+		time_repo.put("the_nether.blockevents", 0L);
+		time_repo.put("the_nether.checknextlight", 0L);
+		time_repo.put("the_nether.tickchunk", 0L);
+		time_repo.put("the_nether.thunder", 0L);
+		time_repo.put("the_nether.iceandsnow", 0L);
+		time_repo.put("the_nether.randomticks", 0L);
 		time_repo.put("the_nether.entities", 0L);
 		time_repo.put("the_nether.tileentities", 0L);
 
 		time_repo.put("the_end.spawning", 0L);
-		time_repo.put("the_end.blocks", 0L);
+		time_repo.put("the_end.tickupdates", 0L);
+		time_repo.put("the_end.chunkmap", 0L);
+		time_repo.put("the_end.villages", 0L);
+		time_repo.put("the_end.portals", 0L);
+		time_repo.put("the_end.blockevents", 0L);
+		time_repo.put("the_end.checknextlight", 0L);
+		time_repo.put("the_end.tickchunk", 0L);
+		time_repo.put("the_end.thunder", 0L);
+		time_repo.put("the_end.iceandsnow", 0L);
+		time_repo.put("the_end.randomticks", 0L);
 		time_repo.put("the_end.entities", 0L);
 		time_repo.put("the_end.tileentities", 0L);
 
@@ -166,11 +193,38 @@ public class CarpetProfiler {
 		accumulated += time_repo.get("overworld.tileentities");
 		Messenger.print_server_message(server, String.format(" - Tile Entities: %.3fms", divider * time_repo.get("overworld.tileentities")));
 
-		accumulated += time_repo.get("overworld.blocks");
-		Messenger.print_server_message(server, String.format(" - Blocks: %.3fms", divider * time_repo.get("overworld.blocks")));
+		accumulated += time_repo.get("overworld.tickupdates");
+		Messenger.print_server_message(server, String.format(" - Tick Updates: %.3fms", divider * time_repo.get("overworld.tickupdates")));
 
 		accumulated += time_repo.get("overworld.spawning");
 		Messenger.print_server_message(server, String.format(" - Spawning: %.3fms", divider * time_repo.get("overworld.spawning")));
+
+		accumulated += time_repo.get("overworld.chunkmap");
+		Messenger.print_server_message(server, String.format(" - Chunk Map: %.3fms", divider * time_repo.get("overworld.chunkmap")));
+
+		accumulated += time_repo.get("overworld.villages");
+		Messenger.print_server_message(server, String.format(" - Villages: %.3fms", divider * time_repo.get("overworld.villages")));
+
+		accumulated += time_repo.get("overworld.portals");
+		Messenger.print_server_message(server, String.format(" - Portalcaching: %.3fms", divider * time_repo.get("overworld.portals")));
+
+		accumulated += time_repo.get("overworld.blockevents");
+		Messenger.print_server_message(server, String.format(" - Queued Block Events: %.3fms", divider * time_repo.get("overworld.blockevents")));
+
+		accumulated += time_repo.get("overworld.checknextlight");
+		Messenger.print_server_message(server, String.format(" - Check Next Light: %.3fms", divider * time_repo.get("overworld.checknextlight")));
+
+		accumulated += time_repo.get("overworld.tickchunk");
+		Messenger.print_server_message(server, String.format(" - Tick Chunk: %.3fms", divider * time_repo.get("overworld.tickchunk")));
+
+		accumulated += time_repo.get("overworld.thunder");
+		Messenger.print_server_message(server, String.format(" - Thunder: %.3fms", divider * time_repo.get("overworld.thunder")));
+
+		accumulated += time_repo.get("overworld.iceandsnow");
+		Messenger.print_server_message(server, String.format(" - Ice&Snow: %.3fms", divider * time_repo.get("overworld.iceandsnow")));
+
+		accumulated += time_repo.get("overworld.randomticks");
+		Messenger.print_server_message(server, String.format(" - Random Ticks: %.3fms", divider * time_repo.get("overworld.randomticks")));
 
 		Messenger.print_server_message(server, "Nether:");
 
@@ -180,11 +234,38 @@ public class CarpetProfiler {
 		accumulated += time_repo.get("the_nether.tileentities");
 		Messenger.print_server_message(server, String.format(" - Tile Entities: %.3fms", divider * time_repo.get("the_nether.tileentities")));
 
-		accumulated += time_repo.get("the_nether.blocks");
-		Messenger.print_server_message(server, String.format(" - Blocks: %.3fms", divider * time_repo.get("the_nether.blocks")));
+		accumulated += time_repo.get("the_nether.tickupdates");
+		Messenger.print_server_message(server, String.format(" - Tick Updates: %.3fms", divider * time_repo.get("the_nether.tickupdates")));
 
 		accumulated += time_repo.get("the_nether.spawning");
 		Messenger.print_server_message(server, String.format(" - Spawning: %.3fms", divider * time_repo.get("the_nether.spawning")));
+
+		accumulated += time_repo.get("the_nether.chunkmap");
+		Messenger.print_server_message(server, String.format(" - Chunk Map: %.3fms", divider * time_repo.get("the_nether.chunkmap")));
+
+		accumulated += time_repo.get("the_nether.villages");
+		Messenger.print_server_message(server, String.format(" - Villages: %.3fms", divider * time_repo.get("the_nether.villages")));
+
+		accumulated += time_repo.get("the_nether.portals");
+		Messenger.print_server_message(server, String.format(" - Portalcaching: %.3fms", divider * time_repo.get("the_nether.portals")));
+
+		accumulated += time_repo.get("the_nether.blockevents");
+		Messenger.print_server_message(server, String.format(" - Queued Block Events: %.3fms", divider * time_repo.get("the_nether.blockevents")));
+
+		accumulated += time_repo.get("the_nether.checknextlight");
+		Messenger.print_server_message(server, String.format(" - Check Next Light: %.3fms", divider * time_repo.get("the_nether.checknextlight")));
+
+		accumulated += time_repo.get("the_nether.tickchunk");
+		Messenger.print_server_message(server, String.format(" - Tick Chunk: %.3fms", divider * time_repo.get("the_nether.tickchunk")));
+
+		accumulated += time_repo.get("the_nether.thunder");
+		Messenger.print_server_message(server, String.format(" - Thunder: %.3fms", divider * time_repo.get("the_nether.thunder")));
+
+		accumulated += time_repo.get("the_nether.iceandsnow");
+		Messenger.print_server_message(server, String.format(" - Ice&Snow: %.3fms", divider * time_repo.get("the_nether.iceandsnow")));
+
+		accumulated += time_repo.get("the_nether.randomticks");
+		Messenger.print_server_message(server, String.format(" - Random Ticks: %.3fms", divider * time_repo.get("the_nether.randomticks")));
 
 		Messenger.print_server_message(server, "End:");
 
@@ -194,11 +275,38 @@ public class CarpetProfiler {
 		accumulated += time_repo.get("the_end.tileentities");
 		Messenger.print_server_message(server, String.format(" - Tile Entities: %.3fms", divider * time_repo.get("the_end.tileentities")));
 
-		accumulated += time_repo.get("the_end.blocks");
-		Messenger.print_server_message(server, String.format(" - Blocks: %.3fms", divider * time_repo.get("the_end.blocks")));
+		accumulated += time_repo.get("the_end.tickupdates");
+		Messenger.print_server_message(server, String.format(" - Tick Updates: %.3fms", divider * time_repo.get("the_end.tickupdates")));
 
 		accumulated += time_repo.get("the_end.spawning");
 		Messenger.print_server_message(server, String.format(" - Spawning: %.3fms", divider * time_repo.get("the_end.spawning")));
+
+		accumulated += time_repo.get("the_end.chunkmap");
+		Messenger.print_server_message(server, String.format(" - Chunk Map: %.3fms", divider * time_repo.get("the_end.chunkmap")));
+
+		accumulated += time_repo.get("the_end.villages");
+		Messenger.print_server_message(server, String.format(" - Villages: %.3fms", divider * time_repo.get("the_end.villages")));
+
+		accumulated += time_repo.get("the_end.portals");
+		Messenger.print_server_message(server, String.format(" - Portalcaching: %.3fms", divider * time_repo.get("the_end.portals")));
+
+		accumulated += time_repo.get("the_end.blockevents");
+		Messenger.print_server_message(server, String.format(" - Queued Block Events: %.3fms", divider * time_repo.get("the_end.blockevents")));
+
+		accumulated += time_repo.get("the_end.checknextlight");
+		Messenger.print_server_message(server, String.format(" - Check Next Light: %.3fms", divider * time_repo.get("the_end.checknextlight")));
+
+		accumulated += time_repo.get("the_end.tickchunk");
+		Messenger.print_server_message(server, String.format(" - Tick Chunk: %.3fms", divider * time_repo.get("the_end.tickchunk")));
+
+		accumulated += time_repo.get("the_end.thunder");
+		Messenger.print_server_message(server, String.format(" - Thunder: %.3fms", divider * time_repo.get("the_end.thunder")));
+
+		accumulated += time_repo.get("the_end.iceandsnow");
+		Messenger.print_server_message(server, String.format(" - Ice&Snow: %.3fms", divider * time_repo.get("the_end.iceandsnow")));
+
+		accumulated += time_repo.get("the_end.randomticks");
+		Messenger.print_server_message(server, String.format(" - Random Ticks: %.3fms", divider * time_repo.get("the_end.randomticks")));
 
 		long rest = total_tick_time - accumulated;
 
