@@ -17,7 +17,6 @@
 		"EntityPlayerMPMixin",
 		"EnumFacingMixin",
 		"IBlockShulkerBoxMixin",
-		"IEntityItemMixin",
 		"InventoryPlayerMixin",
 		"ISPacketPlayerListHeaderFooterMixin",
 		"MinecraftServerMixin",
