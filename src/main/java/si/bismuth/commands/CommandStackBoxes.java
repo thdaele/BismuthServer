@@ -1,8 +1,5 @@
 package si.bismuth.commands;
 
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import si.bismuth.mixins.IBlockShulkerBoxMixin;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -15,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import si.bismuth.mixins.IBlockShulkerBoxMixin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,11 +47,11 @@ public class CommandStackBoxes extends CommandBismuthBase {
 		for (Map.Entry<EnumDyeColor, Integer> entry : boxesToStack.entrySet()) {
 			if (entry.getValue() > 0) {
 				final ItemStack stack = new ItemStack(BlockShulkerBox.getBlockByColor(entry.getKey()), entry.getValue());
-				player.addItemStackToInventory(stack);
+				if (!player.addItemStackToInventory(stack)) {
+					player.dropItem(stack, false);
+				}
 			}
 		}
-		player.inventoryContainer.detectAndSendChanges();
-		player.openContainer.detectAndSendChanges();
 	}
 
 	private Pair<EnumDyeColor, Integer> getShulkerBoxColourAndAmour(final ItemStack stack) {
