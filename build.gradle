@@ -17,19 +17,19 @@ apply plugin: "org.spongepowered.mixin"
 apply plugin: "com.github.johnrengelman.shadow"
 
 version = "1.0.0"
-group = "carpet.bismuth" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "bismuthcarpet"
+group = "si.bismuth" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "bismuthtweaker"
 
 minecraft {
 	version = "1.12.2"
 	mappings = "stable_39"
 	runDir = "run"
-	tweakClass = "carpet.bismuth.launch.BismuthCarpetTweaker"
+	tweakClass = "si.bismuth.launch.BismuthTweaker"
 	serverJvmArgs.addAll("-Dmixin.debug=true")
 
 	makeObfSourceJar = false
 
-	replaceIn "launch/BismuthCarpet.java"
+	replaceIn "launch/BismuthTweaker.java"
 	replace "@MCVERSION@", version
 }
 
@@ -46,7 +46,7 @@ mixin {
 	defaultObfuscationEnv notch
 }
 
-sourceSets.main.ext.refMap = "mixins.bismuthcarpet.refmap.json"
+sourceSets.main.ext.refMap = "mixins.bismuthtweaker.refmap.json"
 
 repositories {
 	maven { url = "https://repo.spongepowered.org/maven" }
@@ -61,6 +61,7 @@ dependencies {
 		exclude module: "gson"
 		exclude module: "commons-io"
 	}
+
 	compile "net.sf.jopt-simple:jopt-simple:5.0.3"
 	compile "com.eclipsesource.minimal-json:minimal-json:0.9.5"
 	compile "org.apache.logging.log4j:log4j-api:2.8.1"
@@ -92,6 +93,6 @@ shadowJar {
 tasks.build.dependsOn(shadowJar)
 
 jar.manifest.attributes(
-		"Main-Class": "carpet.bismuth.launch.BismuthCarpet",
+		"Main-Class": "si.bismuth.launch.BismuthTweaker",
 		"Class-Path": "minecraft_server.${minecraft.version}.jar libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"
 )
