@@ -1,6 +1,6 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.interfaces.IWorldServer;
+import carpet.bismuth.utils.IWorldServer;
 import carpet.bismuth.patches.EntityPlayerMPFake;
 import carpet.bismuth.patches.NetHandlerPlayServerFake;
 import net.minecraft.entity.Entity;

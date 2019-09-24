@@ -14,5 +14,4 @@ abstract class CommandCarpetBase extends CommandBase {
 	public int getRequiredPermissionLevel() {
 		return 0;
 	}
-
 }

@@ -15,7 +15,6 @@ public class CommandTick extends CommandCarpetBase {
 	/**
 	 * Gets the name of the command
 	 */
-
 	public String getName() {
 		return "tick";
 	}

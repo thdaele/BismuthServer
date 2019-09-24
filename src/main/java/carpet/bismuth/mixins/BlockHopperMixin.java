@@ -1,6 +1,6 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.helpers.BlockRotator;
+import carpet.bismuth.utils.BlockRotator;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.block.material.MapColor;

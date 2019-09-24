@@ -1,6 +1,6 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.interfaces.IWorldServer;
+import carpet.bismuth.utils.IWorldServer;
 import carpet.bismuth.utils.CarpetProfiler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;

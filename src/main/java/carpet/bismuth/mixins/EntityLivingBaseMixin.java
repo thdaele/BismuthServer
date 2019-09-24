@@ -25,10 +25,6 @@ abstract class EntityLivingBaseMixin extends Entity {
 
 	@Redirect(method = "renderBrokenItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnParticle(Lnet/minecraft/util/EnumParticleTypes;DDDDDD[I)V"))
 	private void fixToolBreakEffect2(World world, EnumParticleTypes particleType, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
-		if (world instanceof WorldServer) {
-			((WorldServer) world).spawnParticle(particleType, xCoord, yCoord, zCoord, 0, xCoord, yCoord + 0.05D, zCoord, 0.0D, parameters[0], new ItemStack(Item.getItemById(parameters[0])).getMetadata());
-		} else {
-			this.world.spawnParticle(particleType, xCoord, yCoord, zCoord, xCoord, yCoord + 0.05D, zCoord, parameters[0], new ItemStack(Item.getItemById(parameters[0])).getMetadata());
-		}
+		((WorldServer) world).spawnParticle(particleType, xCoord, yCoord, zCoord, 0, xCoord, yCoord + 0.05D, zCoord, 0.0D, parameters[0], new ItemStack(Item.getItemById(parameters[0])).getMetadata());
 	}
 }

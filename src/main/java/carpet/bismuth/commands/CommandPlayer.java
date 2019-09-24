@@ -19,19 +19,10 @@ import java.util.List;
 import java.util.Set;
 
 public class CommandPlayer extends CommandCarpetBase {
-	/**
-	 * Gets the name of the command
-	 */
 	public String getName() {
 		return "player";
 	}
 
-
-	/**
-	 * Gets the usage string for the command.
-	 *
-	 * @param sender The ICommandSender who is requesting usage details
-	 */
 	public String getUsage(ICommandSender sender) {
 		return "player <player_name> <spawn|kill> ";
 	}

@@ -1,6 +1,6 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.helpers.BlockRotator;
+import carpet.bismuth.utils.BlockRotator;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;

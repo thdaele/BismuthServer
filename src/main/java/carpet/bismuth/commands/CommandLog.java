@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("NoTranslation")
 public class CommandLog extends CommandCarpetBase {
 	@Override
 	public String getName() {

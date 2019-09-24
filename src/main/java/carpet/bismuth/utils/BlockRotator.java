@@ -1,4 +1,4 @@
-package carpet.bismuth.helpers;
+package carpet.bismuth.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;

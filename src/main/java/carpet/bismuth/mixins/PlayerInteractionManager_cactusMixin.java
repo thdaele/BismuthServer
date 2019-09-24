@@ -1,6 +1,6 @@
 package carpet.bismuth.mixins;
 
-import carpet.bismuth.helpers.BlockRotator;
+import carpet.bismuth.utils.BlockRotator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
