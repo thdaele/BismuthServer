@@ -1,5 +1,7 @@
 package si.bismuth.commands;
 
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import si.bismuth.mixins.IBlockShulkerBoxMixin;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.command.CommandException;
@@ -46,8 +48,8 @@ public class CommandStackBoxes extends CommandBismuthBase {
 
 		for (Map.Entry<EnumDyeColor, Integer> entry : boxesToStack.entrySet()) {
 			if (entry.getValue() > 0) {
-				final ItemStack stack = new ItemStack(new BlockShulkerBox(entry.getKey()), entry.getValue());
-				player.dropItem(stack, true);
+				final ItemStack stack = new ItemStack(BlockShulkerBox.getBlockByColor(entry.getKey()), entry.getValue());
+				player.addItemStackToInventory(stack);
 			}
 		}
 		player.inventoryContainer.detectAndSendChanges();
