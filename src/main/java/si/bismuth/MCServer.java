@@ -1,7 +1,5 @@
 package si.bismuth;
 
-import si.bismuth.logging.LoggerRegistry;
-import si.bismuth.utils.HUDController;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -13,6 +11,8 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
+import si.bismuth.logging.LoggerRegistry;
+import si.bismuth.utils.HUDController;
 
 public class MCServer // static for now - easier to handle all around the code, its one anyways
 {

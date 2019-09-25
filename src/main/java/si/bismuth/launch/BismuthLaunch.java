@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-class BismuthLaunch {
+public class BismuthLaunch {
 	// Definitely not stolen from the SpongeVanilla codebase at all.
 	// >_>
 	// https://github.com/SpongePowered/SpongeVanilla/blob/2dba56156d8c4f515adb37105a78b6d58874c6e6/src/main/java/org/spongepowered/server/launch/VanillaServerMain.java
@@ -40,7 +40,7 @@ class BismuthLaunch {
 	private static final String LAUNCHWRAPPER_SHA1 = "111e7bea9c968cdb3d06ef4632bf7ff0824d0f36";
 
 	private static final String TWEAK_ARGUMENT = "--tweakClass";
-	private static final String TWEAKER = "si.bismuth.launch.BismuthTweaker";
+	private static final String TWEAKER = "@TWEAKER@";
 	// From http://stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java
 	private static final char[] hexArray = "0123456789abcdef".toCharArray();
 

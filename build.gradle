@@ -16,21 +16,23 @@ apply plugin: "net.minecraftforge.gradle.tweaker-server"
 apply plugin: "org.spongepowered.mixin"
 apply plugin: "com.github.johnrengelman.shadow"
 
-version = "1.0.0"
+version = "1.0.1"
 group = "si.bismuth" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "bismuthtweaker"
+def tweakerClass = "${group}.launch.BismuthTweaker"
 
 minecraft {
 	version = "1.12.2"
 	mappings = "stable_39"
 	runDir = "run"
-	tweakClass = "si.bismuth.launch.BismuthTweaker"
+	tweakClass = tweakerClass
 	serverJvmArgs.addAll("-Dmixin.debug=true")
 
 	makeObfSourceJar = false
 
-	replaceIn "launch/BismuthTweaker.java"
+	replaceIn "launch/BismuthLaunch.java"
 	replace "@MCVERSION@", version
+	replace "@TWEAKER@", tweakerClass
 }
 
 reobf {
@@ -93,6 +95,6 @@ shadowJar {
 tasks.build.dependsOn(shadowJar)
 
 jar.manifest.attributes(
-		"Main-Class": "si.bismuth.launch.BismuthTweaker",
+		"Main-Class": "${group}.launch.BismuthLaunch",
 		"Class-Path": "minecraft_server.${minecraft.version}.jar libraries/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar"
 )
