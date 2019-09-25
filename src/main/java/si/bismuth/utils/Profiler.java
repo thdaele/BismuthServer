@@ -458,7 +458,7 @@ public class Profiler {
 		notchToMcp.put("afh", "Container Minecart");
 		notchToMcp.put("afi", "Furnace Minecart");
 		notchToMcp.put("afj", "Hopper Minecart");
-		notchToMcp.put("afk", "EmptyMinecart");
+		notchToMcp.put("afk", "Empty Minecart");
 		notchToMcp.put("afl", "Mob Spawner Minecart");
 		notchToMcp.put("afm", "TNT Minecart");
 		notchToMcp.put("avf", "Banner");
