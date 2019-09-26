@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Container.class)
-abstract class ContainerMixin {
+public abstract class ContainerMixin {
 	@Shadow
 	public abstract Slot getSlot(int slotId);
 

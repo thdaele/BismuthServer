@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerInteractionManager.class)
-abstract class PlayerInteractionManagerMixin {
+public abstract class PlayerInteractionManagerMixin {
 	@Shadow
 	public World world;
 

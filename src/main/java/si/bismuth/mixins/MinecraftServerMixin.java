@@ -21,7 +21,7 @@ import java.io.File;
 import java.net.Proxy;
 
 @Mixin(MinecraftServer.class)
-abstract class MinecraftServerMixin {
+public abstract class MinecraftServerMixin {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onCtor(File p_i47054_1_, Proxy p_i47054_2_, DataFixer p_i47054_3_, YggdrasilAuthenticationService p_i47054_4_, MinecraftSessionService p_i47054_5_, GameProfileRepository p_i47054_6_, PlayerProfileCache p_i47054_7_, CallbackInfo ci) {
 		MCServer.init((MinecraftServer) (Object) this);

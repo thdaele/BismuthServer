@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Chunk.class)
-abstract class ChunkMixin {
+public abstract class ChunkMixin {
 	@Shadow
 	@Final
 	private World world;

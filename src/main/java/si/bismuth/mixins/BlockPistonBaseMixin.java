@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.List;
 
 @Mixin(BlockPistonBase.class)
-abstract class BlockPistonBaseMixin {
+public abstract class BlockPistonBaseMixin {
 	private List<TileEntity> tileEntitiesList;
 
 	@Redirect(method = "canPush", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;hasTileEntity()Z"))

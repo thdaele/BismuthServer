@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerRecipeBookHelper.class)
-abstract class ServerRecipeBookHelperMixin {
+public abstract class ServerRecipeBookHelperMixin {
 	@Shadow
 	private InventoryCraftResult field_194335_f;
 

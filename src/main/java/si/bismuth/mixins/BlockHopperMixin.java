@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(BlockHopper.class)
-abstract class BlockHopperMixin extends BlockContainer {
+public abstract class BlockHopperMixin extends BlockContainer {
 	protected BlockHopperMixin(Material materialIn, MapColor color) {
 		super(materialIn, color);
 	}

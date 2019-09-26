@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(EntityLivingBase.class)
-abstract class EntityLivingBaseMixin extends Entity {
+public abstract class EntityLivingBaseMixin extends Entity {
 	public EntityLivingBaseMixin(World worldIn) {
 		super(worldIn);
 	}
