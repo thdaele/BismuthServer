@@ -1,12 +1,11 @@
 package si.bismuth.mixins;
 
-import si.bismuth.MCServer;
-import si.bismuth.utils.Profiler;
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerProfileCache;
+import net.minecraft.util.Util;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.world.WorldType;
 import org.apache.logging.log4j.Logger;
@@ -16,9 +15,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import si.bismuth.MCServer;
+import si.bismuth.utils.Profiler;
 
 import java.io.File;
 import java.net.Proxy;
+import java.util.concurrent.FutureTask;
 
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin {
@@ -71,6 +73,17 @@ public abstract class MinecraftServerMixin {
 	@Inject(method = "updateTimeLightAndEntities", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", args = "ldc=commandFunctions"))
 	private void postNetworkTick(CallbackInfo ci) {
 		Profiler.end_current_section();
+	}
+
+	@Redirect(method = "updateTimeLightAndEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;runTask(Ljava/util/concurrent/FutureTask;Lorg/apache/logging/log4j/Logger;)Ljava/lang/Object;"))
+	private <V> V locateArrayIndexOutOfBoundsException(FutureTask<V> task, Logger logger) {
+		try {
+			Util.runTask(task, logger);
+		} catch (Exception exception) {
+			logger.fatal("Error executing task", exception);
+			Thread.dumpStack();
+		}
+		return (V) null;
 	}
 
 	@Inject(method = "getServerModName", at = @At("HEAD"), cancellable = true)
