@@ -18,6 +18,7 @@
 		"EnumFacingMixin",
 		"IBlockShulkerBoxMixin",
 		"InventoryPlayerMixin",
+		"ISlotCraftingMixin",
 		"ISPacketPlayerListHeaderFooterMixin",
 		"MinecraftServerMixin",
 		"PlayerInteractionManager_cactusMixin",
