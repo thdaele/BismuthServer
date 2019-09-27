@@ -24,6 +24,8 @@
 		"PlayerInteractionManagerMixin",
 		"PlayerList_coreMixin",
 		"PlayerListMixin",
+		"RConConsoleSourceMixin",
+		"RConThreadClientMixin",
 		"ServerCommandManagerMixin",
 		"ServerRecipeBookHelperMixin",
 		"TileEntityPistonMixin",
