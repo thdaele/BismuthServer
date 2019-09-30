@@ -106,17 +106,4 @@ public abstract class TileEntityPistonMixin extends TileEntity implements ITileE
 			compound.setTag("carriedTileEntity", this.carriedTileEntity.writeToNBT(new NBTTagCompound()));
 		}
 	}
-
-	@Inject(method = "readFromNBT", at = @At(value = "FIELD", target = "Lnet/minecraft/tileentity/TileEntityPiston;lastProgress:F", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
-	private void readPistonSerialization(NBTTagCompound compound, CallbackInfo ci) {
-		if (compound.hasKey("lastProgress", 5)) {
-			this.lastProgress = this.progress;
-		}
-	}
-
-	@Redirect(method = "writeToNBT", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NBTTagCompound;setFloat(Ljava/lang/String;F)V"))
-	private void writePistonSerialization(NBTTagCompound compound, String key, float value) {
-		compound.setFloat("progress", this.progress);
-		compound.setFloat("lastProgress", this.lastProgress);
-	}
 }

@@ -26,6 +26,7 @@
 		"PlayerList_coreMixin",
 		"PlayerListMixin",
 		"RConThreadClientMixin",
+		"ResourceLocation$SerializerMixin",
 		"ServerCommandManagerMixin",
 		"ServerRecipeBookHelperMixin",
 		"TileEntityPistonMixin",
