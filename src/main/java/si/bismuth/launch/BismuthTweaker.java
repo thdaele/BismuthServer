@@ -3,7 +3,6 @@ package si.bismuth.launch;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.File;
@@ -13,7 +12,6 @@ public class BismuthTweaker implements ITweaker {
 	@Override
 	public void injectIntoClassLoader(LaunchClassLoader loader) {
 		MixinBootstrap.init();
-		MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.SERVER);
 		Mixins.addConfiguration("mixins.bismuthtweaker.json");
 	}
 
