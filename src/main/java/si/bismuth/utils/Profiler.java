@@ -103,7 +103,7 @@ public class Profiler {
 		if (current_section != null) {
 			end_current_section();
 		}
-		current_section = dimension + "." + getMCPName(e.getClass().getSimpleName());
+		current_section = dimension + "." + simplifyName(e.getClass().getSimpleName());
 		current_section_start = System.nanoTime();
 	}
 
@@ -363,133 +363,7 @@ public class Profiler {
 		current_section = null;
 	}
 
-	private static String getMCPName(String notchName) {
-		if (isDev) {
-			return notchName;
-		} else {
-			return notchToMcp.getOrDefault(notchName, "Unknown");
-		}
-	}
-
-	static {
-		try {
-			Class.forName("net.minecraft.world.World");
-			isDev = true;
-		} catch (Exception ignored) {
-		}
-
-		notchToMcp.put("aaa", "Mooshroom");
-		notchToMcp.put("aab", "Ocelot");
-		notchToMcp.put("aac", "Parrot");
-		notchToMcp.put("aad", "Pig");
-		notchToMcp.put("aae", "Polar Bear");
-		notchToMcp.put("aaf", "Rabbit");
-		notchToMcp.put("aag", "Sheep");
-		notchToMcp.put("aai", "Snowman");
-		notchToMcp.put("aaj", "Squid");
-		notchToMcp.put("aak", "Iron Golem");
-		notchToMcp.put("aam", "Wolf");
-		notchToMcp.put("aap", "Donkey");
-		notchToMcp.put("aaq", "Horse");
-		notchToMcp.put("aas", "Llama");
-		notchToMcp.put("aat", "Mule");
-		notchToMcp.put("aau", "Skeleton Horse");
-		notchToMcp.put("aaw", "Zombie Horse");
-		notchToMcp.put("abc", "Ender Crystal");
-		notchToMcp.put("abd", "Dragon");
-		notchToMcp.put("abx", "Wither");
-		notchToMcp.put("abz", "Armor Stand");
-		notchToMcp.put("acb", "Item Frame");
-		notchToMcp.put("acc", "Leash Knot");
-		notchToMcp.put("acd", "Painting");
-		notchToMcp.put("acf", "Fish Hook");
-		notchToMcp.put("aci", "Lightning Bolt");
-		notchToMcp.put("ack", "Falling Block");
-		notchToMcp.put("acl", "Item");
-		notchToMcp.put("acm", "Primed TNT");
-		notchToMcp.put("acq", "Blaze");
-		notchToMcp.put("acr", "Cave Spider");
-		notchToMcp.put("acs", "Creeper");
-		notchToMcp.put("act", "Elder Guardian");
-		notchToMcp.put("acu", "Enderman");
-		notchToMcp.put("acv", "Endermite");
-		notchToMcp.put("acx", "Evoker");
-		notchToMcp.put("acy", "Ghast");
-		notchToMcp.put("acz", "Giant Zombie");
-		notchToMcp.put("ada", "Guardian");
-		notchToMcp.put("adb", "Husk");
-		notchToMcp.put("adc", "Illusioner");
-		notchToMcp.put("add", "Magma Cube");
-		notchToMcp.put("adf", "Zombie Pigman");
-		notchToMcp.put("adi", "Shulker");
-		notchToMcp.put("adj", "Silverfish");
-		notchToMcp.put("adk", "Skeleton");
-		notchToMcp.put("adl", "Slime");
-		notchToMcp.put("adn", "Spider");
-		notchToMcp.put("ado", "Stray");
-		notchToMcp.put("adp", "Vex");
-		notchToMcp.put("adq", "Vindicator");
-		notchToMcp.put("adr", "Witch");
-		notchToMcp.put("ads", "Wither Skeleton");
-		notchToMcp.put("adt", "Zombie");
-		notchToMcp.put("adu", "Zombie Villager");
-		notchToMcp.put("ady", "Villager");
-		notchToMcp.put("aeh", "Arrow");
-		notchToMcp.put("aei", "Dragon Fireball");
-		notchToMcp.put("aej", "Evoker Fangs");
-		notchToMcp.put("aek", "EnderEye");
-		notchToMcp.put("ael", "Fireball");
-		notchToMcp.put("aem", "Firework Rocket");
-		notchToMcp.put("aen", "Large Fireball");
-		notchToMcp.put("aeo", "LlamaSpit");
-		notchToMcp.put("aer", "Shulker Bullet");
-		notchToMcp.put("aes", "Small Fireball");
-		notchToMcp.put("aet", "Snowball");
-		notchToMcp.put("aeu", "Spectral Arrow");
-		notchToMcp.put("aew", "Egg");
-		notchToMcp.put("aex", "Ender Pearl");
-		notchToMcp.put("aey", "Exp Bottle");
-		notchToMcp.put("aez", "Potion");
-		notchToMcp.put("afa", "Tipped Arrow");
-		notchToMcp.put("afb", "Wither Skull");
-		notchToMcp.put("afd", "Boat");
-		notchToMcp.put("aff", "Chest Minecart");
-		notchToMcp.put("afg", "CommandBlock Minecart");
-		notchToMcp.put("afh", "Container Minecart");
-		notchToMcp.put("afi", "Furnace Minecart");
-		notchToMcp.put("afj", "Hopper Minecart");
-		notchToMcp.put("afk", "Empty Minecart");
-		notchToMcp.put("afl", "Mob Spawner Minecart");
-		notchToMcp.put("afm", "TNT Minecart");
-		notchToMcp.put("avf", "Banner");
-		notchToMcp.put("avh", "Beacon");
-		notchToMcp.put("avi", "Bed");
-		notchToMcp.put("avk", "Brewing Stand");
-		notchToMcp.put("avl", "Chest");
-		notchToMcp.put("avm", "Command Block");
-		notchToMcp.put("avn", "Comparator");
-		notchToMcp.put("avo", "Daylight Sensor");
-		notchToMcp.put("avp", "Dispenser");
-		notchToMcp.put("avq", "Dropper");
-		notchToMcp.put("avr", "Enchantment Table");
-		notchToMcp.put("avs", "Ender Chest");
-		notchToMcp.put("avt", "Flower Pot");
-		notchToMcp.put("avu", "Furnace");
-		notchToMcp.put("avw", "Hopper");
-		notchToMcp.put("avy", "Mob Spawner");
-		notchToMcp.put("avz", "Noteblock");
-		notchToMcp.put("awb", "Shulker Box");
-		notchToMcp.put("awc", "Sign");
-		notchToMcp.put("awd", "Skull");
-		notchToMcp.put("awe", "Structure");
-		notchToMcp.put("awf", "End Gateway");
-		notchToMcp.put("awg", "End Portal");
-		notchToMcp.put("awm", "Piston");
-		notchToMcp.put("oq", "Player");
-		notchToMcp.put("ve", "Area Effect Cloud");
-		notchToMcp.put("vm", "XP Orb");
-		notchToMcp.put("zt", "Bat");
-		notchToMcp.put("zw", "Chicken");
-		notchToMcp.put("zx", "Cow");
+	private static String simplifyName(String name) {
+		return name.replaceFirst("^Entity|^TileEntity.*?", "");
 	}
 }
