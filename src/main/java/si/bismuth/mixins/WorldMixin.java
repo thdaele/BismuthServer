@@ -1,6 +1,5 @@
 package si.bismuth.mixins;
 
-import si.bismuth.utils.Profiler;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -17,9 +16,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import si.bismuth.utils.Profiler;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @Mixin(World.class)
 public abstract class WorldMixin {
@@ -29,6 +32,14 @@ public abstract class WorldMixin {
 	@Shadow
 	@Final
 	public List<TileEntity> loadedTileEntityList;
+	@Shadow
+	@Final
+	public List<TileEntity> tickableTileEntities;
+	private String worldName;
+	private Iterator myIterator;
+	@Shadow
+	@Final
+	private List<TileEntity> tileEntitiesToBeRemoved;
 
 	@Shadow
 	public abstract boolean isBlockLoaded(BlockPos pos);
@@ -36,12 +47,22 @@ public abstract class WorldMixin {
 	@Shadow
 	public abstract Chunk getChunk(BlockPos pos);
 
-	private String worldName;
-	private Iterator myIterator;
-
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void setWorldName(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn, net.minecraft.profiler.Profiler profilerIn, boolean client, CallbackInfo ci) {
 		this.worldName = this.provider.getDimensionType().getName();
+	}
+
+	@Redirect(method = "updateEntities", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z", ordinal = 0, remap = false))
+	private boolean fasterTEremoval(List list) {
+		if (!this.tileEntitiesToBeRemoved.isEmpty()) {
+			final Set<TileEntity> remove = Collections.newSetFromMap(new IdentityHashMap<>());
+			remove.addAll(this.tileEntitiesToBeRemoved);
+			this.tickableTileEntities.removeAll(remove);
+			this.loadedTileEntityList.removeAll(remove);
+			this.tileEntitiesToBeRemoved.clear();
+		}
+
+		return true;
 	}
 
 	@Inject(method = "updateEntities", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V", args = "ldc=remove"))
