@@ -37,15 +37,15 @@ minecraft {
 
 reobf {
 	jar {
-		mappingType = "NOTCH"
+		mappingType = "SEARGE"
 	}
 	shadowJar {
-		mappingType = "NOTCH"
+		mappingType = "SEARGE"
 	}
 }
 
 mixin {
-	defaultObfuscationEnv notch
+	defaultObfuscationEnv searge
 }
 
 sourceSets.main.ext.refMap = "mixins.bismuthtweaker.refmap.json"
