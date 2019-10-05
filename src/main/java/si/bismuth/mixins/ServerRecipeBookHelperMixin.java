@@ -1,6 +1,5 @@
 package si.bismuth.mixins;
 
-import si.bismuth.utils.IRecipeBookItemDuper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
@@ -12,6 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import si.bismuth.utils.IRecipeBookItemDuper;
 
 @Mixin(ServerRecipeBookHelper.class)
 public abstract class ServerRecipeBookHelperMixin {
@@ -27,19 +27,19 @@ public abstract class ServerRecipeBookHelperMixin {
 	}
 
 	private void craftingWindowDupingBugAddedBack(EntityPlayerMP player) {
-		int slot = ((IRecipeBookItemDuper) player).getDupeItem();
-		if (slot == Integer.MIN_VALUE) {
+		final int slot = ((IRecipeBookItemDuper) player).getDupeItem();
+		if (slot == Integer.MIN_VALUE || slot == -1) {
 			return;
 		}
 
-		ItemStack dupeItem = player.inventory.getStackInSlot(slot);
+		final ItemStack dupeItem = player.inventory.getStackInSlot(slot);
 		if (dupeItem.isEmpty()) {
 			return;
 		}
 
 		int size = dupeItem.getCount();
 		for (int j = 0; j < this.field_194336_g.getSizeInventory(); ++j) {
-			ItemStack itemstack = this.field_194336_g.getStackInSlot(j);
+			final ItemStack itemstack = this.field_194336_g.getStackInSlot(j);
 			if (!itemstack.isEmpty()) {
 				size += itemstack.getCount();
 				itemstack.setCount(0);
