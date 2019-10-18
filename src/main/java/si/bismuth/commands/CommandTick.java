@@ -23,7 +23,7 @@ public class CommandTick extends CommandBismuthBase {
 	 * Gets the usage string for the command.
 	 */
 	public String getUsage(ICommandSender sender) {
-		return "Usage: tick <health|entities> [duration]";
+		return "Usage: tick <health|entity|entities> [duration]";
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class CommandTick extends CommandBismuthBase {
 
 			Profiler.prepare_tick_report(step);
 			return;
-		} else if ("entities".equalsIgnoreCase(args[0])) {
+		} else if ("entity".equalsIgnoreCase(args[0]) || "entities".equalsIgnoreCase(args[0])) {
 			int step = 100;
 			if (args.length > 1) {
 				step = parseInt(args[1], 20, 72000);
@@ -57,12 +57,12 @@ public class CommandTick extends CommandBismuthBase {
 
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		if (args.length == 1) {
-			return getListOfStringsMatchingLastWord(args, "health", "entities");
+			return getListOfStringsMatchingLastWord(args, "health", "entity", "entities");
 		}
 		if (args.length == 2 && "health".equalsIgnoreCase(args[0])) {
 			return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
 		}
-		if (args.length == 2 && "entities".equalsIgnoreCase(args[0])) {
+		if (args.length == 2 && ("entity".equalsIgnoreCase(args[0]) || "entities".equalsIgnoreCase(args[0]))) {
 			return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
 		}
 		return Collections.emptyList();

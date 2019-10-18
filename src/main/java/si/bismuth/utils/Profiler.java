@@ -178,6 +178,14 @@ public class Profiler {
 		double divider = 1.0D / tick_health_requested / 1000000;
 		Messenger.print_server_message(server, String.format("Average tick time: %.3fms", divider * total_tick_time));
 		long accumulated = 0L;
+		long totalOverworld = 0L;
+		long totalNether = 0L;
+		long totalEnd = 0L;
+		for(Map.Entry<String, Long> e : time_repo.entrySet()) {
+			if(e.getKey().startsWith("overworld")) totalOverworld += e.getValue();
+			if(e.getKey().startsWith("the_nether")) totalNether += e.getValue();
+			if(e.getKey().startsWith("the_end")) totalEnd += e.getValue();
+		}
 
 		accumulated += time_repo.get("autosave");
 		Messenger.print_server_message(server, String.format("Autosave: %.3fms", divider * time_repo.get("autosave")));
@@ -185,7 +193,7 @@ public class Profiler {
 		accumulated += time_repo.get("network");
 		Messenger.print_server_message(server, String.format("Network: %.3fms", divider * time_repo.get("network")));
 
-		Messenger.print_server_message(server, "Overworld:");
+		Messenger.print_server_message(server, String.format("Overworld: %.3fms", divider * totalOverworld));
 
 		accumulated += time_repo.get("overworld.entities");
 		Messenger.print_server_message(server, String.format(" - Entities: %.3fms", divider * time_repo.get("overworld.entities")));
@@ -226,7 +234,7 @@ public class Profiler {
 		accumulated += time_repo.get("overworld.randomticks");
 		Messenger.print_server_message(server, String.format(" - Random Ticks: %.3fms", divider * time_repo.get("overworld.randomticks")));
 
-		Messenger.print_server_message(server, "Nether:");
+		Messenger.print_server_message(server, String.format("Nether: %.3fms", divider * totalNether));
 
 		accumulated += time_repo.get("the_nether.entities");
 		Messenger.print_server_message(server, String.format(" - Entities: %.3fms", divider * time_repo.get("the_nether.entities")));
@@ -267,7 +275,7 @@ public class Profiler {
 		accumulated += time_repo.get("the_nether.randomticks");
 		Messenger.print_server_message(server, String.format(" - Random Ticks: %.3fms", divider * time_repo.get("the_nether.randomticks")));
 
-		Messenger.print_server_message(server, "End:");
+		Messenger.print_server_message(server, String.format("End: %.3fms", divider * totalEnd));
 
 		accumulated += time_repo.get("the_end.entities");
 		Messenger.print_server_message(server, String.format(" - Entities: %.3fms", divider * time_repo.get("the_end.entities")));
