@@ -15,8 +15,6 @@ public class Profiler {
 	private static String current_section = null;
 	private static long current_section_start = 0;
 	private static long current_tick_start = 0;
-	private static final Map<String, String> notchToMcp = new HashMap<>();
-	private static boolean isDev = false;
 
 	public static void prepare_tick_report(int ticks) {
 		//maybe add so it only spams the sending player, but honestly - all may want to see it

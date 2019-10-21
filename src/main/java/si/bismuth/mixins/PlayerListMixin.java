@@ -1,8 +1,5 @@
 package si.bismuth.mixins;
 
-import si.bismuth.utils.IWorldServer;
-import si.bismuth.patches.EntityPlayerMPFake;
-import si.bismuth.patches.NetHandlerPlayServerFake;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
@@ -17,10 +14,24 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import si.bismuth.MCServer;
+import si.bismuth.patches.EntityPlayerMPFake;
+import si.bismuth.patches.NetHandlerPlayServerFake;
+import si.bismuth.utils.IWorldServer;
 
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
 	private EntityPlayerMP mycopy;
+
+	@Inject(method = "playerLoggedIn", at = @At(value = "RETURN"))
+	private void onPlayerLoggedIn(EntityPlayerMP playerIn, CallbackInfo ci) {
+		MCServer.playerConnected(playerIn);
+	}
+
+	@Inject(method = "playerLoggedOut", at = @At(value = "HEAD"))
+	private void onPlayerLoggedOut(EntityPlayerMP playerIn, CallbackInfo ci) {
+		MCServer.playerDisconnected(playerIn);
+	}
 
 	@Inject(method = "initializeConnectionToPlayer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/server/management/PlayerList;readPlayerDataFromFile(Lnet/minecraft/entity/player/EntityPlayerMP;)Lnet/minecraft/nbt/NBTTagCompound;"))
 	private void onInitializeConnectionToPlayer(NetworkManager netManager, EntityPlayerMP playerIn, CallbackInfo ci) {

@@ -1,9 +1,9 @@
 package si.bismuth.logging;
 
-import si.bismuth.MCServer;
-import si.bismuth.utils.HUDController;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.ITextComponent;
+import si.bismuth.MCServer;
+import si.bismuth.utils.HUDController;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,9 +56,11 @@ public abstract class LogHandler {
 	public abstract void handle(EntityPlayerMP player, ITextComponent[] message, Object[] commandParams);
 
 	public void onRemovePlayer(String playerName) {
+		// noop
 	}
 
 	void onAddPlayer() {
+		// noop
 	}
 
 	@FunctionalInterface

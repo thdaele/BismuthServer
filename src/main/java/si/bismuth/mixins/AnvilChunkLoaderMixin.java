@@ -29,8 +29,8 @@ public abstract class AnvilChunkLoaderMixin {
 	@Final
 	private static Logger LOGGER;
 
-	private final Map<ChunkPos, NBTTagCompound> chunksToSave = new HashMap();
-	private final Map<ChunkPos, NBTTagCompound> chunksInWrite = new HashMap();
+	private final Map<ChunkPos, NBTTagCompound> chunksToSave = new HashMap<>();
+	private final Map<ChunkPos, NBTTagCompound> chunksInWrite = new HashMap<>();
 	@Shadow
 	private boolean flushing;
 	@Shadow
