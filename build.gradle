@@ -1,5 +1,6 @@
 buildscript {
 	repositories {
+		mavenCentral()
 		maven { url = "https://files.minecraftforge.net/maven" }
 		maven { url = "https://repo.spongepowered.org/maven" }
 		maven { url = "https://plugins.gradle.org/m2" }
@@ -55,7 +56,7 @@ repositories {
 }
 
 dependencies {
-	compile("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+	compile("org.spongepowered:mixin:0.8-SNAPSHOT") {
 		exclude module: "asm-commons"
 		exclude module: "asm-tree"
 		exclude module: "launchwrapper"
@@ -64,6 +65,9 @@ dependencies {
 		exclude module: "commons-io"
 	}
 
+	compile "org.ow2.asm:asm-commons:6.2"
+	compile "org.ow2.asm:asm-tree:6.2"
+	compile "org.ow2.asm:asm-util:6.2"
 	compile "net.sf.jopt-simple:jopt-simple:5.0.3"
 	compile "com.eclipsesource.minimal-json:minimal-json:0.9.5"
 	compile "org.apache.logging.log4j:log4j-api:2.8.1"
@@ -75,11 +79,11 @@ dependencies {
 }
 
 shadowJar {
-	exclude "dummyThing"
-	exclude "LICENSE.txt"
-
 	dependencies {
 		include dependency("org.spongepowered:mixin")
+		include dependency("org.ow2.asm:asm-commons")
+		include dependency("org.ow2.asm:asm-tree")
+		include dependency("org.ow2.asm:asm-util")
 		include dependency("net.sf.jopt-simple:jopt-simple")
 		include dependency("com.eclipsesource.minimal-json:minimal-json")
 		include dependency("org.apache.logging.log4j:log4j-api")
