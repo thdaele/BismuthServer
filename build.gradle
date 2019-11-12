@@ -38,9 +38,6 @@ minecraft {
 }
 
 reobf {
-	jar {
-		mappingType = "SEARGE"
-	}
 	shadowJar {
 		mappingType = "SEARGE"
 	}
@@ -58,9 +55,7 @@ repositories {
 
 dependencies {
 	compile "org.spongepowered:mixin:0.8-SNAPSHOT"
-	compile "org.ow2.asm:asm-commons:6.2"
-	compile "org.ow2.asm:asm-tree:6.2"
-	compile "org.ow2.asm:asm-util:6.2"
+	compile "org.ow2.asm:asm-debug-all:5.2"
 	compile "net.sf.jopt-simple:jopt-simple:5.0.3"
 	compile "com.eclipsesource.minimal-json:minimal-json:0.9.5"
 	compile "org.apache.logging.log4j:log4j-api:2.8.1"
@@ -69,24 +64,10 @@ dependencies {
 	compile "org.apache.commons:commons-lang3:3.5"
 	compile "commons-io:commons-io:2.5"
 	compile "com.google.code.gson:gson:2.8.0"
+	provided "org.ow2.asm:asm-all:5.2"
 }
 
 shadowJar {
-	dependencies {
-		include dependency("org.spongepowered:mixin")
-		include dependency("org.ow2.asm:asm-commons")
-		include dependency("org.ow2.asm:asm-tree")
-		include dependency("org.ow2.asm:asm-util")
-		include dependency("net.sf.jopt-simple:jopt-simple")
-		include dependency("com.eclipsesource.minimal-json:minimal-json")
-		include dependency("org.apache.logging.log4j:log4j-api")
-		include dependency("org.apache.logging.log4j:log4j-core")
-		include dependency("com.google.guava:guava")
-		include dependency("org.apache.commons:commons-lang3")
-		include dependency("commons-io:commons-io")
-		include dependency("com.google.code.gson:gson")
-	}
-
 	classifier = ""
 }
 tasks.build.dependsOn(shadowJar)
