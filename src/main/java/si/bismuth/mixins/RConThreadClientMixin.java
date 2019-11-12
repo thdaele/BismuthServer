@@ -35,7 +35,7 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 
 	/**
 	 * @author nessie
-	 * Fixes MC-72390
+	 * @reason Fixes MC-72390
 	 */
 	@Overwrite
 	public void run() {

@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 public abstract class BlockFarmlandMixin {
 	/**
 	 * @author nessie
+	 * @reason Unfixes MC-120444
 	 */
 	@Overwrite
 	protected static void turnToDirt(World world, BlockPos pos) {

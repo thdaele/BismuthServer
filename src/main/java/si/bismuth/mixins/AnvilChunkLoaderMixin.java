@@ -103,6 +103,7 @@ public abstract class AnvilChunkLoaderMixin {
 
 	/**
 	 * @author DeadlyMC
+	 * @reason The changes to this method are very invasive and this is the simplest way to achieve what's needed
 	 */
 	@Overwrite
 	public boolean writeNextIO() {
