@@ -2,7 +2,8 @@ buildscript {
 	repositories {
 		mavenCentral()
 		maven { url = "https://files.minecraftforge.net/maven" }
-		maven { url = "https://repo.spongepowered.org/maven" }
+		//maven { url = "https://repo.spongepowered.org/maven" }
+		maven { url = "https://dist.creeper.host/Sponge/maven" }
 		maven { url = "https://plugins.gradle.org/m2" }
 	}
 
@@ -44,7 +45,6 @@ reobf {
 		mappingType = "SEARGE"
 	}
 }
-
 mixin {
 	defaultObfuscationEnv searge
 }
@@ -52,19 +52,12 @@ mixin {
 sourceSets.main.ext.refMap = "mixins.bismuthtweaker.refmap.json"
 
 repositories {
-	maven { url = "https://repo.spongepowered.org/maven" }
+	//maven { url = "https://repo.spongepowered.org/maven" }
+	maven { url = "https://dist.creeper.host/Sponge/maven" }
 }
 
 dependencies {
-	compile("org.spongepowered:mixin:0.8-SNAPSHOT") {
-		exclude module: "asm-commons"
-		exclude module: "asm-tree"
-		exclude module: "launchwrapper"
-		exclude module: "guava"
-		exclude module: "gson"
-		exclude module: "commons-io"
-	}
-
+	compile "org.spongepowered:mixin:0.8-SNAPSHOT"
 	compile "org.ow2.asm:asm-commons:6.2"
 	compile "org.ow2.asm:asm-tree:6.2"
 	compile "org.ow2.asm:asm-util:6.2"
