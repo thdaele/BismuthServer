@@ -1,5 +1,7 @@
 package si.bismuth.mixins;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import si.bismuth.commands.CommandLog;
 import si.bismuth.commands.CommandPing;
 import si.bismuth.commands.CommandPlayer;
@@ -23,5 +25,12 @@ public abstract class ServerCommandManagerMixin extends CommandHandler implement
 		this.registerCommand(new CommandPlayer());
 		this.registerCommand(new CommandStackBoxes());
 		this.registerCommand(new CommandTick());
+	}
+
+	@Inject(method = "notifyListener", at = @At("HEAD"), cancellable = true)
+	private void silenceRcon(ICommandSender sender, ICommand command, int flags, String translationKey, Object[] translationArgs, CallbackInfo ci) {
+		if(sender.getName().equals("Rcon")) {
+			ci.cancel();
+		}
 	}
 }
