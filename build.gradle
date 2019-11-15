@@ -2,8 +2,7 @@ buildscript {
 	repositories {
 		mavenCentral()
 		maven { url = "https://files.minecraftforge.net/maven" }
-		//maven { url = "https://repo.spongepowered.org/maven" }
-		maven { url = "https://dist.creeper.host/Sponge/maven" }
+		maven { url = "https://repo.spongepowered.org/maven" }
 		maven { url = "https://plugins.gradle.org/m2" }
 	}
 
@@ -49,8 +48,7 @@ mixin {
 sourceSets.main.ext.refMap = "mixins.bismuthtweaker.refmap.json"
 
 repositories {
-	//maven { url = "https://repo.spongepowered.org/maven" }
-	maven { url = "https://dist.creeper.host/Sponge/maven" }
+	maven { url = "https://repo.spongepowered.org/maven" }
 }
 
 dependencies {
