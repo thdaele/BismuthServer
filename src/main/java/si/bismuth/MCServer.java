@@ -19,13 +19,12 @@ import si.bismuth.utils.HUDController;
 
 
 public class MCServer {
-	public static MinecraftServer server;
-	public static Logger LOG = LogManager.getLogger("Bismuth");
-	public static PluginChannelsManager channelManager = new PluginChannelsManager();
-
+	public static final Logger LOG = LogManager.getLogger("Bismuth");
+	public static final PluginChannelsManager channelManager = new PluginChannelsManager();
 	private static final IRecipe duration1 = new ShapelessRecipes("rocket", makeFirework(1), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER)));
 	private static final IRecipe duration2 = new ShapelessRecipes("rocket", makeFirework(2), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER)));
 	private static final IRecipe duration3 = new ShapelessRecipes("rocket", makeFirework(3), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER)));
+	public static MinecraftServer server;
 
 	static {
 		CraftingManager.register("bismuth:durationone", duration1);
@@ -43,8 +42,7 @@ public class MCServer {
 		return firework;
 	}
 
-	public static void init(MinecraftServer server) //aka constructor of this static singleton class
-	{
+	public static void init(MinecraftServer server) {
 		MCServer.server = server;
 	}
 
