@@ -6,7 +6,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.storage.ThreadedFileIOBase;
-import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -17,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import si.bismuth.MCServer;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,10 +25,6 @@ import java.util.Map;
 
 @Mixin(AnvilChunkLoader.class)
 public abstract class AnvilChunkLoaderMixin {
-	@Shadow
-	@Final
-	private static Logger LOGGER;
-
 	private final Map<ChunkPos, NBTTagCompound> chunksToSave = new HashMap<>();
 	private final Map<ChunkPos, NBTTagCompound> chunksInWrite = new HashMap<>();
 	@Shadow
@@ -110,7 +106,7 @@ public abstract class AnvilChunkLoaderMixin {
 		Map.Entry<ChunkPos, NBTTagCompound> entry = fetchChunkToWrite();
 		if (entry == null) {
 			if (this.flushing) {
-				LOGGER.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", new Object[]{this.chunkSaveLocation.getName()});
+				MCServer.LOG.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", new Object[]{this.chunkSaveLocation.getName()});
 			}
 
 			return false;
@@ -122,7 +118,7 @@ public abstract class AnvilChunkLoaderMixin {
 		try {
 			this.writeChunkData(chunkpos, nbttagcompound);
 		} catch (Exception exception) {
-			LOGGER.error("Failed to save chunk", exception);
+			MCServer.LOG.error("Failed to save chunk", exception);
 		}
 
 		retireChunkToWrite(chunkpos);

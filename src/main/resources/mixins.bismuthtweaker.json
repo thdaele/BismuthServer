@@ -19,6 +19,7 @@
 		"InventoryPlayerMixin",
 		"ISPacketPlayerListHeaderFooterMixin",
 		"MinecraftServerMixin",
+		"NetHandlerPlayServerMixin",
 		"PlayerInteractionManagerMixin",
 		"PlayerListMixin",
 		"RConThreadClientMixin",

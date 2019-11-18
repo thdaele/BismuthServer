@@ -11,12 +11,17 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import si.bismuth.logging.LoggerRegistry;
+import si.bismuth.network.PluginChannelsManager;
 import si.bismuth.utils.HUDController;
 
-public class MCServer // static for now - easier to handle all around the code, its one anyways
-{
-	public static MinecraftServer minecraft_server;
+
+public class MCServer {
+	public static MinecraftServer server;
+	public static Logger LOG = LogManager.getLogger("Bismuth");
+	public static PluginChannelsManager channelManager = new PluginChannelsManager();
 
 	private static final IRecipe duration1 = new ShapelessRecipes("rocket", makeFirework(1), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER)));
 	private static final IRecipe duration2 = new ShapelessRecipes("rocket", makeFirework(2), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER)));
@@ -40,7 +45,7 @@ public class MCServer // static for now - easier to handle all around the code, 
 
 	public static void init(MinecraftServer server) //aka constructor of this static singleton class
 	{
-		minecraft_server = server;
+		MCServer.server = server;
 	}
 
 	public static void onServerLoaded(MinecraftServer server) {
@@ -54,6 +59,7 @@ public class MCServer // static for now - easier to handle all around the code, 
 	public static void playerConnected(EntityPlayerMP player) {
 		LoggerRegistry.playerConnected(player);
 		unlockCustomRecipes(player);
+		channelManager.sendRegisterToPlayer(player);
 	}
 
 	public static void playerDisconnected(EntityPlayerMP player) {

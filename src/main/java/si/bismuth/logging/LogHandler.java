@@ -27,7 +27,7 @@ public abstract class LogHandler {
 
 		@Override
 		public void onRemovePlayer(String playerName) {
-			EntityPlayerMP player = MCServer.minecraft_server.getPlayerList().getPlayerByUsername(playerName);
+			EntityPlayerMP player = MCServer.server.getPlayerList().getPlayerByUsername(playerName);
 			if (player != null)
 				HUDController.clear_player(player);
 		}

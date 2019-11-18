@@ -60,7 +60,7 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 							if (this.loggedIn) {
 								final String command = RConUtils.getBytesAsString(this.buffer, 12, i);
 
-								MCServer.minecraft_server.addScheduledTask(() -> {
+								MCServer.server.addScheduledTask(() -> {
 									try {
 										sendMultipacketResponse(id, server.handleRConCommand(command));
 									} catch (Exception exception) {
