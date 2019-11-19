@@ -27,11 +27,6 @@ import java.util.Map;
 public abstract class AnvilChunkLoaderMixin {
 	private final Map<ChunkPos, NBTTagCompound> chunksToSave = new HashMap<>();
 	private final Map<ChunkPos, NBTTagCompound> chunksInWrite = new HashMap<>();
-	@Shadow
-	private boolean flushing;
-	@Shadow
-	@Final
-	private File chunkSaveLocation;
 	private ChunkPos copyOfChunkPos1;
 	private ChunkPos copyOfChunkPos2;
 
@@ -47,8 +42,8 @@ public abstract class AnvilChunkLoaderMixin {
 			return null;
 		}
 
-		Iterator<Map.Entry<ChunkPos, NBTTagCompound>> iter = this.chunksToSave.entrySet().iterator();
-		Map.Entry<ChunkPos, NBTTagCompound> entry = iter.next();
+		final Iterator<Map.Entry<ChunkPos, NBTTagCompound>> iter = this.chunksToSave.entrySet().iterator();
+		final Map.Entry<ChunkPos, NBTTagCompound> entry = iter.next();
 		iter.remove();
 		this.chunksInWrite.put(entry.getKey(), entry.getValue());
 		return entry;
@@ -59,7 +54,7 @@ public abstract class AnvilChunkLoaderMixin {
 	}
 
 	synchronized private NBTTagCompound reloadChunkFromRemoveQueues(ChunkPos pos) {
-		NBTTagCompound data = this.chunksToSave.get(pos);
+		final NBTTagCompound data = this.chunksToSave.get(pos);
 		if (data != null) {
 			return data;
 		}
@@ -103,26 +98,20 @@ public abstract class AnvilChunkLoaderMixin {
 	 */
 	@Overwrite
 	public boolean writeNextIO() {
-		Map.Entry<ChunkPos, NBTTagCompound> entry = fetchChunkToWrite();
+		final Map.Entry<ChunkPos, NBTTagCompound> entry = fetchChunkToWrite();
 		if (entry == null) {
-			if (this.flushing) {
-				MCServer.LOG.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", new Object[]{this.chunkSaveLocation.getName()});
-			}
-
 			return false;
 		}
 
-		ChunkPos chunkpos = entry.getKey();
-		NBTTagCompound nbttagcompound = entry.getValue();
-
+		final ChunkPos chunkpos = entry.getKey();
+		final NBTTagCompound nbttagcompound = entry.getValue();
 		try {
 			this.writeChunkData(chunkpos, nbttagcompound);
 		} catch (Exception exception) {
 			MCServer.LOG.error("Failed to save chunk", exception);
 		}
 
-		retireChunkToWrite(chunkpos);
-
+		this.retireChunkToWrite(chunkpos);
 		return true;
 	}
 }
