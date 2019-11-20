@@ -16,7 +16,7 @@ public abstract class InventoryPlayerMixin {
 	@Shadow
 	public EntityPlayer player;
 
-	@Inject(method = "storePartialItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/InventoryPlayer;getFirstEmptyStack()I", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "storePartialItemStack", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/InventoryPlayer;getFirstEmptyStack()I"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void storePartialItemStack(ItemStack stack, CallbackInfoReturnable<Integer> cir, int i) {
 		((IRecipeBookItemDuper) this.player).dupeItem(i);
 	}
