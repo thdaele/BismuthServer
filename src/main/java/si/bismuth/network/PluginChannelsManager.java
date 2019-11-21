@@ -24,7 +24,6 @@ public class PluginChannelsManager {
 
 	public void sendRegisterToPlayer(EntityPlayerMP player) {
 		final String channels = StringUtils.join(this.getAllChannels(), CHANNEL_SEPARATOR);
-		System.out.println(channels);
 		final SPacketCustomPayload packet = new SPacketCustomPayload(REGISTER_CHANNELS, new PacketBuffer(Unpooled.buffer()).writeString(channels));
 		player.connection.sendPacket(packet);
 	}
@@ -37,10 +36,12 @@ public class PluginChannelsManager {
 
 		if (channel.equals(REGISTER_CHANNELS)) {
 			final List<String> incomingChannels = this.getChannelsFromBuffer(data);
-			System.out.println("REGISTER: " + StringUtils.join(incomingChannels, " "));
+			//System.out.println("REGISTER: " + StringUtils.join(incomingChannels, " "));
 			this.addChannelsForPlayer(uuid, incomingChannels);
 		} else if (this.getChannelsForPlayer(uuid).contains(channel)) {
-			// TODO
+			final byte[] bytes = new byte[data.readableBytes()];
+			data.readBytes(bytes);
+			//System.out.println("INCOMING: " + channel + " " + new String(bytes, StandardCharsets.UTF_8));
 		}
 	}
 

@@ -24,30 +24,25 @@ public abstract class PlayerListMixin {
 	private EntityPlayerMP mycopy;
 
 	@Inject(method = "playerLoggedIn", at = @At(value = "RETURN"))
-	private void onPlayerLoggedIn(EntityPlayerMP playerIn, CallbackInfo ci) {
-		MCServer.playerConnected(playerIn);
+	private void onPlayerLoggedIn(EntityPlayerMP player, CallbackInfo ci) {
+		MCServer.playerConnected(player);
 	}
 
 	@Inject(method = "playerLoggedOut", at = @At(value = "HEAD"))
-	private void onPlayerLoggedOut(EntityPlayerMP playerIn, CallbackInfo ci) {
-		MCServer.playerDisconnected(playerIn);
+	private void onPlayerLoggedOut(EntityPlayerMP player, CallbackInfo ci) {
+		MCServer.playerDisconnected(player);
 	}
 
 	@Inject(method = "initializeConnectionToPlayer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/server/management/PlayerList;readPlayerDataFromFile(Lnet/minecraft/entity/player/EntityPlayerMP;)Lnet/minecraft/nbt/NBTTagCompound;"))
-	private void onInitializeConnectionToPlayer(NetworkManager netManager, EntityPlayerMP playerIn, CallbackInfo ci) {
-		if (playerIn instanceof EntityPlayerMPFake) {
-			((EntityPlayerMPFake) playerIn).resetToSetPosition();
+	private void onInitializeConnectionToPlayer(NetworkManager manager, EntityPlayerMP player, CallbackInfo ci) {
+		if (player instanceof EntityPlayerMPFake) {
+			((EntityPlayerMPFake) player).resetToSetPosition();
 		}
 	}
 
 	@Redirect(method = "initializeConnectionToPlayer", at = @At(value = "NEW", target = "net/minecraft/network/NetHandlerPlayServer"))
-	private NetHandlerPlayServer replaceNetHandler(MinecraftServer server, NetworkManager netManager, EntityPlayerMP playerIn) {
-		boolean isEntityPlayerMP = playerIn instanceof EntityPlayerMPFake;
-		if (isEntityPlayerMP) {
-			return new NetHandlerPlayServerFake(server, netManager, playerIn);
-		} else {
-			return new NetHandlerPlayServer(server, netManager, playerIn);
-		}
+	private NetHandlerPlayServer replaceNetHandler(MinecraftServer server, NetworkManager manager, EntityPlayerMP player) {
+		return player instanceof EntityPlayerMPFake ? new NetHandlerPlayServerFake(server, manager, player) : new NetHandlerPlayServer(server, manager, player);
 	}
 
 	@Redirect(method = "createPlayerForUser", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/EntityPlayerMP;connection:Lnet/minecraft/network/NetHandlerPlayServer;"))
@@ -58,7 +53,7 @@ public abstract class PlayerListMixin {
 
 
 	@Redirect(method = "createPlayerForUser", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetHandlerPlayServer;disconnect(Lnet/minecraft/util/text/ITextComponent;)V"))
-	private void handleFakePlayerJoin(NetHandlerPlayServer netHandlerPlayServer, ITextComponent textComponent) {
+	private void handleFakePlayerJoin(NetHandlerPlayServer handler, ITextComponent component) {
 		if (this.mycopy instanceof EntityPlayerMPFake) {
 			this.mycopy.onKillCommand();
 		} else {
@@ -67,10 +62,10 @@ public abstract class PlayerListMixin {
 	}
 
 	@Inject(method = "transferEntityToWorld", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 0, target = "Lnet/minecraft/profiler/Profiler;endSection()V"))
-	private void onTransferEntityToWorld(Entity entityIn, int lastDimension, WorldServer oldWorldIn, WorldServer toWorldIn, CallbackInfo ci) {
-		if (entityIn.addedToChunk && ((IWorldServer) oldWorldIn).isChunkLoadedC(entityIn.chunkCoordX, entityIn.chunkCoordZ, true)) {
-			if (entityIn.addedToChunk && ((IWorldServer) oldWorldIn).isChunkLoadedC(entityIn.chunkCoordX, entityIn.chunkCoordZ, true)) {
-				oldWorldIn.getChunk(entityIn.chunkCoordX, entityIn.chunkCoordZ).removeEntityAtIndex(entityIn, entityIn.chunkCoordY);
+	private void onTransferEntityToWorld(Entity entity, int lastDimension, WorldServer oldWorld, WorldServer newWorld, CallbackInfo ci) {
+		if (entity.addedToChunk && ((IWorldServer) oldWorld).isChunkLoadedC(entity.chunkCoordX, entity.chunkCoordZ, true)) {
+			if (entity.addedToChunk && ((IWorldServer) oldWorld).isChunkLoadedC(entity.chunkCoordX, entity.chunkCoordZ, true)) {
+				oldWorld.getChunk(entity.chunkCoordX, entity.chunkCoordZ).removeEntityAtIndex(entity, entity.chunkCoordY);
 			}
 		}
 	}

@@ -6,7 +6,6 @@
 	"mixins": [
 		"AnvilChunkLoaderMixin",
 		"BlockFarmlandMixin",
-		"BlockHopperMixin",
 		"BlockPistonBaseMixin",
 		"ChunkMixin",
 		"ContainerMixin",

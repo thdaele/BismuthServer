@@ -21,8 +21,8 @@ public abstract class WorldEntitySpawnerMixin {
 	private static int MOB_COUNT_DIV;
 
 	@Inject(method = "findChunksForSpawning", at = @At(value = "FIELD", target = "Lnet/minecraft/world/WorldEntitySpawner;MOB_COUNT_DIV:I", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void getMobcaps(WorldServer worldServerIn, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, CallbackInfoReturnable<Integer> cir, int i, int j4, BlockPos blockpos1, EnumCreatureType[] var8, int var9, int var10, EnumCreatureType enumcreaturetype, int k4) {
-		final int l4 = enumcreaturetype.getMaxNumberOfCreature() * i / MOB_COUNT_DIV;
-		SpawnReporter.mobcaps.get(worldServerIn.provider.getDimensionType().getId()).put(enumcreaturetype, new Tuple<>(k4, l4));
+	private void getMobcaps(WorldServer server, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnOnSetTickRate, CallbackInfoReturnable<Integer> cir, int chunkAddsToMobcap, int mobTypeSpawned, BlockPos spawnPoint, EnumCreatureType[] mobCategories, int idk, int wtf, EnumCreatureType mobCategory, int loadedOfMobCategory) {
+		final int mobCap = mobCategory.getMaxNumberOfCreature() * chunkAddsToMobcap / MOB_COUNT_DIV;
+		SpawnReporter.mobcaps.get(server.provider.getDimensionType().getId()).put(mobCategory, new Tuple<>(loadedOfMobCategory, mobCap));
 	}
 }

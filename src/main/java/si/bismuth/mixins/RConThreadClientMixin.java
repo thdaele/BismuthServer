@@ -29,8 +29,8 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 	@Shadow protected abstract void sendMultipacketResponse(int id, String message);
 	// @formatter:on
 
-	protected RConThreadClientMixin(IServer serverIn, String threadName) {
-		super(serverIn, threadName);
+	protected RConThreadClientMixin(IServer server, String threadName) {
+		super(server, threadName);
 	}
 
 	/**
@@ -47,6 +47,10 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 
 				final BufferedInputStream stream = new BufferedInputStream(this.clientSocket.getInputStream());
 				final int i = stream.read(this.buffer, 0, this.buffer.length);
+				if(i == -1) {
+					break;
+				}
+
 				if (i >= 10) {
 					final int k = RConUtils.getBytesAsLEInt(this.buffer, 0, i);
 					if (k != i - 4) {

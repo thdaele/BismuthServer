@@ -42,8 +42,8 @@ public abstract class WorldServerMixin extends World implements IWorldServer {
 	}
 
 	@Inject(method = "canAddEntity", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 0, remap = false))
-	private void keepACopy(Entity entityIn, CallbackInfoReturnable<Boolean> cir) {
-		this.myEntity = entityIn;
+	private void keepACopy(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+		this.myEntity = entity;
 	}
 
 	@Redirect(method = "canAddEntity", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 0, remap = false))

@@ -33,8 +33,8 @@ public abstract class AnvilChunkLoaderMixin {
 	@Shadow
 	protected abstract void writeChunkData(ChunkPos pos, NBTTagCompound compound);
 
-	synchronized private void queueChunkToRemove(ChunkPos pos, NBTTagCompound data) {
-		chunksToSave.put(pos, data);
+	synchronized private void queueChunkToRemove(ChunkPos pos, NBTTagCompound compound) {
+		chunksToSave.put(pos, compound);
 	}
 
 	synchronized private Map.Entry<ChunkPos, NBTTagCompound> fetchChunkToWrite() {
@@ -63,8 +63,8 @@ public abstract class AnvilChunkLoaderMixin {
 	}
 
 	@Inject(method = "loadChunk", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;", remap = false), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void copyChunkPos(World arg0, int x, int z, CallbackInfoReturnable<Chunk> cir, ChunkPos chunkpos) {
-		this.copyOfChunkPos1 = chunkpos;
+	private void copyChunkPos(World world, int x, int z, CallbackInfoReturnable<Chunk> cir, ChunkPos pos) {
+		this.copyOfChunkPos1 = pos;
 	}
 
 	@Redirect(method = "loadChunk", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;", remap = false))
@@ -73,8 +73,8 @@ public abstract class AnvilChunkLoaderMixin {
 	}
 
 	@Inject(method = "isChunkGeneratedAt", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;", remap = false), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void copyPos(int x, int z, CallbackInfoReturnable<Boolean> cir, ChunkPos chunkpos) {
-		this.copyOfChunkPos2 = chunkpos;
+	private void copyPos(int x, int z, CallbackInfoReturnable<Boolean> cir, ChunkPos pos) {
+		this.copyOfChunkPos2 = pos;
 	}
 
 	@Redirect(method = "isChunkGeneratedAt", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;", remap = false))
@@ -98,15 +98,15 @@ public abstract class AnvilChunkLoaderMixin {
 	 */
 	@Overwrite
 	public boolean writeNextIO() {
-		final Map.Entry<ChunkPos, NBTTagCompound> entry = fetchChunkToWrite();
+		final Map.Entry<ChunkPos, NBTTagCompound> entry = this.fetchChunkToWrite();
 		if (entry == null) {
 			return false;
 		}
 
 		final ChunkPos chunkpos = entry.getKey();
-		final NBTTagCompound nbttagcompound = entry.getValue();
+		final NBTTagCompound compound = entry.getValue();
 		try {
-			this.writeChunkData(chunkpos, nbttagcompound);
+			this.writeChunkData(chunkpos, compound);
 		} catch (Exception exception) {
 			MCServer.LOG.error("Failed to save chunk", exception);
 		}

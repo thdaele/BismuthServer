@@ -30,17 +30,17 @@ public abstract class PlayerInteractionManagerMixin {
 	private BlockPos destroyPos = BlockPos.ORIGIN;
 
 	@Inject(method = "onBlockClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;sendBlockBreakProgress(ILnet/minecraft/util/math/BlockPos;I)V", shift = At.Shift.BEFORE))
-	private void notifyUpdate(BlockPos pos, EnumFacing side, CallbackInfo ci) {
+	private void notifyUpdate(BlockPos pos, EnumFacing face, CallbackInfo ci) {
 		this.player.connection.sendPacket(new SPacketBlockChange(world, destroyPos));
 	}
 
 	@Redirect(method = "processRightClickBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onBlockActivated(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/EnumHand;Lnet/minecraft/util/EnumFacing;FFF)Z"))
-	private boolean onProcessRightClickBlock(Block block, World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		boolean flipped = BlockRotator.flipBlockWithCactus(worldIn, pos, state, playerIn, facing, hitX, hitY, hitZ);
+	private boolean onProcessRightClickBlock(Block block, World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
+		boolean flipped = BlockRotator.flipBlockWithCactus(world, pos, state, player, face, hitX, hitY, hitZ);
 		if (flipped) {
 			return true;
 		}
 
-		return state.getBlock().onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+		return state.getBlock().onBlockActivated(world, pos, state, player, hand, face, hitX, hitY, hitZ);
 	}
 }

@@ -26,26 +26,16 @@ import java.util.Set;
 
 @Mixin(World.class)
 public abstract class WorldMixin {
-	@Shadow
-	@Final
-	public WorldProvider provider;
-	@Shadow
-	@Final
-	public List<TileEntity> loadedTileEntityList;
-	@Shadow
-	@Final
-	public List<TileEntity> tickableTileEntities;
+	// @formatter:off
 	private String worldName;
 	private Iterator myIterator;
-	@Shadow
-	@Final
-	private List<TileEntity> tileEntitiesToBeRemoved;
-
-	@Shadow
-	public abstract boolean isBlockLoaded(BlockPos pos);
-
-	@Shadow
-	public abstract Chunk getChunk(BlockPos pos);
+	@Shadow @Final public WorldProvider provider;
+	@Shadow @Final public List<TileEntity> loadedTileEntityList;
+	@Shadow @Final public List<TileEntity> tickableTileEntities;
+	@Shadow @Final private List<TileEntity> tileEntitiesToBeRemoved;
+	@Shadow public abstract Chunk getChunk(BlockPos pos);
+	@Shadow public abstract boolean isBlockLoaded(BlockPos pos);
+	// @formatter:on
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void setWorldName(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn, net.minecraft.profiler.Profiler profilerIn, boolean client, CallbackInfo ci) {

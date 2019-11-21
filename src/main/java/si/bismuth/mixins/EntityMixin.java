@@ -16,44 +16,29 @@ import si.bismuth.utils.BlockRotator;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-	@Shadow
-	public float rotationYaw;
-
-	@Shadow
-	public double posX;
-
-	@Shadow
-	public double posY;
-
-	@Shadow
-	public double posZ;
-
-	@Shadow
-	public abstract AxisAlignedBB getEntityBoundingBox();
-
-	@Shadow
-	protected abstract NBTTagList newDoubleNBTList(double... numbers);
-
-	@Shadow
-	protected abstract boolean shouldSetPosAfterLoading();
-
-	@Shadow
-	public abstract void setPosition(double x, double y, double z);
-
-	@Shadow
-	public abstract void setEntityBoundingBox(AxisAlignedBB bb);
+	// @formatter:off
+	@Shadow public double posX;
+	@Shadow public double posY;
+	@Shadow public double posZ;
+	@Shadow public float rotationYaw;
+	@Shadow public abstract AxisAlignedBB getEntityBoundingBox();
+	@Shadow protected abstract boolean shouldSetPosAfterLoading();
+	@Shadow public abstract void setEntityBoundingBox(AxisAlignedBB bb);
+	@Shadow public abstract void setPosition(double x, double y, double z);
+	@Shadow protected abstract NBTTagList newDoubleNBTList(double... numbers);
+	// @formatter:on
 
 	@Inject(method = "getHorizontalFacing", at = @At("HEAD"), cancellable = true)
 	private void onGetHorizontalFacing(CallbackInfoReturnable<EnumFacing> cir) {
 		if (BlockRotator.flippinEligibility((Entity) (Object) this)) {
-			cir.setReturnValue(EnumFacing.byHorizontalIndex(MathHelper.floor((double) (this.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite());
+			cir.setReturnValue(EnumFacing.byHorizontalIndex(MathHelper.floor((double) (this.rotationYaw * 1F / 90F) + 0.5D) & 3).getOpposite());
 		}
 	}
 
 	@Inject(method = "writeToNBT", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NBTTagCompound;setUniqueId(Ljava/lang/String;Ljava/util/UUID;)V", shift = At.Shift.AFTER, ordinal = 0))
 	private void AABBNBT(NBTTagCompound compound, CallbackInfoReturnable<NBTTagCompound> cir) {
-		final AxisAlignedBB box = this.getEntityBoundingBox();
-		compound.setTag("AABB", this.newDoubleNBTList(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ));
+		final AxisAlignedBB bb = this.getEntityBoundingBox();
+		compound.setTag("AABB", this.newDoubleNBTList(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ));
 	}
 
 	@Redirect(method = "readFromNBT", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;shouldSetPosAfterLoading()Z"))
@@ -63,8 +48,8 @@ public abstract class EntityMixin {
 		}
 
 		if (compound.hasKey("AABB", 9)) {
-			final NBTTagList aabb = compound.getTagList("AABB", 6);
-			this.setEntityBoundingBox(new AxisAlignedBB(aabb.getDoubleAt(0), aabb.getDoubleAt(1), aabb.getDoubleAt(2), aabb.getDoubleAt(3), aabb.getDoubleAt(4), aabb.getDoubleAt(5)));
+			final NBTTagList bb = compound.getTagList("AABB", 6);
+			this.setEntityBoundingBox(new AxisAlignedBB(bb.getDoubleAt(0), bb.getDoubleAt(1), bb.getDoubleAt(2), bb.getDoubleAt(3), bb.getDoubleAt(4), bb.getDoubleAt(5)));
 		}
 
 		return false;
