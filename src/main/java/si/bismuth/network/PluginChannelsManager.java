@@ -8,6 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.network.play.server.SPacketCustomPayload;
 import org.apache.commons.lang3.StringUtils;
+import si.bismuth.MCServer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -19,29 +20,54 @@ import java.util.UUID;
 public class PluginChannelsManager {
 	private static final String CHANNEL_SEPARATOR = "\u0000";
 	private static final String REGISTER_CHANNELS = "REGISTER";
+	private final Map<String, Class<? extends BisPacket>> allChannels = new HashMap<>();
 	private final Map<UUID, List<String>> channelList = new HashMap<>();
-	private final List<String> allChannels = new ArrayList<>();
+
+	public PluginChannelsManager() {
+		this.registerPacket(BisPacketSort.class);
+	}
+
+	private void registerPacket(Class<? extends BisPacket> packet) {
+		try {
+			final String channel = packet.newInstance().getChannelName();
+			if (this.allChannels.containsKey(channel)) {
+				MCServer.LOG.error("Packet {} attempted to register packet on channel '{}' but it already exists!", packet.getSimpleName(), channel);
+			} else {
+				this.allChannels.put(channel, packet);
+			}
+		} catch (IllegalAccessException | InstantiationException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void sendRegisterToPlayer(EntityPlayerMP player) {
-		final String channels = StringUtils.join(this.getAllChannels(), CHANNEL_SEPARATOR);
+		final String channels = StringUtils.join(this.allChannels.keySet(), CHANNEL_SEPARATOR);
 		final SPacketCustomPayload packet = new SPacketCustomPayload(REGISTER_CHANNELS, new PacketBuffer(Unpooled.buffer()).writeString(channels));
 		player.connection.sendPacket(packet);
 	}
 
-	public void processIncoming(EntityPlayer player, CPacketCustomPayload packet) {
+	public void sendPacketToPlayer(EntityPlayerMP player, BisPacket packet) {
+		packet.writePacketData();
+		player.connection.sendPacket(new SPacketCustomPayload(packet.getChannelName(), packet.getPacketBuffer()));
+	}
+
+	public void processIncoming(EntityPlayer player, CPacketCustomPayload packetIn) {
 		final UUID uuid = player.getUniqueID();
-		final String channel = packet.getChannelName();
-		final PacketBuffer data = packet.getBufferData();
+		final String channel = packetIn.getChannelName();
+		final PacketBuffer data = packetIn.getBufferData();
 		data.resetReaderIndex();
 
 		if (channel.equals(REGISTER_CHANNELS)) {
 			final List<String> incomingChannels = this.getChannelsFromBuffer(data);
-			//System.out.println("REGISTER: " + StringUtils.join(incomingChannels, " "));
 			this.addChannelsForPlayer(uuid, incomingChannels);
 		} else if (this.getChannelsForPlayer(uuid).contains(channel)) {
-			final byte[] bytes = new byte[data.readableBytes()];
-			data.readBytes(bytes);
-			//System.out.println("INCOMING: " + channel + " " + new String(bytes, StandardCharsets.UTF_8));
+			try {
+				final BisPacket packet = this.allChannels.get(channel).newInstance();
+				packet.readPacketData(data);
+				packet.processPacket(player);
+			} catch (IllegalAccessException | InstantiationException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -57,15 +83,11 @@ public class PluginChannelsManager {
 	}
 
 	private List<String> getChannelsForPlayer(UUID player) {
-		final Map<UUID, List<String>> channelMap = this.channelList;
-		if (!channelMap.containsKey(player)) {
-			channelMap.put(player, new ArrayList<>());
+		final Map<UUID, List<String>> channels = this.channelList;
+		if (!channels.containsKey(player)) {
+			channels.put(player, new ArrayList<>());
 		}
 
-		return channelMap.get(player);
-	}
-
-	private List<String> getAllChannels() {
-		return this.allChannels;
+		return channels.get(player);
 	}
 }
