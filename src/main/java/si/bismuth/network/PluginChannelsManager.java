@@ -10,6 +10,7 @@ import net.minecraft.network.play.server.SPacketCustomPayload;
 import org.apache.commons.lang3.StringUtils;
 import si.bismuth.MCServer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,20 +29,20 @@ public class PluginChannelsManager {
 	}
 
 	private void registerPacket(Class<? extends BisPacket> clazz) {
-		clazz.getDeclaredAnnotations().
 		if (!clazz.isAnnotationPresent(PacketChannelName.class)) {
-			MCServer.LOG.error("Packet {} lacks plugin channel name.", clazz.getSimpleName());
+			MCServer.LOG.error("Packet {} lacks plugin channel annotation.", clazz.getSimpleName());
 			return;
 		}
 
 		try {
-			final String channel = clazz.newInstance().getChannelName();
+			clazz.getMethod("setChannelName", String.class).invoke(null, clazz.getDeclaredAnnotation(PacketChannelName.class).value());
+			final String channel = (String) clazz.getMethod("getChannelName").invoke(null);
 			if (this.allChannels.containsKey(channel)) {
 				MCServer.LOG.error("Packet {} attempted to register packet on channel '{}' but it already exists!", clazz.getSimpleName(), channel);
 			} else {
 				this.allChannels.put(channel, clazz);
 			}
-		} catch (IllegalAccessException | InstantiationException e) {
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 	}
@@ -53,9 +54,9 @@ public class PluginChannelsManager {
 	}
 
 	public void sendPacketToPlayer(EntityPlayerMP player, BisPacket packet) {
-		if (this.getChannelsForPlayer(player.getUniqueID()).contains(packet.getChannelName())) {
+		if (this.getChannelsForPlayer(player.getUniqueID()).contains(BisPacket.getChannelName())) {
 			packet.writePacketData();
-			player.connection.sendPacket(new SPacketCustomPayload(packet.getChannelName(), packet.getPacketBuffer()));
+			player.connection.sendPacket(new SPacketCustomPayload(BisPacket.getChannelName(), packet.getPacketBuffer()));
 		}
 	}
 
@@ -76,7 +77,8 @@ public class PluginChannelsManager {
 			} catch (IllegalAccessException | InstantiationException e) {
 				e.printStackTrace();
 			}
-		} else { // debug
+		} else {
+			// debug
 			MCServer.LOG.debug("Received on unregistered channel '{}' for player '{}'!", channel, player.getName());
 		}
 	}

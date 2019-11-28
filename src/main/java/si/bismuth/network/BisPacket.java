@@ -6,7 +6,7 @@ import net.minecraft.network.PacketBuffer;
 
 public abstract class BisPacket {
 	private PacketBuffer data = new PacketBuffer(Unpooled.buffer());
-	private String channel;
+	private static String channel;
 
 	public abstract void writePacketData();
 
@@ -14,8 +14,12 @@ public abstract class BisPacket {
 
 	public abstract void processPacket(EntityPlayer player);
 
-	public String getChannelName() {
-		return "Bis|" + this.channel;
+	public static String getChannelName() {
+		return channel;
+	}
+
+	public static void setChannelName(String name) {
+		channel = "Bis|" + name;
 	}
 
 	public PacketBuffer getPacketBuffer() {
