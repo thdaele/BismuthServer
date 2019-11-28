@@ -3,12 +3,12 @@ package si.bismuth.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 
+@PacketChannelName("sort")
 public class BisPacketSort extends BisPacket {
 	private boolean isPlayerInv;
 	private int invIndex;
 
 	public BisPacketSort(boolean playerInv, int index) {
-		super("sort");
 		this.isPlayerInv = playerInv;
 		this.invIndex = index;
 	}

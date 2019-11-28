@@ -5,12 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 
 public abstract class BisPacket {
-	private final String channel;
 	private PacketBuffer data = new PacketBuffer(Unpooled.buffer());
-
-	public BisPacket(String channelIn) {
-		this.channel = channelIn;
-	}
+	private String channel;
 
 	public abstract void writePacketData();
 

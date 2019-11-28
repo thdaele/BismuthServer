@@ -27,13 +27,19 @@ public class PluginChannelsManager {
 		this.registerPacket(BisPacketSort.class);
 	}
 
-	private void registerPacket(Class<? extends BisPacket> packet) {
+	private void registerPacket(Class<? extends BisPacket> clazz) {
+		clazz.getDeclaredAnnotations().
+		if (!clazz.isAnnotationPresent(PacketChannelName.class)) {
+			MCServer.LOG.error("Packet {} lacks plugin channel name.", clazz.getSimpleName());
+			return;
+		}
+
 		try {
-			final String channel = packet.newInstance().getChannelName();
+			final String channel = clazz.newInstance().getChannelName();
 			if (this.allChannels.containsKey(channel)) {
-				MCServer.LOG.error("Packet {} attempted to register packet on channel '{}' but it already exists!", packet.getSimpleName(), channel);
+				MCServer.LOG.error("Packet {} attempted to register packet on channel '{}' but it already exists!", clazz.getSimpleName(), channel);
 			} else {
-				this.allChannels.put(channel, packet);
+				this.allChannels.put(channel, clazz);
 			}
 		} catch (IllegalAccessException | InstantiationException e) {
 			e.printStackTrace();
@@ -47,8 +53,10 @@ public class PluginChannelsManager {
 	}
 
 	public void sendPacketToPlayer(EntityPlayerMP player, BisPacket packet) {
-		packet.writePacketData();
-		player.connection.sendPacket(new SPacketCustomPayload(packet.getChannelName(), packet.getPacketBuffer()));
+		if (this.getChannelsForPlayer(player.getUniqueID()).contains(packet.getChannelName())) {
+			packet.writePacketData();
+			player.connection.sendPacket(new SPacketCustomPayload(packet.getChannelName(), packet.getPacketBuffer()));
+		}
 	}
 
 	public void processIncoming(EntityPlayer player, CPacketCustomPayload packetIn) {
@@ -68,6 +76,8 @@ public class PluginChannelsManager {
 			} catch (IllegalAccessException | InstantiationException e) {
 				e.printStackTrace();
 			}
+		} else { // debug
+			MCServer.LOG.debug("Received on unregistered channel '{}' for player '{}'!", channel, player.getName());
 		}
 	}
 
