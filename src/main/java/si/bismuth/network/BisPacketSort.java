@@ -8,6 +8,10 @@ public class BisPacketSort extends BisPacket {
 	private boolean isPlayerInv;
 	private int invIndex;
 
+	public BisPacketSort() {
+		// noop
+	}
+
 	public BisPacketSort(boolean playerInv, int index) {
 		this.isPlayerInv = playerInv;
 		this.invIndex = index;

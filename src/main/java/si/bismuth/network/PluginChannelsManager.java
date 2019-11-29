@@ -49,7 +49,7 @@ public class PluginChannelsManager {
 
 	public void sendRegisterToPlayer(EntityPlayerMP player) {
 		final String channels = StringUtils.join(this.allChannels.keySet(), CHANNEL_SEPARATOR);
-		final SPacketCustomPayload packet = new SPacketCustomPayload(REGISTER_CHANNELS, new PacketBuffer(Unpooled.buffer()).writeString(channels));
+		final SPacketCustomPayload packet = new SPacketCustomPayload(REGISTER_CHANNELS, new PacketBuffer(Unpooled.buffer().writeBytes(channels.getBytes())));
 		player.connection.sendPacket(packet);
 	}
 
