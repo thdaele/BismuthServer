@@ -1,6 +1,6 @@
 package si.bismuth.network;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.network.PacketBuffer;
 import si.bismuth.utils.InventoryHelper;
@@ -14,7 +14,7 @@ public class BisPacketSort extends BisPacket {
 		// noop
 	}
 
-	public BisPacketSort(boolean playerInv, int index) {
+	public BisPacketSort(boolean playerInv) {
 		this.isPlayerInv = playerInv;
 	}
 
@@ -30,7 +30,7 @@ public class BisPacketSort extends BisPacket {
 	}
 
 	@Override
-	public void processPacket(EntityPlayer player) {
+	public void processPacket(EntityPlayerMP player) {
 		if (this.isPlayerInv) {
 			InventoryHelper.sortInv(player.inventory, 9, 27);
 		} else {

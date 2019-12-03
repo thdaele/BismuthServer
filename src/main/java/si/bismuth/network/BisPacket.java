@@ -1,8 +1,10 @@
 package si.bismuth.network;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
+
+import java.io.IOException;
 
 public abstract class BisPacket {
 	private PacketBuffer data = new PacketBuffer(Unpooled.buffer());
@@ -10,9 +12,9 @@ public abstract class BisPacket {
 
 	public abstract void writePacketData();
 
-	public abstract void readPacketData(PacketBuffer buf);
+	public abstract void readPacketData(PacketBuffer buf) throws IOException;
 
-	public abstract void processPacket(EntityPlayer player);
+	public abstract void processPacket(EntityPlayerMP player);
 
 	public static String getChannelName() {
 		return channel;

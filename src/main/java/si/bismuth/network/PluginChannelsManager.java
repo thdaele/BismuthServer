@@ -2,7 +2,6 @@ package si.bismuth.network;
 
 import com.google.common.collect.Lists;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
@@ -10,6 +9,7 @@ import net.minecraft.network.play.server.SPacketCustomPayload;
 import org.apache.commons.lang3.StringUtils;
 import si.bismuth.MCServer;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -25,6 +25,8 @@ public class PluginChannelsManager {
 	private final Map<UUID, List<String>> channelList = new HashMap<>();
 
 	public PluginChannelsManager() {
+		this.registerPacket(BisPacketGetInventory.class);
+		this.registerPacket(BisPacketSearchForItem.class);
 		this.registerPacket(BisPacketSort.class);
 	}
 
@@ -60,7 +62,7 @@ public class PluginChannelsManager {
 		}
 	}
 
-	public void processIncoming(EntityPlayer player, CPacketCustomPayload packetIn) {
+	public void processIncoming(EntityPlayerMP player, CPacketCustomPayload packetIn) {
 		final UUID uuid = player.getUniqueID();
 		final String channel = packetIn.getChannelName();
 		final PacketBuffer data = packetIn.getBufferData();
@@ -74,12 +76,9 @@ public class PluginChannelsManager {
 				final BisPacket packet = this.allChannels.get(channel).newInstance();
 				packet.readPacketData(data);
 				packet.processPacket(player);
-			} catch (IllegalAccessException | InstantiationException e) {
+			} catch (IllegalAccessException | InstantiationException | IOException e) {
 				e.printStackTrace();
 			}
-		} else {
-			// debug
-			MCServer.LOG.debug("Received on unregistered channel '{}' for player '{}'!", channel, player.getName());
 		}
 	}
 
