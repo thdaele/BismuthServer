@@ -79,7 +79,11 @@ public abstract class PlayerListMixin {
 	private void onPlayerSendMessage(ITextComponent component, boolean isSystem, CallbackInfo ci) {
 		if (!isSystem) {
 			final String text = component.getUnformattedText().replaceFirst("<(\\S*?)>", "<`$1`>");
-			MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(text).queue();
+			try {
+				MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(text).queue();
+			} catch (Exception ignored) {
+				// noop
+			}
 		}
 	}
 
