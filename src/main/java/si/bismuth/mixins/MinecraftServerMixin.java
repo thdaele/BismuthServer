@@ -1,12 +1,6 @@
 package si.bismuth.mixins;
 
-import com.mojang.authlib.GameProfileRepository;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerProfileCache;
-import net.minecraft.util.datafix.DataFixer;
-import net.minecraft.world.WorldType;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,18 +11,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import si.bismuth.MCServer;
 import si.bismuth.utils.Profiler;
 
-import java.io.File;
-import java.net.Proxy;
+import javax.security.auth.login.LoginException;
 
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin {
 	@Inject(method = "<init>", at = @At("RETURN"))
-	private void onCtor(File f, Proxy p, DataFixer df, YggdrasilAuthenticationService yas, MinecraftSessionService mcss, GameProfileRepository gpr, PlayerProfileCache ppc, CallbackInfo ci) {
+	private void onCtor(CallbackInfo ci) {
 		MCServer.init((MinecraftServer) (Object) this);
 	}
 
 	@Inject(method = "loadAllWorlds", at = @At("HEAD"))
-	private void onLoadAllWorlds(String saveName, String worldNameIn, long seed, WorldType type, String generatorOptions, CallbackInfo ci) {
+	private void onLoadAllWorlds(CallbackInfo ci) throws LoginException {
 		MCServer.onServerLoaded((MinecraftServer) (Object) this);
 	}
 

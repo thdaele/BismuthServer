@@ -15,12 +15,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
+import si.bismuth.discord.DCBot;
 import si.bismuth.patches.EntityPlayerMPFake;
 import si.bismuth.patches.NetHandlerPlayServerFake;
 import si.bismuth.utils.IWorldServer;
 
+import java.util.regex.Pattern;
+
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
+	final private static Pattern urlPattern = Pattern.compile(
+			"(?:^|[\\W])((ht|f)tp(s?)://|www\\.)(([\\w\\-]+\\.){1,}?([\\w\\-.~]+/?)*[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)",
+			Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 	private EntityPlayerMP mycopy;
 
 	@Inject(method = "playerLoggedIn", at = @At(value = "RETURN"))
@@ -51,7 +57,6 @@ public abstract class PlayerListMixin {
 		return player.connection;
 	}
 
-
 	@Redirect(method = "createPlayerForUser", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetHandlerPlayServer;disconnect(Lnet/minecraft/util/text/ITextComponent;)V"))
 	private void handleFakePlayerJoin(NetHandlerPlayServer handler, ITextComponent component) {
 		if (this.mycopy instanceof EntityPlayerMPFake) {
@@ -69,4 +74,53 @@ public abstract class PlayerListMixin {
 			}
 		}
 	}
+
+	@Inject(method = "sendMessage(Lnet/minecraft/util/text/ITextComponent;Z)V", at = @At("HEAD"))
+	private void onPlayerSendMessage(ITextComponent component, boolean isSystem, CallbackInfo ci) {
+		if (!isSystem) {
+			final String text = component.getUnformattedText().replaceFirst("<(\\S*?)>", "<`$1`>");
+			MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(text).queue();
+		}
+	}
+
+	/*
+	@ModifyVariable(method = "sendMessage(Lnet/minecraft/util/text/ITextComponent;Z)V", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+	private ITextComponent applyTextFormatting(ITextComponent component) {
+		return this.applyFormatting(component);
+	}
+
+	// mega shitty and fragile code.
+	//TODO: Fix plz
+	private ITextComponent applyFormatting(ITextComponent component) {
+		// Current handle two cases:
+		// * DC chat which is TextComponentString{[TextComponentString{prefix},TextComponentTranslation{name,chat}]}
+		// * IG chat which is TextComponentTranslation{name,chat}
+		// mega hax lol.
+		System.out.println(component.getClass());
+
+		TextComponentTranslation startComponent;
+		try {
+			if (component instanceof TextComponentString) {
+				startComponent = (TextComponentTranslation) component.getSiblings().get(1);
+			} else {
+				startComponent = (TextComponentTranslation) component;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return component;
+		}
+
+		// code stolen from Whitefang34's post on Stackoverflow: https://stackoverflow.com/questions/5713558/detect-and-extract-url-from-a-string/5713866#5713866
+		// Pattern for recognizing a URL, based off RFC 3986
+		final Matcher matcher = urlPattern.matcher(startComponent.getUnformattedComponentText());
+		final ITextComponent newComponent = new TextComponentTranslation();
+		int lastMatchEnd = 0;
+		while (matcher.find()) {
+			final int matchStart = matcher.start(1);
+			final int matchEnd = matcher.end();
+
+		}
+
+		return newComponent;
+	}*/
 }

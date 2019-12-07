@@ -49,9 +49,11 @@ sourceSets.main.ext.refMap = "mixins.bismuthtweaker.refmap.json"
 
 repositories {
 	maven { url = "https://repo.spongepowered.org/maven" }
+	jcenter()
 }
 
 dependencies {
+	compile "net.dv8tion:JDA:4.0.0_70"
 	compile "org.spongepowered:mixin:0.8-SNAPSHOT"
 	compile "org.ow2.asm:asm-debug-all:5.2"
 	compile "net.sf.jopt-simple:jopt-simple:5.0.3"

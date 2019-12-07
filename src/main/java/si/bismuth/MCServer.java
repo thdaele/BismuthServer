@@ -10,21 +10,25 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.NonNullList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import si.bismuth.discord.DCBot;
 import si.bismuth.logging.LoggerRegistry;
 import si.bismuth.network.PluginChannelsManager;
 import si.bismuth.utils.HUDController;
 
+import javax.security.auth.login.LoginException;
 
 public class MCServer {
 	public static final Logger LOG = LogManager.getLogger("Bismuth");
 	public static final PluginChannelsManager channelManager = new PluginChannelsManager();
+	public static MinecraftServer server;
+	public static DCBot bot;
 	private static final IRecipe duration1 = new ShapelessRecipes("rocket", makeFirework(1), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER)));
 	private static final IRecipe duration2 = new ShapelessRecipes("rocket", makeFirework(2), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER)));
 	private static final IRecipe duration3 = new ShapelessRecipes("rocket", makeFirework(3), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER)));
-	public static MinecraftServer server;
 
 	static {
 		CraftingManager.register("bismuth:durationone", duration1);
@@ -46,8 +50,9 @@ public class MCServer {
 		MCServer.server = server;
 	}
 
-	public static void onServerLoaded(MinecraftServer server) {
+	public static void onServerLoaded(MinecraftServer server) throws LoginException {
 		LoggerRegistry.initLoggers(server);
+		MCServer.bot = new DCBot(((DedicatedServer) server).getStringProperty("botToken", ""));
 	}
 
 	public static void tick(MinecraftServer server) {
