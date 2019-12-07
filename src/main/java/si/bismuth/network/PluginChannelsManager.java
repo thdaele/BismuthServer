@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import si.bismuth.MCServer;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,16 +35,11 @@ public class PluginChannelsManager {
 			return;
 		}
 
-		try {
-			clazz.getMethod("setChannelName", String.class).invoke(null, clazz.getDeclaredAnnotation(PacketChannelName.class).value());
-			final String channel = (String) clazz.getMethod("getChannelName").invoke(null);
-			if (this.allChannels.containsKey(channel)) {
-				MCServer.LOG.error("Packet {} attempted to register packet on channel '{}' but it already exists!", clazz.getSimpleName(), channel);
-			} else {
-				this.allChannels.put(channel, clazz);
-			}
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
+		final String channel = this.getChannelFromPacket(clazz);
+		if (this.allChannels.containsKey(channel)) {
+			MCServer.LOG.error("Packet {} attempted to register packet on channel '{}' but it already exists!", clazz.getSimpleName(), channel);
+		} else {
+			this.allChannels.put(channel, clazz);
 		}
 	}
 
@@ -56,9 +50,11 @@ public class PluginChannelsManager {
 	}
 
 	public void sendPacketToPlayer(EntityPlayerMP player, BisPacket packet) {
-		if (this.getChannelsForPlayer(player.getUniqueID()).contains(BisPacket.getChannelName())) {
+		//TODO: plz fix
+		final String channel = this.getChannelFromPacket(packet);
+		if (this.getChannelsForPlayer(player.getUniqueID()).contains(channel)) {
 			packet.writePacketData();
-			player.connection.sendPacket(new SPacketCustomPayload(BisPacket.getChannelName(), packet.getPacketBuffer()));
+			player.connection.sendPacket(new SPacketCustomPayload(channel, packet.getPacketBuffer()));
 		}
 	}
 
@@ -100,5 +96,13 @@ public class PluginChannelsManager {
 		}
 
 		return channels.get(player);
+	}
+
+	private String getChannelFromPacket(BisPacket packet) {
+		return this.getChannelFromPacket(packet.getClass());
+	}
+
+	private String getChannelFromPacket(Class<? extends BisPacket> clazz) {
+		return "Bis|" + clazz.getDeclaredAnnotation(PacketChannelName.class).value();
 	}
 }

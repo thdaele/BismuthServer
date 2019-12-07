@@ -14,14 +14,9 @@ public class BisPacketSort extends BisPacket {
 		// noop
 	}
 
-	public BisPacketSort(boolean playerInv) {
-		this.isPlayerInv = playerInv;
-	}
-
 	@Override
 	public void writePacketData() {
-		final PacketBuffer buf = this.getPacketBuffer();
-		buf.writeBoolean(this.isPlayerInv);
+		// noop
 	}
 
 	@Override

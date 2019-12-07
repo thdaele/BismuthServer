@@ -23,7 +23,7 @@ import javax.security.auth.login.LoginException;
 
 public class MCServer {
 	public static final Logger LOG = LogManager.getLogger("Bismuth");
-	public static final PluginChannelsManager channelManager = new PluginChannelsManager();
+	public static final PluginChannelsManager pcm = new PluginChannelsManager();
 	public static MinecraftServer server;
 	public static DCBot bot;
 	private static final IRecipe duration1 = new ShapelessRecipes("rocket", makeFirework(1), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER)));
@@ -62,7 +62,7 @@ public class MCServer {
 	public static void playerConnected(EntityPlayerMP player) {
 		LoggerRegistry.playerConnected(player);
 		unlockCustomRecipes(player);
-		channelManager.sendRegisterToPlayer(player);
+		pcm.sendRegisterToPlayer(player);
 	}
 
 	public static void playerDisconnected(EntityPlayerMP player) {

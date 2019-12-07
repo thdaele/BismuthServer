@@ -17,6 +17,6 @@ public abstract class NetHandlerPlayServerMixin {
 
 	@Inject(method = "processCustomPayload", at = @At(value = "TAIL"))
 	private void onProcessCustomPayload(CPacketCustomPayload packet, CallbackInfo ci) {
-		MCServer.channelManager.processIncoming(this.player, packet);
+		MCServer.pcm.processIncoming(this.player, packet);
 	}
 }
