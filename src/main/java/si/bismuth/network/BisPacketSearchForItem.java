@@ -44,7 +44,6 @@ public class BisPacketSearchForItem extends BisPacket {
 
 	@Override
 	public void processPacket(EntityPlayerMP player) {
-		final long s0 = System.nanoTime();
 		final int range = 8;
 		final NonNullList<BlockPos> positions = NonNullList.create();
 		for (int i = -range; i <= range; i++) {
