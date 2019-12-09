@@ -19,7 +19,7 @@ apply plugin: "com.github.johnrengelman.shadow"
 
 version = "1.2.0"
 group = "si.bismuth" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "bismuthtweaker"
+archivesBaseName = "bismuthserver"
 def tweakerClass = "${group}.launch.BismuthTweaker"
 
 minecraft {
@@ -45,7 +45,7 @@ mixin {
 	defaultObfuscationEnv searge
 }
 
-sourceSets.main.ext.refMap = "mixins.bismuthtweaker.refmap.json"
+sourceSets.main.ext.refMap = "mixins.bismuthserver.refmap.json"
 
 repositories {
 	maven { url = "https://repo.spongepowered.org/maven" }

@@ -12,7 +12,7 @@ public class BismuthTweaker implements ITweaker {
 	@Override
 	public void injectIntoClassLoader(LaunchClassLoader loader) {
 		MixinBootstrap.init();
-		Mixins.addConfiguration("mixins.bismuthtweaker.json");
+		Mixins.addConfiguration("mixins.bismuthserver.json");
 	}
 
 	@Override

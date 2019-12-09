@@ -1,6 +1,6 @@
 {
 	"package": "si.bismuth.mixins",
-	"refmap": "mixins.bismuthtweaker.refmap.json",
+	"refmap": "mixins.bismuthserver.refmap.json",
 	"minVersion": "0.7.3",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
