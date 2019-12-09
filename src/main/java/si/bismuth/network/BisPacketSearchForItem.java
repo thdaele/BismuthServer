@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import si.bismuth.MCServer;
+import si.bismuth.utils.InventoryHelper;
 
 import java.io.IOException;
 
@@ -55,20 +56,22 @@ public class BisPacketSearchForItem extends BisPacket {
 					final IInventory container = TileEntityHopper.getInventoryAtPosition(player.world, x, y, z);
 					// silence inspection since it falsely claims that container cannot be null. :(
 					//noinspection ConstantConditions
-					if (container == null)
+					if (container == null) {
 						continue;
+					}
+
 					for (int s = 0; s < container.getSizeInventory(); s++) {
 						final ItemStack stackInSlot = container.getStackInSlot(s);
-						if (stackInSlot.isItemEqual(this.stack)) {
+						if (InventoryHelper.areItemStacksEqualIgnoringCount(this.stack, stackInSlot)) {
 							positions.add(new BlockPos(x, y, z));
 							break;
 						} else if (Block.getBlockFromItem(stackInSlot.getItem()) instanceof BlockShulkerBox) {
 							final NBTTagCompound tag = stackInSlot.getTagCompound();
-							if (tag != null) {
-								final NBTTagList list = tag.getTagList("Items", 9);
+							if (tag != null && tag.hasKey("BlockEntityTag", 10)) {
+								final NBTTagList list = tag.getCompoundTag("BlockEntityTag").getTagList("Items", 10);
 								for (int b = 0; b < list.tagCount(); b++) {
 									final NBTTagCompound compound = list.getCompoundTagAt(b);
-									if (new ItemStack(compound).isItemEqual(this.stack)) {
+									if (InventoryHelper.areItemStacksEqualIgnoringCount(this.stack, new ItemStack(compound))) {
 										positions.add(new BlockPos(x, y, z));
 										break;
 									}

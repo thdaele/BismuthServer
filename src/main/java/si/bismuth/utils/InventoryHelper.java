@@ -63,10 +63,33 @@ public class InventoryHelper {
 			return false;
 		}
 
-		if (first.getCount() == first.getMaxStackSize() || second.getCount() == second.getMaxStackSize()) {
+		if (first.getCount() >= first.getMaxStackSize() || second.getCount() >= second.getMaxStackSize()) {
 			return false;
 		}
 
 		return ItemStack.areItemsEqual(first, second);
+	}
+
+	public static boolean areItemStacksEqualIgnoringCount(ItemStack first, ItemStack second) {
+		if (first.isEmpty() && second.isEmpty()) {
+			return true;
+		} else {
+			return !first.isEmpty() && !second.isEmpty() && isItemStackEqualIgnoringCount(first, second);
+		}
+	}
+
+	/**
+	 * compares ItemStack argument to the instance ItemStack; returns true if both ItemStacks are equal
+	 */
+	private static boolean isItemStackEqualIgnoringCount(ItemStack first, ItemStack second) {
+		if (first.getItem() != second.getItem()) {
+			return false;
+		} else if (first.getItemDamage() != second.getItemDamage()) {
+			return false;
+		} else if (first.getTagCompound() == null && second.getTagCompound() != null) {
+			return false;
+		} else {
+			return first.getTagCompound() == null || first.getTagCompound().equals(second.getTagCompound());
+		}
 	}
 }
