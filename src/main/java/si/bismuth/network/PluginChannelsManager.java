@@ -9,7 +9,6 @@ import net.minecraft.network.play.server.SPacketCustomPayload;
 import org.apache.commons.lang3.StringUtils;
 import si.bismuth.MCServer;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,8 +71,8 @@ public class PluginChannelsManager {
 				final BisPacket packet = this.allChannels.get(channel).newInstance();
 				packet.readPacketData(data);
 				packet.processPacket(player);
-			} catch (IllegalAccessException | InstantiationException | IOException e) {
-				e.printStackTrace();
+			} catch (Exception ignored) {
+				// meh, noop
 			}
 		}
 	}
