@@ -78,7 +78,7 @@ public abstract class PlayerListMixin {
 	@Inject(method = "sendMessage(Lnet/minecraft/util/text/ITextComponent;Z)V", at = @At("HEAD"))
 	private void onPlayerSendMessage(ITextComponent component, boolean isSystem, CallbackInfo ci) {
 		if (!isSystem) {
-			final String text = component.getUnformattedText().replaceFirst("<(\\S*?)>", "<`$1`>");
+			final String text = component.getUnformattedText().replaceFirst("<(\\S*?)>", "\u02F9`$1`\u02FC");
 			try {
 				MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(text).queue();
 			} catch (Exception ignored) {
