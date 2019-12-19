@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
 
@@ -18,5 +19,10 @@ public abstract class NetHandlerPlayServerMixin {
 	@Inject(method = "processCustomPayload", at = @At(value = "TAIL"))
 	private void onProcessCustomPayload(CPacketCustomPayload packet, CallbackInfo ci) {
 		MCServer.pcm.processIncoming(this.player, packet);
+	}
+
+	@Redirect(method = "processPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayerMP;isInvulnerableDimensionChange()Z"))
+	private boolean preventPlayerMovedWronglyOrTooQuickly(EntityPlayerMP player) {
+		return true;
 	}
 }
