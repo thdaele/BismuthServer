@@ -36,7 +36,7 @@ public class CommandStackBoxes extends CommandBismuthBase {
 
 		Map<EnumDyeColor, Integer> boxesToStack = new HashMap<>();
 		final EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-		for (final Slot slot : player.openContainer.inventorySlots) {
+		for (final Slot slot : player.inventoryContainer.inventorySlots) {
 			final Pair<EnumDyeColor, Integer> pair = getShulkerBoxColourAndAmour(slot.getStack());
 			if (pair.getRight() > 0) {
 				boxesToStack.merge(pair.getLeft(), pair.getRight(), Integer::sum);
@@ -52,6 +52,8 @@ public class CommandStackBoxes extends CommandBismuthBase {
 				}
 			}
 		}
+
+		player.inventoryContainer.detectAndSendChanges();
 	}
 
 	private Pair<EnumDyeColor, Integer> getShulkerBoxColourAndAmour(final ItemStack stack) {
