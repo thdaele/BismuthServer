@@ -1,7 +1,18 @@
 package si.bismuth.utils;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntityEnderChest;
+import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import si.bismuth.MCServer;
+import si.bismuth.network.BisPacketSearchForItem;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -73,23 +84,59 @@ public class InventoryHelper {
 	public static boolean areItemStacksEqualIgnoringCount(ItemStack first, ItemStack second) {
 		if (first.isEmpty() && second.isEmpty()) {
 			return true;
-		} else {
-			return !first.isEmpty() && !second.isEmpty() && isItemStackEqualIgnoringCount(first, second);
-		}
-	}
-
-	/**
-	 * compares ItemStack argument to the instance ItemStack; returns true if both ItemStacks are equal
-	 */
-	private static boolean isItemStackEqualIgnoringCount(ItemStack first, ItemStack second) {
-		if (first.getItem() != second.getItem()) {
+		} else if (first.getItem() != second.getItem()) {
 			return false;
 		} else if (first.getItemDamage() != second.getItemDamage()) {
-			return false;
-		} else if (first.getTagCompound() == null && second.getTagCompound() != null) {
 			return false;
 		} else {
 			return first.getTagCompound() == null || first.getTagCompound().equals(second.getTagCompound());
 		}
+	}
+
+	public static void processFindItem(EntityPlayerMP player, ItemStack stack) {
+		final int range = 8;
+		final NonNullList<BlockPos> positions = NonNullList.create();
+		for (int i = -range; i <= range; i++) {
+			for (int j = -range; j <= range; j++) {
+				for (int k = -range; k <= range; k++) {
+					final int x = i + player.getPosition().getX();
+					final int y = j + player.getPosition().getY();
+					final int z = k + player.getPosition().getZ();
+					final BlockPos pos = new BlockPos(x, y, z);
+					IInventory container = TileEntityHopper.getInventoryAtPosition(player.world, x, y, z);
+					if (player.world.getTileEntity(pos) instanceof TileEntityEnderChest) {
+						System.out.println("Found ender chest!");
+						container = player.getInventoryEnderChest();
+					}
+
+					//noinspection ConstantConditions
+					if (container == null) {
+						continue;
+					}
+
+					for (int s = 0; s < container.getSizeInventory(); s++) {
+						final ItemStack stackInSlot = container.getStackInSlot(s);
+						if (InventoryHelper.areItemStacksEqualIgnoringCount(stack, stackInSlot)) {
+							positions.add(pos);
+							break;
+						} else if (Block.getBlockFromItem(stackInSlot.getItem()) instanceof BlockShulkerBox) {
+							final NBTTagCompound tag = stackInSlot.getTagCompound();
+							if (tag != null && tag.hasKey("BlockEntityTag", 10)) {
+								final NBTTagList list = tag.getCompoundTag("BlockEntityTag").getTagList("Items", 10);
+								for (int b = 0; b < list.tagCount(); b++) {
+									final NBTTagCompound compound = list.getCompoundTagAt(b);
+									if (InventoryHelper.areItemStacksEqualIgnoringCount(stack, new ItemStack(compound))) {
+										positions.add(pos);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		MCServer.pcm.sendPacketToPlayer(player, new BisPacketSearchForItem(positions));
 	}
 }

@@ -1,20 +1,21 @@
 package si.bismuth.mixins;
 
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
-import si.bismuth.commands.CommandLog;
-import si.bismuth.commands.CommandPing;
-import si.bismuth.commands.CommandPlayer;
-import si.bismuth.commands.CommandStackBoxes;
-import si.bismuth.commands.CommandTick;
 import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandListener;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import si.bismuth.commands.CommandLog;
+import si.bismuth.commands.CommandPing;
+import si.bismuth.commands.CommandPlayer;
+import si.bismuth.commands.CommandSearchForItem;
+import si.bismuth.commands.CommandStackBoxes;
+import si.bismuth.commands.CommandTick;
 
 @Mixin(ServerCommandManager.class)
 public abstract class ServerCommandManagerMixin extends CommandHandler implements ICommandListener {
@@ -23,13 +24,14 @@ public abstract class ServerCommandManagerMixin extends CommandHandler implement
 		this.registerCommand(new CommandLog());
 		this.registerCommand(new CommandPing());
 		this.registerCommand(new CommandPlayer());
+		this.registerCommand(new CommandSearchForItem());
 		this.registerCommand(new CommandStackBoxes());
 		this.registerCommand(new CommandTick());
 	}
 
 	@Inject(method = "notifyListener", at = @At("HEAD"), cancellable = true)
 	private void silenceRcon(ICommandSender sender, ICommand command, int flags, String translationKey, Object[] translationArgs, CallbackInfo ci) {
-		if(sender.getName().equals("Rcon")) {
+		if (sender.getName().equals("Rcon")) {
 			ci.cancel();
 		}
 	}
