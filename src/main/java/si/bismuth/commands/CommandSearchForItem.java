@@ -38,7 +38,7 @@ public class CommandSearchForItem extends CommandBismuthBase {
 		}
 
 		if (args.length == 0) {
-			InventoryHelper.processFindItem((EntityPlayerMP) sender, ((EntityPlayerMP) sender).getActiveItemStack());
+			InventoryHelper.processFindItem((EntityPlayerMP) sender, ((EntityPlayerMP) sender).getHeldItemMainhand());
 			return;
 		}
 

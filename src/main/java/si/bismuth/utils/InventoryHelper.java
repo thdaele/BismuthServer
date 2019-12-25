@@ -105,7 +105,6 @@ public class InventoryHelper {
 					final BlockPos pos = new BlockPos(x, y, z);
 					IInventory container = TileEntityHopper.getInventoryAtPosition(player.world, x, y, z);
 					if (player.world.getTileEntity(pos) instanceof TileEntityEnderChest) {
-						System.out.println("Found ender chest!");
 						container = player.getInventoryEnderChest();
 					}
 
