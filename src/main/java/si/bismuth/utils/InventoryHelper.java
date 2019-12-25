@@ -94,6 +94,10 @@ public class InventoryHelper {
 	}
 
 	public static void processFindItem(EntityPlayerMP player, ItemStack stack) {
+		if (stack.isEmpty()) {
+			return;
+		}
+
 		final int range = 8;
 		final NonNullList<BlockPos> positions = NonNullList.create();
 		for (int i = -range; i <= range; i++) {
