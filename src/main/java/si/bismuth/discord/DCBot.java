@@ -33,6 +33,18 @@ public class DCBot extends ListenerAdapter {
 				.build();
 	}
 
+	public void sendToDiscord(String message) {
+		try {
+			MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(message).queue();
+		} catch (Exception ignored) {
+			// noop
+		}
+	}
+
+	public void sendDeathmessage(ITextComponent component) {
+		this.sendToDiscord("**\uD83D\uDD71 " + component.getUnformattedText() + "**");
+	}
+
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || event.getGuild().getIdLong() != BismuthID) {

@@ -13,6 +13,7 @@
 		"EntityLivingBaseMixin",
 		"EntityMixin",
 		"EntityPlayerMPMixin",
+		"EntityTameableMixin",
 		"EntityXPOrbMixin",
 		"EnumFacingMixin",
 		"IBlockShulkerBoxMixin",

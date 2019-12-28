@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
-import si.bismuth.discord.DCBot;
 import si.bismuth.patches.EntityPlayerMPFake;
 import si.bismuth.patches.NetHandlerPlayServerFake;
 import si.bismuth.utils.IWorldServer;
@@ -79,11 +78,7 @@ public abstract class PlayerListMixin {
 	private void onPlayerSendMessage(ITextComponent component, boolean isSystem, CallbackInfo ci) {
 		if (!isSystem) {
 			final String text = component.getUnformattedText().replaceFirst("<(\\S*?)>", "\u02F9`$1`\u02FC");
-			try {
-				MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(text).queue();
-			} catch (Exception ignored) {
-				// noop
-			}
+			MCServer.bot.sendToDiscord(text);
 		}
 	}
 
