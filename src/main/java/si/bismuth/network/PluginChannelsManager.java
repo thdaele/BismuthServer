@@ -26,6 +26,7 @@ public class PluginChannelsManager {
 		this.registerPacket(BisPacketGetInventory.class);
 		this.registerPacket(BisPacketSearchForItem.class);
 		this.registerPacket(BisPacketSort.class);
+		this.registerPacket(FakeCarpetClientSupport.class);
 	}
 
 	private void registerPacket(Class<? extends BisPacket> clazz) {
@@ -102,6 +103,7 @@ public class PluginChannelsManager {
 	}
 
 	private String getChannelFromPacket(Class<? extends BisPacket> clazz) {
-		return "Bis|" + clazz.getDeclaredAnnotation(PacketChannelName.class).value();
+		PacketChannelName annotation = clazz.getDeclaredAnnotation(PacketChannelName.class);
+		return (annotation.isCustom() ? "" : "Bis|") + annotation.value();
 	}
 }

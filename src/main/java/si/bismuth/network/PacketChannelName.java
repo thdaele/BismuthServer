@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PacketChannelName {
 	String value() default "";
+
+	boolean isCustom() default false;
 }
