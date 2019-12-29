@@ -26,6 +26,7 @@ public class FakeCarpetClientSupport extends BisPacket {
 		final NBTTagList carpetRules = new NBTTagList();
 		carpetRules.appendTag(ctrlQCrafting);
 		nbt.setTag("ruleList", carpetRules);
+		buf.writeInt(0);
 		buf.writeCompoundTag(nbt);
 	}
 
