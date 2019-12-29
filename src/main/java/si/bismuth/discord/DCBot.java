@@ -14,6 +14,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import org.apache.commons.lang3.StringUtils;
 import si.bismuth.MCServer;
@@ -23,6 +24,7 @@ import javax.security.auth.login.LoginException;
 public class DCBot extends ListenerAdapter {
 	final public static long BismuthID = 635252849571266580L;
 	final public static long ChannelID = 635254222916419590L;
+	final public static String channelURL = String.format("https://discordapp.com/channels/%d/%d/", BismuthID, ChannelID);
 	final public static String PREFIX = ";";
 	final public JDA jda;
 
@@ -51,6 +53,7 @@ public class DCBot extends ListenerAdapter {
 			return;
 		}
 
+		// TODO: handle DC2MC images
 		final MessageChannel channel = event.getChannel();
 		final Member member = event.getMember();
 		final Message message = event.getMessage();
@@ -59,7 +62,8 @@ public class DCBot extends ListenerAdapter {
 			final String name = event.getMember().getEffectiveName();
 			final ITextComponent symbol = new TextComponentString("\u24B9");
 			final HoverEvent hoverText = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(member.getUser().getAsTag()));
-			symbol.getStyle().setColor(TextFormatting.BLUE).setHoverEvent(hoverText);
+			final ClickEvent clickText = new ClickEvent(ClickEvent.Action.OPEN_URL, channelURL);
+			symbol.getStyle().setColor(TextFormatting.BLUE).setHoverEvent(hoverText).setClickEvent(clickText);
 			final ITextComponent text = new TextComponentTranslation("chat.type.text", name, content);
 			MCServer.server.addScheduledTask(() -> MCServer.server.getPlayerList().sendMessage(new TextComponentString("").appendSibling(symbol).appendSibling(text)));
 			return;
@@ -75,7 +79,8 @@ public class DCBot extends ListenerAdapter {
 					title = players.length + " player" + (players.length > 1 ? "s" : "") + " online:";
 				}
 
-				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n"), EmbedType.RICH, null, 0x8665BD, null, null, new MessageEmbed.AuthorInfo("BismuthBot", null, "https://i.imgur.com/a2w3DjI.png", null), null, null, null, null);
+				final MessageEmbed.AuthorInfo author = new MessageEmbed.AuthorInfo("BismuthBot", null, "https://i.imgur.com/a2w3DjI.png", null);
+				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n"), EmbedType.RICH, null, 0x8665BD, null, null, author, null, null, null, null);
 				channel.sendMessage(embed).queue();
 			});
 		}
