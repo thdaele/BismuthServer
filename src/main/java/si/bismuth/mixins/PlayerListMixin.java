@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
 import si.bismuth.patches.EntityPlayerMPFake;
 import si.bismuth.patches.NetHandlerPlayServerFake;
-import si.bismuth.utils.IWorldServer;
 
 import java.util.regex.Pattern;
 
@@ -67,10 +66,8 @@ public abstract class PlayerListMixin {
 
 	@Inject(method = "transferEntityToWorld", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 0, target = "Lnet/minecraft/profiler/Profiler;endSection()V"))
 	private void onTransferEntityToWorld(Entity entity, int lastDimension, WorldServer oldWorld, WorldServer newWorld, CallbackInfo ci) {
-		if (entity.addedToChunk && ((IWorldServer) oldWorld).isChunkLoadedC(entity.chunkCoordX, entity.chunkCoordZ, true)) {
-			if (entity.addedToChunk && ((IWorldServer) oldWorld).isChunkLoadedC(entity.chunkCoordX, entity.chunkCoordZ, true)) {
-				oldWorld.getChunk(entity.chunkCoordX, entity.chunkCoordZ).removeEntityAtIndex(entity, entity.chunkCoordY);
-			}
+		if (entity.addedToChunk && ((IWorldServerMixin) oldWorld).getIsChunkLoaded(entity.chunkCoordX, entity.chunkCoordZ, true)) {
+			oldWorld.getChunk(entity.chunkCoordX, entity.chunkCoordZ).removeEntityAtIndex(entity, entity.chunkCoordY);
 		}
 	}
 
@@ -81,45 +78,4 @@ public abstract class PlayerListMixin {
 			MCServer.bot.sendToDiscord(text);
 		}
 	}
-
-	/*
-	@ModifyVariable(method = "sendMessage(Lnet/minecraft/util/text/ITextComponent;Z)V", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-	private ITextComponent applyTextFormatting(ITextComponent component) {
-		return this.applyFormatting(component);
-	}
-
-	// mega shitty and fragile code.
-	//TODO: Fix plz
-	private ITextComponent applyFormatting(ITextComponent component) {
-		// Current handle two cases:
-		// * DC chat which is TextComponentString{[TextComponentString{prefix},TextComponentTranslation{name,chat}]}
-		// * IG chat which is TextComponentTranslation{name,chat}
-		// mega hax lol.
-		System.out.println(component.getClass());
-
-		TextComponentTranslation startComponent;
-		try {
-			if (component instanceof TextComponentString) {
-				startComponent = (TextComponentTranslation) component.getSiblings().get(1);
-			} else {
-				startComponent = (TextComponentTranslation) component;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return component;
-		}
-
-		// code stolen from Whitefang34's post on Stackoverflow: https://stackoverflow.com/questions/5713558/detect-and-extract-url-from-a-string/5713866#5713866
-		// Pattern for recognizing a URL, based off RFC 3986
-		final Matcher matcher = urlPattern.matcher(startComponent.getUnformattedComponentText());
-		final ITextComponent newComponent = new TextComponentTranslation();
-		int lastMatchEnd = 0;
-		while (matcher.find()) {
-			final int matchStart = matcher.start(1);
-			final int matchEnd = matcher.end();
-
-		}
-
-		return newComponent;
-	}*/
 }

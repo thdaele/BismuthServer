@@ -20,6 +20,7 @@
 		"IEntityXPOrbMixin",
 		"InventoryPlayerMixin",
 		"ISPacketPlayerListHeaderFooterMixin",
+		"IWorldServerMixin",
 		"MinecraftServerMixin",
 		"NetHandlerPlayServerMixin",
 		"PlayerInteractionManagerMixin",

@@ -1,7 +1,5 @@
 package si.bismuth.mixins;
 
-import si.bismuth.utils.IWorldServer;
-import si.bismuth.utils.Profiler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.server.MinecraftServer;
@@ -20,9 +18,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import si.bismuth.utils.Profiler;
 
 @Mixin(WorldServer.class)
-public abstract class WorldServerMixin extends World implements IWorldServer {
+public abstract class WorldServerMixin extends World {
 	protected WorldServerMixin(ISaveHandler ish, WorldInfo wi, WorldProvider wp, net.minecraft.profiler.Profiler p, boolean b) {
 		super(ish, wi, wp, p, b);
 	}
@@ -35,11 +34,6 @@ public abstract class WorldServerMixin extends World implements IWorldServer {
 	private static Logger LOGGER;
 	private String worldName;
 	private Entity myEntity;
-
-	@Override
-	public boolean isChunkLoadedC(int x, int z, boolean allowEmpty) {
-		return this.isChunkLoaded(x, z, allowEmpty);
-	}
 
 	@Inject(method = "canAddEntity", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 0, remap = false))
 	private void keepACopy(Entity entity, CallbackInfoReturnable<Boolean> cir) {
