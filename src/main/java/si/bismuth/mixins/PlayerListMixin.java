@@ -17,7 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
 import si.bismuth.patches.EntityPlayerMPFake;
 import si.bismuth.patches.NetHandlerPlayServerFake;
+import si.bismuth.utils.ScoreboardHelper;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Mixin(PlayerList.class)
@@ -74,8 +77,12 @@ public abstract class PlayerListMixin {
 	@Inject(method = "sendMessage(Lnet/minecraft/util/text/ITextComponent;Z)V", at = @At("HEAD"))
 	private void onPlayerSendMessage(ITextComponent component, boolean isSystem, CallbackInfo ci) {
 		if (!isSystem) {
-			final String text = component.getUnformattedText().replaceFirst("<(\\S*?)>", "\u02F9`$1`\u02FC");
+			final String text = component.getUnformattedText().replaceFirst("^<(\\S*?)>", "\u02F9`$1`\u02FC");
 			MCServer.bot.sendToDiscord(text);
+			final List<String> args = Arrays.asList(text.split(" "));
+			if (args.size() > 1 && args.get(1).equals(";s")) {
+				ScoreboardHelper.setSidebarScoreboard(args);
+			}
 		}
 	}
 }

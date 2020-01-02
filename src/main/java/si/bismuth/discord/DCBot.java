@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import si.bismuth.MCServer;
 
 import javax.security.auth.login.LoginException;
+import java.util.Arrays;
 
 public class DCBot extends ListenerAdapter {
 	final public static long BismuthID = 635252849571266580L;
@@ -69,7 +70,13 @@ public class DCBot extends ListenerAdapter {
 			return;
 		}
 
-		if (this.isCommand(content, "list") || this.isCommand(content, "players") || this.isCommand(content, "online")) {
+		final String[] args = content.split(" ");
+		if (args.length == 0) {
+			return;
+		}
+
+		final String command = args[0];
+		if (this.isCommand(command, new String[]{"list", "players", "online"})) {
 			MCServer.server.addScheduledTask(() -> {
 				final String[] players = MCServer.server.getOnlinePlayerNames();
 				String title;
@@ -83,10 +90,17 @@ public class DCBot extends ListenerAdapter {
 				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n"), EmbedType.RICH, null, 0x8665BD, null, null, author, null, null, null, null);
 				channel.sendMessage(embed).queue();
 			});
+
+			return;
 		}
+
+		/*if (this.isCommand(command, new String[]{"s", "score", "scores", "scoreboard"})) {
+			MCServer.server.addScheduledTask(() -> ScoreboardHelper.setSidebarScoreboard(args));
+			return;
+		}*/
 	}
 
-	private boolean isCommand(String text, String command) {
-		return text.startsWith(PREFIX + command);
+	private boolean isCommand(String text, String[] command) {
+		return Arrays.stream(command).anyMatch(s -> text.startsWith(PREFIX + s));
 	}
 }
