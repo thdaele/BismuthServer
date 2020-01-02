@@ -26,6 +26,10 @@ public class BisPacketSort extends BisPacket {
 
 	@Override
 	public void processPacket(EntityPlayerMP player) {
+		if (player.isSpectator()) {
+			return;
+		}
+
 		if (this.isPlayerInv) {
 			InventoryHelper.sortInv(player.inventory, 9, 27);
 		} else {
