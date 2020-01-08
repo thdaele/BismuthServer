@@ -1,8 +1,11 @@
 package si.bismuth.mixins;
 
+import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,9 +15,13 @@ import si.bismuth.MCServer;
 import si.bismuth.utils.IRecipeBookItemDuper;
 
 @Mixin(EntityPlayerMP.class)
-public abstract class EntityPlayerMPMixin implements IRecipeBookItemDuper {
+public abstract class EntityPlayerMPMixin extends EntityPlayer implements IRecipeBookItemDuper {
 	private int dupe;
 	private boolean scanForDuping;
+
+	public EntityPlayerMPMixin(World worldIn, GameProfile gameProfileIn) {
+		super(worldIn, gameProfileIn);
+	}
 
 	@Override
 	public void clearDupeItem() {
@@ -47,5 +54,6 @@ public abstract class EntityPlayerMPMixin implements IRecipeBookItemDuper {
 	private void sendMessage(PlayerList list, ITextComponent component) {
 		list.sendMessage(component);
 		MCServer.bot.sendDeathmessage(component);
+		MCServer.LOG.info("Player {} died at {} {} {} in {}", this.getName(), this.posX, this.posY, this.posZ, this.world.provider.getDimensionType().getName());
 	}
 }
