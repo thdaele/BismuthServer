@@ -3,6 +3,7 @@ package si.bismuth.mixins;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
+import net.minecraft.network.play.client.CPacketPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,5 +25,10 @@ public abstract class NetHandlerPlayServerMixin {
 	@Redirect(method = "processPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayerMP;isInvulnerableDimensionChange()Z"))
 	private boolean preventPlayerMovedWronglyOrTooQuickly(EntityPlayerMP player) {
 		return true;
+	}
+
+	@Inject(method = "processPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetHandlerPlayServer;disconnect(Lnet/minecraft/util/text/ITextComponent;)V"))
+	private void debugPlayerBeingKicked(CPacketPlayer packet, CallbackInfo ci) {
+		MCServer.bot.sendToDiscord(String.format("nessie pls %s %s %s %s %s", packet.getX(0D), packet.getY(0D), packet.getZ(0D), packet.getPitch(0F), packet.getYaw(0F)));
 	}
 }
