@@ -39,7 +39,7 @@ public abstract class ServerCommandManagerMixin extends CommandHandler implement
 		}
 	}
 
-	@Inject(method = "notifyListener", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "notifyListener", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/text/Style;setItalic(Ljava/lang/Boolean;)Lnet/minecraft/util/text/Style;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void logAdminCommands(ICommandSender sender, ICommand command, int flags, String translationKey, Object[] translationArgs, CallbackInfo ci, boolean flag, MinecraftServer server, ITextComponent component) {
 		MCServer.bot.sendToDiscord(component.getUnformattedText());
 	}
