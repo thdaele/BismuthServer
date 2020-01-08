@@ -6,10 +6,13 @@ import net.minecraft.command.ICommandListener;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import si.bismuth.MCServer;
 import si.bismuth.commands.CommandLog;
 import si.bismuth.commands.CommandPing;
 import si.bismuth.commands.CommandPlayer;
@@ -34,5 +37,10 @@ public abstract class ServerCommandManagerMixin extends CommandHandler implement
 		if (sender.getName().equals("Rcon")) {
 			ci.cancel();
 		}
+	}
+
+	@Inject(method = "notifyListener", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
+	private void logAdminCommands(ICommandSender sender, ICommand command, int flags, String translationKey, Object[] translationArgs, CallbackInfo ci, boolean flag, MinecraftServer server, ITextComponent component) {
+		MCServer.bot.sendToDiscord(component.getUnformattedText());
 	}
 }
