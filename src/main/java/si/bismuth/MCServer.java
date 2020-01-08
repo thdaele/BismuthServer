@@ -22,7 +22,7 @@ import si.bismuth.utils.HUDController;
 import javax.security.auth.login.LoginException;
 
 public class MCServer {
-	public static final Logger LOG = LogManager.getLogger("Bismuth");
+	public static final Logger log = LogManager.getLogger("Bismuth");
 	public static final PluginChannelsManager pcm = new PluginChannelsManager();
 	public static MinecraftServer server;
 	public static DCBot bot;

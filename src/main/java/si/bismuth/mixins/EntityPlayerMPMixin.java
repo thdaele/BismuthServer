@@ -54,6 +54,6 @@ public abstract class EntityPlayerMPMixin extends EntityPlayer implements IRecip
 	private void sendMessage(PlayerList list, ITextComponent component) {
 		list.sendMessage(component);
 		MCServer.bot.sendDeathmessage(component);
-		MCServer.LOG.info("Player {} died at {} {} {} in {}", this.getName(), this.posX, this.posY, this.posZ, this.world.provider.getDimensionType().getName());
+		MCServer.log.info("Player {} died at {} {} {} in {}", this.getName(), this.posX, this.posY, this.posZ, this.world.provider.getDimensionType().getName());
 	}
 }

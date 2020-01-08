@@ -6,7 +6,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.storage.ThreadedFileIOBase;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import si.bismuth.MCServer;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -108,7 +106,7 @@ public abstract class AnvilChunkLoaderMixin {
 		try {
 			this.writeChunkData(chunkpos, compound);
 		} catch (Exception exception) {
-			MCServer.LOG.error("Failed to save chunk", exception);
+			MCServer.log.error("Failed to save chunk", exception);
 		}
 
 		this.retireChunkToWrite(chunkpos);

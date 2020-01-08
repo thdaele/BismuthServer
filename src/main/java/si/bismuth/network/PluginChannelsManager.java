@@ -31,13 +31,13 @@ public class PluginChannelsManager {
 
 	private void registerPacket(Class<? extends BisPacket> clazz) {
 		if (!clazz.isAnnotationPresent(PacketChannelName.class)) {
-			MCServer.LOG.error("Packet {} lacks plugin channel annotation.", clazz.getSimpleName());
+			MCServer.log.error("Packet {} lacks plugin channel annotation.", clazz.getSimpleName());
 			return;
 		}
 
 		final String channel = this.getChannelFromPacket(clazz);
 		if (this.allChannels.containsKey(channel)) {
-			MCServer.LOG.error("Packet {} attempted to register packet on channel '{}' but it already exists!", clazz.getSimpleName(), channel);
+			MCServer.log.error("Packet {} attempted to register packet on channel '{}' but it already exists!", clazz.getSimpleName(), channel);
 		} else {
 			this.allChannels.put(channel, clazz);
 		}
