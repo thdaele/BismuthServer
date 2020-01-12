@@ -9,6 +9,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
 
 import java.io.BufferedInputStream;
@@ -33,9 +36,17 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 		super(server, threadName);
 	}
 
+	@Inject(method = "<init>", at = @At("RETURN"))
+	private void localRconONly(IServer server, Socket socket, CallbackInfo ci) {
+		if (!socket.getInetAddress().isLoopbackAddress()) {
+			this.closeSocket();
+		}
+	}
+
 	/**
 	 * @author nessie
 	 * @reason Fixes MC-72390
+	 * @author
 	 */
 	@Overwrite
 	public void run() {
@@ -47,7 +58,7 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 
 				final BufferedInputStream stream = new BufferedInputStream(this.clientSocket.getInputStream());
 				final int i = stream.read(this.buffer, 0, this.buffer.length);
-				if(i == -1) {
+				if (i == -1) {
 					break;
 				}
 
