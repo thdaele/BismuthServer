@@ -9,9 +9,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
 
 import java.io.BufferedInputStream;
@@ -34,13 +31,6 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 
 	protected RConThreadClientMixin(IServer server, String threadName) {
 		super(server, threadName);
-	}
-
-	@Inject(method = "<init>", at = @At("RETURN"))
-	private void localRconONly(IServer server, Socket socket, CallbackInfo ci) {
-		if (!socket.getInetAddress().isLoopbackAddress()) {
-			this.closeSocket();
-		}
 	}
 
 	/**
@@ -79,7 +69,7 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 									try {
 										sendMultipacketResponse(id, server.handleRConCommand(command));
 									} catch (Exception exception) {
-										sendMultipacketResponse(id, "Error executing: " + command + " (" + exception.getMessage() + ")");
+										sendMultipacketResponse(id, String.format("Error executing: %s (%s)", command, exception.getMessage()));
 									}
 								});
 
