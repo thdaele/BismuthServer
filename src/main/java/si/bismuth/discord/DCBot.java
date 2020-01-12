@@ -34,6 +34,7 @@ public class DCBot extends ListenerAdapter {
 				.setToken(token)
 				.addEventListeners(this)
 				.build();
+		this.sendToDiscord("Server started!");
 	}
 
 	public void sendToDiscord(String message) {
