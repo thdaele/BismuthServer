@@ -69,7 +69,7 @@ public abstract class PlayerListMixin {
 
 	@Inject(method = "transferEntityToWorld", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, ordinal = 0, target = "Lnet/minecraft/profiler/Profiler;endSection()V"))
 	private void onTransferEntityToWorld(Entity entity, int lastDimension, WorldServer oldWorld, WorldServer newWorld, CallbackInfo ci) {
-		if (entity.addedToChunk && ((IWorldServerMixin) oldWorld).getIsChunkLoaded(entity.chunkCoordX, entity.chunkCoordZ, true)) {
+		if (entity.addedToChunk && ((IWorldServerMixin) oldWorld).callIsChunkLoaded(entity.chunkCoordX, entity.chunkCoordZ, true)) {
 			oldWorld.getChunk(entity.chunkCoordX, entity.chunkCoordZ).removeEntityAtIndex(entity, entity.chunkCoordY);
 		}
 	}

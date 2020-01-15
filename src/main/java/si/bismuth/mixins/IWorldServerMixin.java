@@ -7,5 +7,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(WorldServer.class)
 public interface IWorldServerMixin {
 	@Invoker
-	boolean getIsChunkLoaded(int x, int z, boolean allowEmpty);
+	boolean callIsChunkLoaded(int x, int z, boolean allowEmpty);
 }
