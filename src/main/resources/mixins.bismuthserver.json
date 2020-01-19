@@ -8,6 +8,7 @@
 		"BlockFarmlandMixin",
 		"BlockPistonBaseMixin",
 		"ChunkMixin",
+		"CommandBroadcastMixin",
 		"ContainerMixin",
 		"EntityItemMixin",
 		"EntityLivingBaseMixin",
