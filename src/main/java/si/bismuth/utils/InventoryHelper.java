@@ -98,7 +98,7 @@ public class InventoryHelper {
 			return;
 		}
 
-		final int range = 8;
+		final int range = 16;
 		final NonNullList<BlockPos> positions = NonNullList.create();
 		for (int i = -range; i <= range; i++) {
 			for (int j = -range; j <= range; j++) {
