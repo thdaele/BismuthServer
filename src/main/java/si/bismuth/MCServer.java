@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.GameType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import si.bismuth.discord.DCBot;
@@ -60,6 +61,13 @@ public class MCServer {
 	}
 
 	public static void playerConnected(EntityPlayerMP player) {
+		final GameType mode = player.interactionManager.getGameType();
+		if (mode == GameType.CREATIVE) {
+			player.setGameType(GameType.SPECTATOR);
+		} else if (mode == GameType.ADVENTURE) {
+			player.setGameType(GameType.SURVIVAL);
+		}
+
 		LoggerRegistry.playerConnected(player);
 		unlockCustomRecipes(player);
 		pcm.sendRegisterToPlayer(player);
