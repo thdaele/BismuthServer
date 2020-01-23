@@ -3,7 +3,7 @@ package si.bismuth.mixins;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.text.ITextComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,11 +27,8 @@ public abstract class NetHandlerPlayServerMixin {
 		return true;
 	}
 
-	@Inject(method = "processPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetHandlerPlayServer;disconnect(Lnet/minecraft/util/text/ITextComponent;)V"))
-	private void debugPlayerBeingKicked(CPacketPlayer packet, CallbackInfo ci) {
-		if (Double.isNaN(packet.getX(0D)) || Double.isNaN(packet.getY(0D)) || Double.isNaN(packet.getZ(0D))) {
-			MCServer.bot.sendToDiscord(String.format("Detected and adjusted: %s (%s %s %s) %s %s (%s %s %s)", this.player.getName(), packet.getX(0D), packet.getY(0D), packet.getZ(0D), packet.getPitch(0F), packet.getYaw(0F), this.player.posX, this.player.posY, this.player.posZ));
-			this.player.connection.setPlayerLocation(this.player.posX, this.player.posY, this.player.posZ, this.player.rotationYaw, this.player.rotationPitch);
-		}
+	@Redirect(method = "processPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetHandlerPlayServer;disconnect(Lnet/minecraft/util/text/ITextComponent;)V"))
+	private void debugPlayerBeingKicked(NetHandlerPlayServer handler, ITextComponent component) {
+		this.player.connection.setPlayerLocation(this.player.prevPosX, this.player.prevPosY, this.player.prevPosZ, this.player.prevRotationYaw, this.player.prevRotationPitch);
 	}
 }
