@@ -32,6 +32,7 @@
 		"ServerRecipeBookHelperMixin",
 		"TileEntityPistonMixin",
 		"WorldEntitySpawnerMixin",
+		"WorldGenBirchTreeMixin",
 		"WorldMixin",
 		"WorldServerMixin"
 	]
