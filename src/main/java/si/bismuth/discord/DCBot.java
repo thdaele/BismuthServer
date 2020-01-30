@@ -88,7 +88,7 @@ public class DCBot extends ListenerAdapter {
 				}
 
 				final MessageEmbed.AuthorInfo author = new MessageEmbed.AuthorInfo("BismuthBot", null, "https://i.imgur.com/a2w3DjI.png", null);
-				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n").replaceAll("(?<!\\\\)_", "\\_"), EmbedType.RICH, null, 0x8665BD, null, null, author, null, null, null, null);
+				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n").replaceAll("_", "\\_"), EmbedType.RICH, null, 0x8665BD, null, null, author, null, null, null, null);
 				channel.sendMessage(embed).queue();
 			});
 
