@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,6 +30,7 @@ public abstract class NetHandlerPlayServerMixin {
 
 	@Redirect(method = "processPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetHandlerPlayServer;disconnect(Lnet/minecraft/util/text/ITextComponent;)V"))
 	private void debugPlayerBeingKicked(NetHandlerPlayServer handler, ITextComponent component) {
-		this.player.connection.setPlayerLocation(this.player.prevPosX, this.player.prevPosY, this.player.prevPosZ, this.player.prevRotationYaw, this.player.prevRotationPitch);
+		handler.player.sendStatusMessage(new TextComponentString("If you're OptiFine F4 or later, disable Fast Math!"), true);
+		this.player.setPositionAndUpdate(this.player.posX, this.player.posY, this.player.posZ);
 	}
 }
