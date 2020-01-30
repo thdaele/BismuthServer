@@ -338,7 +338,7 @@ public class Profiler {
 			String[] parts = entry.getKey().split("\\.");
 			String dim = parts[1];
 			String name = parts[2];
-			Messenger.print_server_message(server, String.format(" - %s in %s: %.3f", name, dim, 1.0D * entry.getValue() / tick_health_requested));
+			Messenger.print_server_message(server, String.format(" - %s in %s: %s", name, dim, entry.getValue() / tick_health_requested));
 		}
 		Messenger.print_server_message(server, "Top 10 grossing:");
 		total = 0;
