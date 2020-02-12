@@ -59,11 +59,15 @@ public class CommandTick extends CommandBismuthBase {
 		if (args.length == 1) {
 			return getListOfStringsMatchingLastWord(args, "health", "entities");
 		}
-		if (args.length == 2 && "health".equalsIgnoreCase(args[0])) {
-			return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
-		}
-		if (args.length == 2 && ("entities".equalsIgnoreCase(args[0]) || "entities".equalsIgnoreCase(args[0]))) {
-			return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
+
+		if (args.length == 2) {
+			if ("health".equalsIgnoreCase(args[0])) {
+				return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
+			}
+
+			if ("entities".equalsIgnoreCase(args[0])) {
+				return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
+			}
 		}
 		return Collections.emptyList();
 	}
