@@ -1,11 +1,11 @@
 package si.bismuth.commands;
 
-import si.bismuth.utils.Profiler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import si.bismuth.utils.Profiler;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -23,7 +23,7 @@ public class CommandTick extends CommandBismuthBase {
 	 * Gets the usage string for the command.
 	 */
 	public String getUsage(ICommandSender sender) {
-		return "Usage: tick <health|entity|entities> [duration]";
+		return "Usage: tick <health|entities> [duration]";
 	}
 
 	/**
@@ -57,12 +57,12 @@ public class CommandTick extends CommandBismuthBase {
 
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		if (args.length == 1) {
-			return getListOfStringsMatchingLastWord(args, "health", "entity", "entities");
+			return getListOfStringsMatchingLastWord(args, "health", "entities");
 		}
 		if (args.length == 2 && "health".equalsIgnoreCase(args[0])) {
 			return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
 		}
-		if (args.length == 2 && ("entity".equalsIgnoreCase(args[0]) || "entities".equalsIgnoreCase(args[0]))) {
+		if (args.length == 2 && ("entities".equalsIgnoreCase(args[0]) || "entities".equalsIgnoreCase(args[0]))) {
 			return getListOfStringsMatchingLastWord(args, "100", "200", "1000");
 		}
 		return Collections.emptyList();
