@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -77,6 +78,15 @@ public class DCBot extends ListenerAdapter {
 		}
 
 		final String command = args[0];
+
+		if (this.isCommand(command, new String[]{"tps"})) {
+			MCServer.server.addScheduledTask(() -> {
+				final double MSPT = MathHelper.average(MCServer.server.tickTimeArray) * 1E-6D;
+				final double TPS = 1000D / Math.max(50, MSPT);
+				channel.sendMessage(String.format("**TPS: %.2f MSPT: %.2f**", TPS, MSPT)).queue();
+			});
+		}
+
 		if (this.isCommand(command, new String[]{"list", "players", "online"})) {
 			MCServer.server.addScheduledTask(() -> {
 				final String[] players = MCServer.server.getOnlinePlayerNames();
