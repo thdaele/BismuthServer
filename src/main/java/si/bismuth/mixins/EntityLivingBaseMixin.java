@@ -2,6 +2,7 @@ package si.bismuth.mixins;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
@@ -10,7 +11,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityLivingBase.class)
 public abstract class EntityLivingBaseMixin extends Entity {
@@ -26,5 +29,12 @@ public abstract class EntityLivingBaseMixin extends Entity {
 	@Redirect(method = "renderBrokenItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnParticle(Lnet/minecraft/util/EnumParticleTypes;DDDDDD[I)V"))
 	private void fixToolBreakEffect2(World world, EnumParticleTypes particleType, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
 		((WorldServer) world).spawnParticle(particleType, xCoord, yCoord, zCoord, 0, xCoord, yCoord + 0.05D, zCoord, 0.0D, parameters[0], new ItemStack(Item.getItemById(parameters[0])).getMetadata());
+	}
+
+	@Inject(method = "collideWithNearbyEntities", at = @At("HEAD"), cancellable = true)
+	private void optimizedCollisionCancellations(CallbackInfo ci) {
+		if (!this.canBePushed() && !((Object) this instanceof EntityDragon)) {
+			ci.cancel();
+		}
 	}
 }
