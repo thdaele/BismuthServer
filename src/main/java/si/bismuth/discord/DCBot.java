@@ -79,6 +79,10 @@ public class DCBot extends ListenerAdapter {
 
 		final String command = args[0];
 
+		if (this.isCommand(command, new String[]{"lazy"})) {
+			MCServer.server.addScheduledTask(() -> channel.sendMessage("no u").queue());
+		}
+
 		if (this.isCommand(command, new String[]{"tps"})) {
 			MCServer.server.addScheduledTask(() -> {
 				final double MSPT = MathHelper.average(MCServer.server.tickTimeArray) * 1E-6D;
