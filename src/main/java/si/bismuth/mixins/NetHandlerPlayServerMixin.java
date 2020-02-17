@@ -35,8 +35,8 @@ public abstract class NetHandlerPlayServerMixin {
 		this.player.setPositionAndUpdate(this.player.posX, this.player.posY, this.player.posZ);
 	}
 
-	@Redirect(method = "processEntityAction", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/EntityPlayerMP;motionY:D", opcode = Opcodes.GETSTATIC))
-	private double mc111444(double motionY) {
+	@Redirect(method = "processEntityAction", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/EntityPlayerMP;motionY:D", opcode = Opcodes.GETFIELD))
+	private double mc111444(EntityPlayerMP player) {
 		return -1D;
 	}
 }
