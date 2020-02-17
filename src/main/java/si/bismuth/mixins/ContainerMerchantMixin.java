@@ -12,8 +12,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Random;
+
 @Mixin(ContainerMerchant.class)
 public abstract class ContainerMerchantMixin {
+	private final Random rand = new Random();
+
 	@Shadow
 	@Final
 	private IMerchant merchant;
@@ -34,7 +38,7 @@ public abstract class ContainerMerchantMixin {
 
 		if (shouldUnlock) {
 			for (MerchantRecipe recipe : recipes) {
-				((IMerchantRecipeMixin) recipe).setToolUses(0);
+				recipe.increaseMaxTradeUses(this.rand.nextInt(6) + this.rand.nextInt(6) + 2);
 			}
 		}
 	}

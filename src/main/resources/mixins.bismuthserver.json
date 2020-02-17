@@ -21,7 +21,6 @@
 		"EnumFacingMixin",
 		"IBlockShulkerBoxMixin",
 		"IEntityXPOrbMixin",
-		"IMerchantRecipeMixin",
 		"InventoryPlayerMixin",
 		"ISPacketPlayerListHeaderFooterMixin",
 		"IWorldServerMixin",
