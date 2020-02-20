@@ -24,6 +24,7 @@ public class PluginChannelsManager {
 
 	public PluginChannelsManager() {
 		this.registerPacket(BisPacketGetInventory.class);
+		this.registerPacket(BisPacketRegister.class);
 		this.registerPacket(BisPacketSearchForItem.class);
 		this.registerPacket(BisPacketSort.class);
 		this.registerPacket(FakeCarpetClientSupport.class);
