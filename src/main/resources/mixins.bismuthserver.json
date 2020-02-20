@@ -7,6 +7,7 @@
 		"AnvilChunkLoaderMixin",
 		"BlockFarmlandMixin",
 		"BlockPistonBaseMixin",
+		"BlockRelaxedPlacementMixin",
 		"ChunkMixin",
 		"CommandBroadcastMixin",
 		"CommandGameModeMixin",
