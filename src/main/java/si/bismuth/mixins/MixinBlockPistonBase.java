@@ -1,6 +1,5 @@
 package si.bismuth.mixins;
 
-import si.bismuth.utils.ITileEntityPiston;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
@@ -18,11 +17,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import si.bismuth.utils.ITileEntityPiston;
 
 import java.util.List;
 
 @Mixin(BlockPistonBase.class)
-public abstract class BlockPistonBaseMixin {
+public abstract class MixinBlockPistonBase {
 	private List<TileEntity> tileEntitiesList;
 
 	@Redirect(method = "canPush", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;hasTileEntity()Z"))

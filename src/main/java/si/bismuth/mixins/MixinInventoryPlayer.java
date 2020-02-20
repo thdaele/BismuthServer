@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import si.bismuth.utils.IRecipeBookItemDuper;
 
 @Mixin(InventoryPlayer.class)
-public abstract class InventoryPlayerMixin {
+public abstract class MixinInventoryPlayer {
 	@Shadow
 	public EntityPlayer player;
 

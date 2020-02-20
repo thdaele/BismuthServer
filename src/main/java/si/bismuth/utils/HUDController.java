@@ -1,7 +1,5 @@
 package si.bismuth.utils;
 
-import si.bismuth.logging.LoggerRegistry;
-import si.bismuth.mixins.ISPacketPlayerListHeaderFooterMixin;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -11,6 +9,8 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import si.bismuth.logging.LoggerRegistry;
+import si.bismuth.mixins.ISPacketPlayerListHeaderFooter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,8 +33,8 @@ public class HUDController {
 
 	public static void clear_player(EntityPlayer player) {
 		SPacketPlayerListHeaderFooter packet = new SPacketPlayerListHeaderFooter();
-		((ISPacketPlayerListHeaderFooterMixin) packet).setHeader(new TextComponentString(""));
-		((ISPacketPlayerListHeaderFooterMixin) packet).setFooter(new TextComponentString(""));
+		((ISPacketPlayerListHeaderFooter) packet).setHeader(new TextComponentString(""));
+		((ISPacketPlayerListHeaderFooter) packet).setFooter(new TextComponentString(""));
 		((EntityPlayerMP) player).connection.sendPacket(packet);
 	}
 
@@ -53,8 +53,8 @@ public class HUDController {
 
 		for (EntityPlayer player : player_huds.keySet()) {
 			SPacketPlayerListHeaderFooter packet = new SPacketPlayerListHeaderFooter();
-			((ISPacketPlayerListHeaderFooterMixin) packet).setHeader(new TextComponentString(""));
-			((ISPacketPlayerListHeaderFooterMixin) packet).setFooter(Messenger.m(null, player_huds.get(player).toArray(new Object[0])));
+			((ISPacketPlayerListHeaderFooter) packet).setHeader(new TextComponentString(""));
+			((ISPacketPlayerListHeaderFooter) packet).setFooter(Messenger.m(null, player_huds.get(player).toArray(new Object[0])));
 			((EntityPlayerMP) player).connection.sendPacket(packet);
 		}
 	}

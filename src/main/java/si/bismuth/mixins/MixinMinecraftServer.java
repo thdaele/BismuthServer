@@ -14,7 +14,7 @@ import si.bismuth.utils.Profiler;
 import javax.security.auth.login.LoginException;
 
 @Mixin(MinecraftServer.class)
-public abstract class MinecraftServerMixin {
+public abstract class MixinMinecraftServer {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onCtor(CallbackInfo ci) {
 		MCServer.init((MinecraftServer) (Object) this);

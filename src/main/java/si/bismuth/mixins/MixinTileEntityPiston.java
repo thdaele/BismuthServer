@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import si.bismuth.utils.ITileEntityPiston;
 
 @Mixin(TileEntityPiston.class)
-public abstract class TileEntityPistonMixin extends TileEntity implements ITileEntityPiston {
+public abstract class MixinTileEntityPiston extends TileEntity implements ITileEntityPiston {
 	@Shadow
 	private IBlockState pistonState;
 	private TileEntity carriedTileEntity;

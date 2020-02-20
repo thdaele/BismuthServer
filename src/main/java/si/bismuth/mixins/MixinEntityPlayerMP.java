@@ -24,7 +24,7 @@ import si.bismuth.utils.IRecipeBookItemDuper;
 import javax.annotation.Nullable;
 
 @Mixin(EntityPlayerMP.class)
-public abstract class EntityPlayerMPMixin extends EntityPlayer implements IRecipeBookItemDuper {
+public abstract class MixinEntityPlayerMP extends EntityPlayer implements IRecipeBookItemDuper {
 	@Shadow
 	public abstract boolean isSpectator();
 
@@ -38,7 +38,7 @@ public abstract class EntityPlayerMPMixin extends EntityPlayer implements IRecip
 	private int dupe;
 	private boolean scanForDuping;
 
-	public EntityPlayerMPMixin(World worldIn, GameProfile gameProfileIn) {
+	public MixinEntityPlayerMP(World worldIn, GameProfile gameProfileIn) {
 		super(worldIn, gameProfileIn);
 	}
 

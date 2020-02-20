@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import si.bismuth.mixins.IBlockShulkerBoxMixin;
+import si.bismuth.mixins.IBlockShulkerBox;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class CommandStackBoxes extends CommandBismuthBase {
 		if (stack.getItem() instanceof ItemShulkerBox) {
 			NBTTagCompound cmp = this.getCompoundOrNull(stack);
 			if (cmp == null || cmp.getTagList("Items", 10).isEmpty()) {
-				final EnumDyeColor dye = ((IBlockShulkerBoxMixin) ((ItemShulkerBox) stack.getItem()).getBlock()).getColor();
+				final EnumDyeColor dye = ((IBlockShulkerBox) ((ItemShulkerBox) stack.getItem()).getBlock()).getColor();
 				return new ImmutablePair<>(dye, stack.getCount());
 			}
 		}

@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Mixin(AnvilChunkLoader.class)
-public abstract class AnvilChunkLoaderMixin {
+public abstract class MixinAnvilChunkLoader {
 	private final Map<ChunkPos, NBTTagCompound> chunksToSave = new HashMap<>();
 	private final Map<ChunkPos, NBTTagCompound> chunksInWrite = new HashMap<>();
 	private ChunkPos copyOfChunkPos1;

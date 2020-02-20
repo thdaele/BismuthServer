@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.MCServer;
 
 @Mixin(NetHandlerPlayServer.class)
-public abstract class NetHandlerPlayServerMixin {
+public abstract class MixinNetHandlerPlayServer {
 	@Shadow
 	public EntityPlayerMP player;
 

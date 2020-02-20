@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityLivingBase.class)
-public abstract class EntityLivingBaseMixin extends Entity {
-	public EntityLivingBaseMixin(World worldIn) {
+public abstract class MixinEntityLivingBase extends Entity {
+	public MixinEntityLivingBase(World worldIn) {
 		super(worldIn);
 	}
 

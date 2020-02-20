@@ -17,18 +17,19 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import si.bismuth.utils.IEntityXPOrb;
 
 @Mixin(EntityXPOrb.class)
-public abstract class EntityXPOrbMixin extends Entity implements IEntityXPOrb {
-	@Shadow
-	public int delayBeforeCanPickup;
+public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.utils.IEntityXPOrb {
 	IntArrayList xpValues = new IntArrayList();
 	int delayBeforeCombine = 25;
+
+	@Shadow
+	public int delayBeforeCanPickup;
+
 	@Shadow
 	private int xpValue;
 
-	public EntityXPOrbMixin(World worldIn) {
+	public MixinEntityXPOrb(World worldIn) {
 		super(worldIn);
 	}
 
@@ -60,12 +61,12 @@ public abstract class EntityXPOrbMixin extends Entity implements IEntityXPOrb {
 	}
 
 	private void combineOrbs(EntityXPOrb orb) {
-		if ((EntityXPOrb) (Object) this == orb) {
+		if ((Object) this == orb) {
 			return;
 		}
 
 		if (orb.isEntityAlive()) {
-			final IEntityXPOrb iorb = ((IEntityXPOrb) orb);
+			final si.bismuth.utils.IEntityXPOrb iorb = ((si.bismuth.utils.IEntityXPOrb) orb);
 			this.xpValue += orb.getXpValue();
 			this.xpValues.addAll(iorb.getXpValues());
 
@@ -114,7 +115,7 @@ public abstract class EntityXPOrbMixin extends Entity implements IEntityXPOrb {
 	}
 
 	private void resetAge() {
-		((IEntityXPOrbMixin) this).setXpOrbAge(0);
+		((IEntityXPOrb) this).setXpOrbAge(0);
 	}
 
 	@Override

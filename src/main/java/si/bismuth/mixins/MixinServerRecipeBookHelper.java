@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.utils.IRecipeBookItemDuper;
 
 @Mixin(ServerRecipeBookHelper.class)
-public abstract class ServerRecipeBookHelperMixin {
+public abstract class MixinServerRecipeBookHelper {
 	@Shadow
 	private InventoryCraftResult field_194335_f;
 

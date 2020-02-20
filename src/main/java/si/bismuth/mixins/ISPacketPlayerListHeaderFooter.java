@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(SPacketPlayerListHeaderFooter.class)
-public interface ISPacketPlayerListHeaderFooterMixin {
+public interface ISPacketPlayerListHeaderFooter {
 	@Accessor("header")
 	void setHeader(ITextComponent component);
 

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import si.bismuth.utils.SpawnReporter;
 
 @Mixin(WorldEntitySpawner.class)
-public abstract class WorldEntitySpawnerMixin {
+public abstract class MixinWorldEntitySpawner {
 	@Shadow
 	@Final
 	private static int MOB_COUNT_DIV;

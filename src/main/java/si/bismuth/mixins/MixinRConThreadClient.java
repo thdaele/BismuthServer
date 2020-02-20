@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 @Mixin(RConThreadClient.class)
-public abstract class RConThreadClientMixin extends RConThreadBase {
+public abstract class MixinRConThreadClient extends RConThreadBase {
 	// @formatter:off
 	@Shadow private boolean loggedIn;
 	@Shadow private Socket clientSocket;
@@ -29,7 +29,7 @@ public abstract class RConThreadClientMixin extends RConThreadBase {
 	@Shadow protected abstract void sendMultipacketResponse(int id, String message);
 	// @formatter:on
 
-	protected RConThreadClientMixin(IServer server, String threadName) {
+	protected MixinRConThreadClient(IServer server, String threadName) {
 		super(server, threadName);
 	}
 

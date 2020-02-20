@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.utils.IRecipeBookItemDuper;
 
 @Mixin(EntityItem.class)
-public abstract class EntityItemMixin implements IRecipeBookItemDuper {
+public abstract class MixinEntityItem implements IRecipeBookItemDuper {
 	@Inject(method = "onCollideWithPlayer", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/item/EntityItem;pickupDelay:I", opcode = Opcodes.GETFIELD))
 	private void startDupe(EntityPlayer entityIn, CallbackInfo ci) {
 		((IRecipeBookItemDuper) entityIn).dupeItemScan(true);

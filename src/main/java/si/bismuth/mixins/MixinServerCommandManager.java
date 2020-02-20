@@ -21,7 +21,7 @@ import si.bismuth.commands.CommandStackBoxes;
 import si.bismuth.commands.CommandTick;
 
 @Mixin(ServerCommandManager.class)
-public abstract class ServerCommandManagerMixin extends CommandHandler implements ICommandListener {
+public abstract class MixinServerCommandManager extends CommandHandler implements ICommandListener {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onCtor(MinecraftServer server, CallbackInfo ci) {
 		this.registerCommand(new CommandLog());

@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import si.bismuth.utils.BlockRotator;
 
 @Mixin(PlayerInteractionManager.class)
-public abstract class PlayerInteractionManagerMixin {
+public abstract class MixinPlayerInteractionManager {
 	@Shadow
 	public World world;
 

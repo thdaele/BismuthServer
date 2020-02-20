@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(BlockFarmland.class)
-public abstract class BlockFarmlandMixin {
+public abstract class MixinBlockFarmland {
 	/**
 	 * @author nessie
 	 * @reason Unfixes MC-120444

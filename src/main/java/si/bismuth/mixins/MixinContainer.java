@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(Container.class)
-public abstract class ContainerMixin {
+public abstract class MixinContainer {
 	@Shadow
 	public List<Slot> inventorySlots;
 

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import si.bismuth.utils.BlockRotator;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin {
+public abstract class MixinEntity {
 	// @formatter:off
 	@Shadow public double posX;
 	@Shadow public double posY;

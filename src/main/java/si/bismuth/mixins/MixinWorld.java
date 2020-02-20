@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 @Mixin(World.class)
-public abstract class WorldMixin {
+public abstract class MixinWorld {
 	// @formatter:off
 	private String worldName;
 	private Iterator myIterator;

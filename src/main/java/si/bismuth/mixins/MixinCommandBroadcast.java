@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import si.bismuth.MCServer;
 
 @Mixin(CommandBroadcast.class)
-public abstract class CommandBroadcastMixin {
+public abstract class MixinCommandBroadcast {
 	@Inject(method = "execute", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/PlayerList;sendMessage(Lnet/minecraft/util/text/ITextComponent;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void onSay(MinecraftServer server, ICommandSender sender, String[] args, CallbackInfo ci, ITextComponent component) {
 		final ITextComponent text = new TextComponentTranslation("chat.type.announcement", sender.getDisplayName(), component);

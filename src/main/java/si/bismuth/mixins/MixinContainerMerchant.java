@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 
 @Mixin(ContainerMerchant.class)
-public abstract class ContainerMerchantMixin {
+public abstract class MixinContainerMerchant {
 	private final Random rand = new Random();
 
 	@Shadow

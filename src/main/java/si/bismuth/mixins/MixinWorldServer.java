@@ -21,8 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import si.bismuth.utils.Profiler;
 
 @Mixin(WorldServer.class)
-public abstract class WorldServerMixin extends World {
-	protected WorldServerMixin(ISaveHandler ish, WorldInfo wi, WorldProvider wp, net.minecraft.profiler.Profiler p, boolean b) {
+public abstract class MixinWorldServer extends World {
+	protected MixinWorldServer(ISaveHandler ish, WorldInfo wi, WorldProvider wp, net.minecraft.profiler.Profiler p, boolean b) {
 		super(ish, wi, wp, p, b);
 	}
 
