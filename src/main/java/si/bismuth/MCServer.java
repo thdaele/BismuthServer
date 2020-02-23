@@ -27,6 +27,7 @@ public class MCServer {
 	public static final PluginChannelsManager pcm = new PluginChannelsManager();
 	public static MinecraftServer server;
 	public static DCBot bot;
+	public static String PREFIX;
 	private static final IRecipe duration1 = new ShapelessRecipes("rocket", makeFirework(1), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER)));
 	private static final IRecipe duration2 = new ShapelessRecipes("rocket", makeFirework(2), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER)));
 	private static final IRecipe duration3 = new ShapelessRecipes("rocket", makeFirework(3), NonNullList.from(Ingredient.EMPTY, Ingredient.fromItems(Items.PAPER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER), Ingredient.fromItems(Items.GUNPOWDER)));
@@ -49,6 +50,7 @@ public class MCServer {
 
 	public static void init(MinecraftServer server) {
 		MCServer.server = server;
+		MCServer.PREFIX = server.isServerInOnlineMode() ? "" : "\uD83E\uDDEA ";
 	}
 
 	public static void onServerLoaded(MinecraftServer server) throws LoginException {

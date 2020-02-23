@@ -40,7 +40,7 @@ public class DCBot extends ListenerAdapter {
 
 	public void sendToDiscord(String message) {
 		try {
-			MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(message).queue();
+			MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(MCServer.PREFIX + message).queue();
 		} catch (Exception ignored) {
 			// noop
 		}
