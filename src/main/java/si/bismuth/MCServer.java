@@ -50,7 +50,6 @@ public class MCServer {
 
 	public static void init(MinecraftServer server) {
 		MCServer.server = server;
-		MCServer.PREFIX = server.isServerInOnlineMode() ? "" : "\uD83E\uDDEA ";
 	}
 
 	public static void onServerLoaded(MinecraftServer server) throws LoginException {
