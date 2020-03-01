@@ -94,13 +94,7 @@ public class DCBot extends ListenerAdapter {
 		if (this.isCommand(command, new String[]{"list", "players", "online"})) {
 			MCServer.server.addScheduledTask(() -> {
 				final String[] players = MCServer.server.getOnlinePlayerNames();
-				String title;
-				if (players.length == 0) {
-					title = "No players online!";
-				} else {
-					title = players.length + " player" + (players.length > 1 ? "s" : "") + " online:";
-				}
-
+				final String title = String.format("%d player%s online:", players.length, players.length != 1 ? "s" : "");
 				final MessageEmbed.AuthorInfo author = new MessageEmbed.AuthorInfo("BismuthBot", null, "https://i.imgur.com/a2w3DjI.png", null);
 				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n").replaceAll("_", "\\\\_"), EmbedType.RICH, null, 0x8665BD, null, null, author, null, null, null, null);
 				channel.sendMessage(embed).queue();
