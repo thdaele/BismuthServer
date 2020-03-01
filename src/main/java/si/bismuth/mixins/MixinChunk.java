@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 @Mixin(Chunk.class)
 public abstract class MixinChunk {
-	@Redirect(method = "<init>(Lnet/minecraft/world/World;II)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Maps;newHashMap()Ljava/util/HashMap;", opcode = Opcodes.INVOKESTATIC))
+	@Redirect(method = "<init>(Lnet/minecraft/world/World;II)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Maps;newHashMap()Ljava/util/HashMap;", opcode = Opcodes.INVOKESTATIC, remap = false))
 	private HashMap<BlockPos, TileEntity> reloadUpdateOrderFix() {
 		return Maps.newLinkedHashMap();
 	}
