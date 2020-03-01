@@ -13,6 +13,7 @@
 		"MixinBlockFenceGate",
 		"MixinBlockPistonBase",
 		"MixinBlockPumpkin",
+		"MixinBlockStainedGlass",
 		"MixinChunk",
 		"MixinCommandBroadcast",
 		"MixinCommandGameMode",
