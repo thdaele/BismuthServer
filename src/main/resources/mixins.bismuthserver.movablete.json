@@ -1,0 +1,11 @@
+{
+	"package": "si.bismuth.movablete.mixins",
+	"refmap": "mixins.bismuthserver.refmap.json",
+	"minVersion": "0.7.3",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"MixinBlockPistonBase",
+		"MixinChunk",
+		"MixinTileEntityPiston"
+	]
+}

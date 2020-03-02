@@ -1,4 +1,4 @@
-package si.bismuth.utils;
+package si.bismuth.movablete;
 
 import net.minecraft.tileentity.TileEntity;
 

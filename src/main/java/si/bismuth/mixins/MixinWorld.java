@@ -28,7 +28,7 @@ import java.util.Set;
 public abstract class MixinWorld {
 	// @formatter:off
 	private String worldName;
-	private Iterator myIterator;
+	private Iterator<TileEntity> myIterator;
 	@Shadow @Final public WorldProvider provider;
 	@Shadow @Final public List<TileEntity> loadedTileEntityList;
 	@Shadow @Final public List<TileEntity> tickableTileEntities;
@@ -43,7 +43,7 @@ public abstract class MixinWorld {
 	}
 
 	@Redirect(method = "updateEntities", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z", ordinal = 0, remap = false))
-	private boolean fasterTEremoval(List list) {
+	private boolean fasterTEremoval(List<TileEntity> list) {
 		if (!this.tileEntitiesToBeRemoved.isEmpty()) {
 			final Set<TileEntity> remove = Collections.newSetFromMap(new IdentityHashMap<>());
 			remove.addAll(this.tileEntitiesToBeRemoved);
@@ -77,7 +77,7 @@ public abstract class MixinWorld {
 	}
 
 	@Inject(method = "updateEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;isInvalid()Z", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void keepACopy(CallbackInfo ci, Iterator iterator, TileEntity entity) {
+	private void keepACopy(CallbackInfo ci, Iterator<TileEntity> iterator, TileEntity entity) {
 		this.myIterator = iterator;
 		Profiler.start_entity_section(this.worldName, entity);
 	}

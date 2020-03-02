@@ -13,6 +13,7 @@ public class BismuthTweaker implements ITweaker {
 	public void injectIntoClassLoader(LaunchClassLoader loader) {
 		MixinBootstrap.init();
 		Mixins.addConfiguration("mixins.bismuthserver.json");
+		Mixins.addConfiguration("mixins.bismuthserver.movablete.json");
 	}
 
 	@Override
