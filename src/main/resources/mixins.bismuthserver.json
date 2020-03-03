@@ -34,6 +34,7 @@
 		"MixinRConThreadClient",
 		"MixinServerCommandManager",
 		"MixinServerRecipeBookHelper",
+		"MixinTileEntityEndGateway",
 		"MixinTileEntityPiston",
 		"MixinWorld",
 		"MixinWorldEntitySpawner",

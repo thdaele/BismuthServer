@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import si.bismuth.MCServer;
+import si.bismuth.commands.CommandAllowGateway;
 import si.bismuth.commands.CommandLog;
 import si.bismuth.commands.CommandPing;
 import si.bismuth.commands.CommandPlayer;
@@ -24,6 +25,7 @@ import si.bismuth.commands.CommandTick;
 public abstract class MixinServerCommandManager extends CommandHandler implements ICommandListener {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void onCtor(MinecraftServer server, CallbackInfo ci) {
+		this.registerCommand(new CommandAllowGateway());
 		this.registerCommand(new CommandLog());
 		this.registerCommand(new CommandPing());
 		this.registerCommand(new CommandPlayer());

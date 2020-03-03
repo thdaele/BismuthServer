@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import si.bismuth.MCServer;
 
+import java.util.Arrays;
+
 @PacketChannelName(value = "carpet:client", isCustom = true)
 public class FakeCarpetClientSupport extends BisPacket {
 	public FakeCarpetClientSupport() {
@@ -17,7 +19,7 @@ public class FakeCarpetClientSupport extends BisPacket {
 		final PacketBuffer buf = this.getPacketBuffer();
 		final NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setString("carpetVersion", "bismuth");
-		nbt.setFloat("tickrate", 20);
+		nbt.setFloat("tickrate", 20F);
 		final NBTTagCompound ctrlQCrafting = new NBTTagCompound();
 		ctrlQCrafting.setString("rule", "ctrlQCrafting");
 		ctrlQCrafting.setString("current", "true");
@@ -26,12 +28,13 @@ public class FakeCarpetClientSupport extends BisPacket {
 		final NBTTagList carpetRules = new NBTTagList();
 		carpetRules.appendTag(ctrlQCrafting);
 		nbt.setTag("ruleList", carpetRules);
-		buf.writeInt(0);
+		buf.writeInt(1);
 		buf.writeCompoundTag(nbt);
 	}
 
 	@Override
 	public void readPacketData(PacketBuffer buf) {
+		System.out.println(Arrays.toString(buf.readByteArray()));
 		// noop
 	}
 
