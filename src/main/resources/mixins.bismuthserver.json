@@ -23,6 +23,7 @@
 		"MixinEntityLivingBase",
 		"MixinEntityPlayerMP",
 		"MixinEntityTameable",
+		"MixinEntityTrackerEntry",
 		"MixinEntityXPOrb",
 		"MixinEnumFacing",
 		"MixinInventoryPlayer",

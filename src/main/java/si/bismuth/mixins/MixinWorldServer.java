@@ -40,6 +40,11 @@ public abstract class MixinWorldServer extends World {
 		this.myEntity = entity;
 	}
 
+	@Redirect(method = "canAddEntity", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V", remap = false))
+	private void silenceTriedToAddEntityButWasMarkedRemovedAlready(Logger logger, String message, Object p0) {
+		// noop
+	}
+
 	@Redirect(method = "canAddEntity", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 0, remap = false))
 	private void addLocationToUUIDSpam(Logger logger, String message, Object p0, Object p1) {
 		LOGGER.warn("Keeping entity {} that already exists with UUID {} at {} in {}", EntityList.getKey(this.myEntity), this.myEntity.getUniqueID(), this.myEntity.getPosition(), this.worldName);
