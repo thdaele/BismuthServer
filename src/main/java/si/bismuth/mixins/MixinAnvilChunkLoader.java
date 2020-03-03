@@ -66,7 +66,7 @@ public abstract class MixinAnvilChunkLoader {
 	}
 
 	@Redirect(method = "loadChunk", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;", remap = false))
-	private Object onLoadChunk(Map map, Object key) {
+	private Object onLoadChunk(Map<ChunkPos, NBTTagCompound> map, Object key) {
 		return reloadChunkFromRemoveQueues(this.copyOfChunkPos1);
 	}
 
@@ -76,7 +76,7 @@ public abstract class MixinAnvilChunkLoader {
 	}
 
 	@Redirect(method = "isChunkGeneratedAt", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;", remap = false))
-	private Object onIsChunkGeneratedAt(Map map, Object key) {
+	private Object onIsChunkGeneratedAt(Map<ChunkPos, NBTTagCompound> map, Object key) {
 		return reloadChunkFromRemoveQueues(this.copyOfChunkPos2);
 	}
 

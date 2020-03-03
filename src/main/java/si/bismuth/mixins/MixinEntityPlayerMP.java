@@ -31,16 +31,16 @@ public abstract class MixinEntityPlayerMP extends EntityPlayer implements IRecip
 	@Shadow
 	public abstract BlockPos getPosition();
 
-	@Shadow
-	@Nullable
-	public abstract Entity changeDimension(int dimensionIn);
+	public MixinEntityPlayerMP(World world, GameProfile profile) {
+		super(world, profile);
+	}
 
 	private int dupe;
 	private boolean scanForDuping;
 
-	public MixinEntityPlayerMP(World worldIn, GameProfile gameProfileIn) {
-		super(worldIn, gameProfileIn);
-	}
+	@Shadow
+	@Nullable
+	public abstract Entity changeDimension(int dim);
 
 	@Override
 	public void clearDupeItem() {

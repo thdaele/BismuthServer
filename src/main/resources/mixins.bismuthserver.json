@@ -17,6 +17,7 @@
 		"MixinCommandBroadcast",
 		"MixinContainer",
 		"MixinContainerMerchant",
+		"MixinDedicatedServer",
 		"MixinEntity",
 		"MixinEntityItem",
 		"MixinEntityLivingBase",

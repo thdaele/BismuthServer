@@ -29,8 +29,8 @@ public abstract class MixinRConThreadClient extends RConThreadBase {
 	@Shadow protected abstract void sendMultipacketResponse(int id, String message);
 	// @formatter:on
 
-	protected MixinRConThreadClient(IServer server, String threadName) {
-		super(server, threadName);
+	protected MixinRConThreadClient(IServer server, String thread) {
+		super(server, thread);
 	}
 
 	/**

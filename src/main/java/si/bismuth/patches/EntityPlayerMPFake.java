@@ -1,6 +1,7 @@
 package si.bismuth.patches;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketEntityHeadLook;
 import net.minecraft.network.play.server.SPacketEntityTeleport;
@@ -10,6 +11,8 @@ import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
+
+import java.util.UUID;
 
 @SuppressWarnings("EntityConstructor")
 public class EntityPlayerMPFake extends EntityPlayerMP {
@@ -31,6 +34,11 @@ public class EntityPlayerMPFake extends EntityPlayerMP {
 		WorldServer worldIn = server.getWorld(dimension);
 		PlayerInteractionManager interactionManagerIn = new PlayerInteractionManager(worldIn);
 		GameProfile gameprofile = server.getPlayerProfileCache().getGameProfileForUsername(username);
+		if (gameprofile == null) {
+			UUID uuid = EntityPlayer.getUUID(new GameProfile(null, username));
+			gameprofile = new GameProfile(uuid, username);
+		}
+
 		gameprofile = fixSkin(gameprofile);
 		EntityPlayerMPFake instance = new EntityPlayerMPFake(server, worldIn, gameprofile, interactionManagerIn);
 		instance.setSetPosition(x, y, z, (float) yaw, (float) pitch);

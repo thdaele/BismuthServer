@@ -14,13 +14,16 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityXPOrb.class)
 public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.utils.IEntityXPOrb {
+	@Unique
 	IntArrayList xpValues = new IntArrayList();
+	@Unique
 	int delayBeforeCombine = 25;
 
 	@Shadow
@@ -29,8 +32,8 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 	@Shadow
 	private int xpValue;
 
-	public MixinEntityXPOrb(World worldIn) {
-		super(worldIn);
+	public MixinEntityXPOrb(World world) {
+		super(world);
 	}
 
 	@Shadow
@@ -61,7 +64,7 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 	}
 
 	private void combineOrbs(EntityXPOrb orb) {
-		if ((Object) this == orb) {
+		if ((EntityXPOrb) (Object) this == orb) {
 			return;
 		}
 

@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityLivingBase.class)
 public abstract class MixinEntityLivingBase extends Entity {
-	public MixinEntityLivingBase(World worldIn) {
-		super(worldIn);
+	public MixinEntityLivingBase(World world) {
+		super(world);
 	}
 
 	@Redirect(method = "renderBrokenItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;playSound(Lnet/minecraft/util/SoundEvent;FF)V"))
@@ -33,7 +33,9 @@ public abstract class MixinEntityLivingBase extends Entity {
 
 	@Inject(method = "collideWithNearbyEntities", at = @At("HEAD"), cancellable = true)
 	private void optimizedCollisionCancellations(CallbackInfo ci) {
-		if (!this.canBePushed() && !((Object) this instanceof EntityDragon)) {
+		// Mixin will take care of the cast.
+		// noinspection ConstantConditions
+		if (!this.canBePushed() && !((EntityLivingBase) (Object) this instanceof EntityDragon)) {
 			ci.cancel();
 		}
 	}

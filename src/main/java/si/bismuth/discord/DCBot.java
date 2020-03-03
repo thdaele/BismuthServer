@@ -99,8 +99,6 @@ public class DCBot extends ListenerAdapter {
 				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n").replaceAll("_", "\\\\_"), EmbedType.RICH, null, 0x8665BD, null, null, author, null, null, null, null);
 				channel.sendMessage(embed).queue();
 			});
-
-			return;
 		}
 
 		/*if (this.isCommand(command, new String[]{"s", "score", "scores", "scoreboard"})) {
