@@ -18,9 +18,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import si.bismuth.MCServer;
-
-import java.util.Arrays;
 
 @Mixin(EntityXPOrb.class)
 public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.utils.IEntityXPOrb {
@@ -90,10 +87,9 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 			player.xpCooldown = 2;
 			final ItemStack stack = EnchantmentHelper.getEnchantedItem(Enchantments.MENDING, player);
 			int xp = 0;
-			try {
+			// hackfix to prevent OOB exception
+			if (!this.xpValues.isEmpty()) {
 				xp = this.xpValues.removeInt(this.xpValues.size() - 1);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				MCServer.bot.sendToDiscord(xp + " " + this.xpValues.size() + " " + Arrays.toString(this.xpValues.elements()));
 			}
 
 			if (!stack.isEmpty() && stack.isItemDamaged()) {
