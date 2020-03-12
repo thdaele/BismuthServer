@@ -21,6 +21,7 @@
 		"MixinEntity",
 		"MixinEntityItem",
 		"MixinEntityLivingBase",
+		"MixinEntityMinecart",
 		"MixinEntityPlayerMP",
 		"MixinEntityTameable",
 		"MixinEntityTrackerEntry",
