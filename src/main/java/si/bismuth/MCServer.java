@@ -53,7 +53,7 @@ public class MCServer {
 
 	public static void onServerLoaded(MinecraftServer server) throws LoginException {
 		LoggerRegistry.initLoggers(server);
-		MCServer.bot = new DCBot(((DedicatedServer) server).getStringProperty("botToken", ""));
+		MCServer.bot = new DCBot(((DedicatedServer) server).getStringProperty("botToken", ""), server.isServerInOnlineMode());
 	}
 
 	public static void tick(MinecraftServer server) {

@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.minecraft.util.math.MathHelper;
@@ -24,13 +25,15 @@ import javax.security.auth.login.LoginException;
 import java.util.Arrays;
 
 public class DCBot extends ListenerAdapter {
-	final public static long BismuthID = 635252849571266580L;
-	final public static long ChannelID = 635254222916419590L;
-	final public static String channelURL = String.format("https://discordapp.com/channels/%d/%d/", BismuthID, ChannelID);
-	final public static String PREFIX = ";";
-	final public JDA jda;
+	private final static long BismuthID = 635252849571266580L;
+	private final static long ChannelID = 635254222916419590L;
+	private final static String channelURL = String.format("https://discordapp.com/channels/%d/%d/", BismuthID, ChannelID);
+	private final static String PREFIX = ";";
+	private final boolean isTestServer;
+	private final JDA jda;
 
-	public DCBot(String token) throws LoginException {
+	public DCBot(String token, boolean isOnlineMode) throws LoginException {
+		isTestServer = !isOnlineMode;
 		this.jda = new JDABuilder(AccountType.BOT)
 				.setToken(token)
 				.addEventListeners(this)
@@ -39,10 +42,13 @@ public class DCBot extends ListenerAdapter {
 	}
 
 	public void sendToDiscord(String message) {
-		try {
-			MCServer.bot.jda.getTextChannelById(DCBot.ChannelID).sendMessage(message).queue();
-		} catch (Exception ignored) {
-			// noop
+		final TextChannel channel = this.jda.getTextChannelById(DCBot.ChannelID);
+		if (channel != null) {
+			if (isTestServer) {
+				message = "\uD83E\uDDEA" + message;
+			}
+
+			channel.sendMessage(message).queue();
 		}
 	}
 
@@ -52,7 +58,7 @@ public class DCBot extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		if (event.getAuthor().isBot() || event.getGuild().getIdLong() != BismuthID) {
+		if (event.getMember() == null || event.getAuthor().isBot() || event.getGuild().getIdLong() != BismuthID) {
 			return;
 		}
 
@@ -100,11 +106,6 @@ public class DCBot extends ListenerAdapter {
 				channel.sendMessage(embed).queue();
 			});
 		}
-
-		/*if (this.isCommand(command, new String[]{"s", "score", "scores", "scoreboard"})) {
-			MCServer.server.addScheduledTask(() -> ScoreboardHelper.setSidebarScoreboard(args));
-			return;
-		}*/
 	}
 
 	private boolean isCommand(String text, String[] command) {
