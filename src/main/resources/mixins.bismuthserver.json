@@ -15,6 +15,7 @@
 		"MixinBlockStainedGlass",
 		"MixinChunk",
 		"MixinCommandBroadcast",
+		"MixinCommandGameMode",
 		"MixinContainer",
 		"MixinContainerMerchant",
 		"MixinDedicatedServer",
