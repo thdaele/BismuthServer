@@ -19,12 +19,16 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import si.bismuth.MCServer;
 
 import javax.security.auth.login.LoginException;
 import java.util.Arrays;
+import java.util.List;
 
 public class DCBot extends ListenerAdapter {
+	private final static Logger LOGGER = LogManager.getLogger();
 	private final static long BismuthID = 635252849571266580L;
 	private final static long ChannelID = 635254222916419590L;
 	private final static String channelURL = String.format("https://discordapp.com/channels/%d/%d/", BismuthID, ChannelID);
@@ -67,6 +71,7 @@ public class DCBot extends ListenerAdapter {
 		final Member member = event.getMember();
 		final Message message = event.getMessage();
 		final String content = message.getContentDisplay();
+		final List<Message.Attachment> attachments = message.getAttachments();
 		if (channel.getIdLong() == ChannelID && !content.startsWith(PREFIX)) {
 			final String name = event.getMember().getEffectiveName();
 			final ITextComponent symbol = new TextComponentString("\u24B9");
@@ -74,6 +79,13 @@ public class DCBot extends ListenerAdapter {
 			final ClickEvent clickText = new ClickEvent(ClickEvent.Action.OPEN_URL, channelURL);
 			symbol.getStyle().setColor(TextFormatting.BLUE).setHoverEvent(hoverText).setClickEvent(clickText);
 			final ITextComponent text = new TextComponentTranslation("chat.type.text", name, content);
+			for (Message.Attachment file : attachments) {
+				final String url = file.getUrl();
+				final ITextComponent fileUrl = new TextComponentString(" " + url);
+				fileUrl.getStyle().setColor(TextFormatting.BLUE).setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
+				text.appendSibling(fileUrl);
+			}
+
 			MCServer.server.addScheduledTask(() -> MCServer.server.getPlayerList().sendMessage(new TextComponentString("").appendSibling(symbol).appendSibling(text)));
 			return;
 		}
