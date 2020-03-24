@@ -17,6 +17,8 @@ import si.bismuth.utils.SpawnReporter;
 
 @Mixin(WorldEntitySpawner.class)
 public abstract class MixinWorldEntitySpawner {
+	private static final EnumCreatureType[] OVERWORLD = new EnumCreatureType[]{EnumCreatureType.MONSTER, EnumCreatureType.CREATURE, EnumCreatureType.WATER_CREATURE};
+	private static final EnumCreatureType[] OTHERWORLD = new EnumCreatureType[]{EnumCreatureType.MONSTER};
 	@Shadow
 	@Final
 	private static int MOB_COUNT_DIV;
@@ -27,15 +29,8 @@ public abstract class MixinWorldEntitySpawner {
 		SpawnReporter.mobcaps.get(server.provider.getDimensionType().getId()).put(mobCategory, new Tuple<>(loadedOfMobCategory, mobCap));
 	}
 
-	@Redirect(method = "findChunksForSpawning", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EnumCreatureType;getMaxNumberOfCreature()I"))
-	private int preventUselessMobSpawningAttemptsInIncorrectDimensions(EnumCreatureType type, WorldServer world, boolean h, boolean a, boolean spawnOnSetTickRate) {
-		switch (type) {
-			case AMBIENT:
-				return 0;
-			case MONSTER:
-				return type.getMaxNumberOfCreature();
-			default:
-				return world.provider.isSurfaceWorld() ? type.getMaxNumberOfCreature() : 0;
-		}
+	@Redirect(method = "findChunksForSpawning", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EnumCreatureType;values()[Lnet/minecraft/entity/EnumCreatureType;"))
+	private EnumCreatureType[] preventUselessMobSpawningAttemptsInIncorrectDimensions(WorldServer world) {
+		return world.provider.isSurfaceWorld() ? OVERWORLD : OTHERWORLD;
 	}
 }
