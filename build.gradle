@@ -17,7 +17,7 @@ apply plugin: "net.minecraftforge.gradle.tweaker-server"
 apply plugin: "org.spongepowered.mixin"
 apply plugin: "com.github.johnrengelman.shadow"
 
-version = "1.2.1"
+project.version = "1.2.1"
 group = "si.bismuth" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "bismuthserver"
 def tweakerClass = "${group}.launch.BismuthTweaker"
@@ -31,8 +31,10 @@ minecraft {
 
 	makeObfSourceJar = false
 
+	replaceIn "MCServer.java"
+	replace "@BISMUTHVERSION@", project.version
 	replaceIn "launch/BismuthLaunch.java"
-	replace "@MCVERSION@", version
+	replace "@MCVERSION@", minecraft.version
 	replace "@TWEAKER@", tweakerClass
 }
 

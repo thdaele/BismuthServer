@@ -23,6 +23,7 @@ import si.bismuth.utils.HUDController;
 import javax.security.auth.login.LoginException;
 
 public class MCServer {
+	public static final String BISMUTH_SERVER_VERSION = "@BISMUTHVERSION@";
 	public static final Logger log = LogManager.getLogger("Bismuth");
 	public static final PluginChannelsManager pcm = new PluginChannelsManager();
 	public static MinecraftServer server;
@@ -52,6 +53,7 @@ public class MCServer {
 	}
 
 	public static void onServerLoaded(MinecraftServer server) throws LoginException {
+		server.setMOTD("v" + BISMUTH_SERVER_VERSION + " \u2014 " + server.getMOTD());
 		LoggerRegistry.initLoggers(server);
 		MCServer.bot = new DCBot(((DedicatedServer) server).getStringProperty("botToken", ""), server.isServerInOnlineMode());
 	}
