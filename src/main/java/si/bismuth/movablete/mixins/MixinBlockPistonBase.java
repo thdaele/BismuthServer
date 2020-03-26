@@ -3,6 +3,7 @@ package si.bismuth.movablete.mixins;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockPistonMoving;
 import net.minecraft.block.state.BlockPistonStructureHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -37,7 +38,7 @@ public abstract class MixinBlockPistonBase {
 				&& block != Blocks.END_PORTAL && block != Blocks.MOB_SPAWNER && block != Blocks.PISTON_EXTENSION;
 	}
 
-	@Inject(method = "doMove", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Ljava/util/List;size()I", remap = false, ordinal = 4), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "doMove", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I", remap = false, ordinal = 4), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void doMoveTE(World world, BlockPos p, EnumFacing d, boolean e, CallbackInfoReturnable<Boolean> cir, BlockPistonStructureHelper bpsh, List<BlockPos> list) {
 		this.tileEntitiesList = Lists.newArrayList();
 		for (BlockPos pos : list) {
@@ -48,14 +49,17 @@ public abstract class MixinBlockPistonBase {
 				te.markDirty();
 			}
 		}
-
 	}
 
-	@Inject(method = "doMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setTileEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V", shift = At.Shift.AFTER, ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void setTileEntityTE(World world, BlockPos p, EnumFacing d, boolean ex, CallbackInfoReturnable<Boolean> cir, BlockPistonStructureHelper bpsh, List<BlockPos> list, List<IBlockState> lbs, List<BlockPos> lbp, int i, IBlockState[] abs, EnumFacing enumfacing, int l, BlockPos pos) {
-		final TileEntity te = world.getTileEntity(pos);
-		if (te instanceof TileEntityPiston) {
-			((ITileEntityPiston) te).setCarriedTileEntity(tileEntitiesList.get(l));
-		}
+	@Redirect(method = "doMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setTileEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V", ordinal = 0))
+	private void noopSetTileEntity(World world, BlockPos pos, TileEntity te) {
+		// noop
+	}
+
+	@Inject(method = "doMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setTileEntity(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/tileentity/TileEntity;)V", ordinal = 0), locals = LocalCapture.CAPTURE_FAILHARD)
+	private void setTileEntityTE(World world, BlockPos p, EnumFacing direction, boolean extending, CallbackInfoReturnable<Boolean> cir, BlockPistonStructureHelper bpsh, List<BlockPos> list, List<IBlockState> lbs, List<BlockPos> lbp, int i, IBlockState[] abs, EnumFacing enumfacing, int l, BlockPos pos) {
+		final TileEntityPiston te = (TileEntityPiston) BlockPistonMoving.createTilePiston(lbs.get(l), direction, extending, false);
+		((ITileEntityPiston) te).setCarriedTileEntity(this.tileEntitiesList.get(l));
+		world.setTileEntity(pos, te);
 	}
 }

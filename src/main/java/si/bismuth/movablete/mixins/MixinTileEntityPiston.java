@@ -66,9 +66,6 @@ public abstract class MixinTileEntityPiston extends TileEntity implements ITileE
 	@Override
 	public void setCarriedTileEntity(TileEntity te) {
 		this.carriedTileEntity = te;
-		if (this.carriedTileEntity != null) {
-			this.carriedTileEntity.setPos(this.pos);
-		}
 	}
 
 	@Unique
