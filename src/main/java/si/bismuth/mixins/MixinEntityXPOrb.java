@@ -59,8 +59,6 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 		for (EntityXPOrb orb : this.world.getEntitiesWithinAABB(EntityXPOrb.class, this.getEntityBoundingBox().grow(0.5D))) {
 			this.combineOrbs(orb);
 		}
-
-		this.resetAge();
 	}
 
 	private void combineOrbs(EntityXPOrb orb) {
@@ -74,6 +72,7 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 			this.xpValues.addAll(iorb.getXpValues());
 
 			orb.setDead();
+			this.resetAge();
 		}
 	}
 
