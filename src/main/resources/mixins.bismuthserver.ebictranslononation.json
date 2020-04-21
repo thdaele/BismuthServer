@@ -1,0 +1,10 @@
+{
+	"package": "si.bismuth.ebictranslononation.mixins",
+	"refmap": "mixins.bismuthserver.refmap.json",
+	"minVersion": "0.7.3",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"MixinEntity",
+		"MixinTileEntityPiston"
+	]
+}
