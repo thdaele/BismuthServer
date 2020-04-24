@@ -25,11 +25,18 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BlockRotator {
+	private static final List<String> UUIDS = Arrays.asList("c36e8cbd-b090-47b7-8166-bab6985e4382", "73a0e9c7-d30f-43dd-b820-55c72c62a6f7", "78bbb591-b677-41cc-9d60-194fcb2e422c", "8a45fff7-0335-4928-a98c-dcc8b1ad5193");
+
 	public static boolean flipBlockWithCactus(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!playerIn.capabilities.allowEdit || !player_holds_cactus_mainhand(playerIn)) {
 			return false;
 		}
+
+		if (UUIDS.contains(String.valueOf(EntityPlayer.getUUID(playerIn.getGameProfile())))) return false;
 		return flip_block(worldIn, pos, state, facing, hitX, hitY, hitZ);
 	}
 
@@ -96,6 +103,7 @@ public class BlockRotator {
 	public static boolean flippinEligibility(Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
+			if (UUIDS.contains(String.valueOf(EntityPlayer.getUUID(player.getGameProfile())))) return false;
 			return (!player.getHeldItemOffhand().isEmpty() && player.getHeldItemOffhand().getItem() instanceof ItemBlock && ((ItemBlock) (player.getHeldItemOffhand().getItem())).getBlock() == Blocks.CACTUS);
 		}
 		return false;

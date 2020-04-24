@@ -56,7 +56,11 @@ public class DCBot extends ListenerAdapter {
 		}
 	}
 
-	public void sendDeathmessage(ITextComponent component) {
+	public void sendAdvancementMessage(ITextComponent component) {
+		this.sendToDiscord("**\uD83C\uDF8A " + component.getUnformattedText() + "**");
+	}
+
+	public void sendDeathMessage(ITextComponent component) {
 		this.sendToDiscord("**\uD83D\uDD71 " + component.getUnformattedText() + "**");
 	}
 

@@ -13,6 +13,6 @@ public abstract class MixinEntityTameable {
 	@Redirect(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;sendMessage(Lnet/minecraft/util/text/ITextComponent;)V"))
 	private void sendMessage(EntityLivingBase entity, ITextComponent component) {
 		MCServer.server.getPlayerList().sendMessage(component);
-		MCServer.bot.sendDeathmessage(component);
+		MCServer.bot.sendDeathMessage(component);
 	}
 }

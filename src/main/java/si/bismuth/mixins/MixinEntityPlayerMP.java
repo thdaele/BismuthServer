@@ -86,7 +86,7 @@ public abstract class MixinEntityPlayerMP extends EntityPlayer implements IRecip
 	@Redirect(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/PlayerList;sendMessage(Lnet/minecraft/util/text/ITextComponent;)V"))
 	private void sendMessage(PlayerList list, ITextComponent component) {
 		list.sendMessage(component);
-		MCServer.bot.sendDeathmessage(component);
+		MCServer.bot.sendDeathMessage(component);
 		MCServer.log.info("Player {} died at {} {} {} in {}", this.getName(), this.posX, this.posY, this.posZ, this.world.provider.getDimensionType().getName());
 	}
 }
