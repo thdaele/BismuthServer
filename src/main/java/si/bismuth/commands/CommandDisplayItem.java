@@ -5,6 +5,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandDisplayItem extends CommandBismuthBase {
 	@Override
@@ -25,7 +27,8 @@ public class CommandDisplayItem extends CommandBismuthBase {
 
 		final ItemStack stack = ((EntityPlayerMP) sender).getHeldItemMainhand();
 		if (!stack.isEmpty()) {
-			server.getPlayerList().sendMessage(stack.getTextComponent());
+			final ITextComponent component = new TextComponentTranslation("chat.type.text", sender.getDisplayName(), stack.getTextComponent());
+			server.getPlayerList().sendMessage(component, false);
 		}
 	}
 }
