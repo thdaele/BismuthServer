@@ -2,18 +2,15 @@ package si.bismuth.ebictranslononation.mixins;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity {
-	@ModifyVariable(method = "move", ordinal = 0, at = @At("HEAD"), argsOnly = true)
+	@Redirect(method = "move", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/MoverType;PISTON:Lnet/minecraft/entity/MoverType;", opcode = Opcodes.GETSTATIC))
 	private MoverType mc124718(MoverType type) {
-		if (type == MoverType.PISTON) {
-			type = MoverType.SELF;
-		}
-
-		return type;
+		return null;
 	}
 }
