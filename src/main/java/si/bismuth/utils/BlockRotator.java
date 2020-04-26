@@ -36,7 +36,6 @@ public class BlockRotator {
 			return false;
 		}
 
-		if (UUIDS.contains(String.valueOf(EntityPlayer.getUUID(playerIn.getGameProfile())))) return false;
 		return flip_block(worldIn, pos, state, facing, hitX, hitY, hitZ);
 	}
 
@@ -103,7 +102,6 @@ public class BlockRotator {
 	public static boolean flippinEligibility(Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			if (UUIDS.contains(String.valueOf(EntityPlayer.getUUID(player.getGameProfile())))) return false;
 			return (!player.getHeldItemOffhand().isEmpty() && player.getHeldItemOffhand().getItem() instanceof ItemBlock && ((ItemBlock) (player.getHeldItemOffhand().getItem())).getBlock() == Blocks.CACTUS);
 		}
 		return false;
