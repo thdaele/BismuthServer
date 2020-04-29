@@ -101,4 +101,9 @@ public abstract class MixinWorld {
 	private void onEndUpdateEntities(CallbackInfo ci) {
 		Profiler.end_current_section();
 	}
+
+	@Redirect(method = "updateEntityWithOptionalForce", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setPositionNonDirty()Z"))
+	private boolean alwaysLoadChunk(Entity entity) {
+		return true;
+	}
 }
