@@ -45,7 +45,7 @@ public abstract class MixinTileEntityPiston extends TileEntity {
 		this.world.notifyBlockUpdate(pos.offset(state.getValue(BlockPistonExtension.FACING).getOpposite()), state, state, 0);
 	}
 
-	@Inject(method = "moveCollidedEntities", at = @At(value = "INVOKE", target = "Ljava/lang/ThreadLocal;set(Ljava/lang/Object;)V", ordinal = 1, shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "moveCollidedEntities", at = @At(value = "INVOKE", target = "Ljava/lang/ThreadLocal;set(Ljava/lang/Object;)V", ordinal = 1, shift = At.Shift.AFTER, remap = false), locals = LocalCapture.CAPTURE_FAILHARD)
 	public void updateEntity(float f, CallbackInfo ci, EnumFacing face, double d0, List<AxisAlignedBB> list, AxisAlignedBB bb, List<Entity> list1, boolean isSlime, int i, Entity entity) {
 		this.world.updateEntityWithOptionalForce(entity, false);
 	}
