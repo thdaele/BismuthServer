@@ -33,6 +33,7 @@
 		"MixinNetHandlerLoginServer",
 		"MixinNetHandlerPlayServer",
 		"MixinNettyVarint21FrameEncoder",
+		"MixinNetworkSystem4",
 		"MixinPlayerAdvancements",
 		"MixinPlayerInteractionManager",
 		"MixinPlayerList",
