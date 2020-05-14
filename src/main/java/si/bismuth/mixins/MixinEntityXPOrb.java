@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityXPOrb.class)
 public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.utils.IEntityXPOrb {
 	@Unique
-	private static final double LOG_32 = Math.log(32D);
+	private static final double LIFETIME_CONSTANT = 1D / Math.log(16D);
 	@Unique
 	private IntArrayList xpValues = new IntArrayList();
 	@Unique
@@ -121,7 +121,7 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 	@Unique
 	private void resetAge() {
 		((IEntityXPOrb) this).setXpOrbAge(0);
-		this.maxAge = (int) (6000 * (1 + Math.log(this.xpValues.size()) / LOG_32));
+		this.maxAge = (int) (6000 * (1 + LIFETIME_CONSTANT * Math.log(this.xpValues.size())));
 	}
 
 	@ModifyConstant(method = "onUpdate", constant = @Constant(intValue = 6000))
