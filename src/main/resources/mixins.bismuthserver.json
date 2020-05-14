@@ -32,6 +32,7 @@
 		"MixinMinecraftServer",
 		"MixinNetHandlerLoginServer",
 		"MixinNetHandlerPlayServer",
+		"MixinNettyVarint21FrameEncoder",
 		"MixinPlayerAdvancements",
 		"MixinPlayerInteractionManager",
 		"MixinPlayerList",
