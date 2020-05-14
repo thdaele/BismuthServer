@@ -16,25 +16,31 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityXPOrb.class)
 public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.utils.IEntityXPOrb {
 	@Unique
-	IntArrayList xpValues = new IntArrayList();
+	private static final double LOG_32 = Math.log(32D);
 	@Unique
-	int delayBeforeCombine = 25;
+	private IntArrayList xpValues = new IntArrayList();
+	@Unique
+	private int delayBeforeCombine = 25;
+	@Unique
+	private int maxAge;
+
+	public MixinEntityXPOrb(World world) {
+		super(world);
+	}
 
 	@Shadow
 	public int delayBeforeCanPickup;
 
 	@Shadow
 	private int xpValue;
-
-	public MixinEntityXPOrb(World world) {
-		super(world);
-	}
 
 	@Shadow
 	protected abstract int durabilityToXp(int durability);
@@ -45,35 +51,6 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 	@Inject(method = "<init>(Lnet/minecraft/world/World;DDDI)V", at = @At("RETURN"))
 	private void onInit(World worldIn, double x, double y, double z, int expValue, CallbackInfo ci) {
 		this.xpValues.add(expValue);
-	}
-
-	@Inject(method = "onUpdate", at = @At("HEAD"))
-	private void onOrbUpdate(CallbackInfo ci) {
-		if (--delayBeforeCombine > 0) {
-			this.searchAndCombine();
-		}
-	}
-
-	private void searchAndCombine() {
-		this.delayBeforeCombine = 50;
-		for (EntityXPOrb orb : this.world.getEntitiesWithinAABB(EntityXPOrb.class, this.getEntityBoundingBox().grow(0.5D))) {
-			this.combineOrbs(orb);
-		}
-	}
-
-	private void combineOrbs(EntityXPOrb orb) {
-		if ((EntityXPOrb) (Object) this == orb) {
-			return;
-		}
-
-		if (orb.isEntityAlive()) {
-			final si.bismuth.utils.IEntityXPOrb iorb = ((si.bismuth.utils.IEntityXPOrb) orb);
-			this.xpValue += orb.getXpValue();
-			this.xpValues.addAll(iorb.getXpValues());
-
-			orb.setDead();
-			this.resetAge();
-		}
 	}
 
 	/**
@@ -111,18 +88,57 @@ public abstract class MixinEntityXPOrb extends Entity implements si.bismuth.util
 		}
 	}
 
+	@Inject(method = "onUpdate", at = @At("HEAD"))
+	private void onOrbUpdate(CallbackInfo ci) {
+		if (--delayBeforeCombine > 0) {
+			this.searchAndCombine();
+		}
+	}
+
+	@Unique
+	private void searchAndCombine() {
+		this.delayBeforeCombine = 50;
+		for (EntityXPOrb orb : this.world.getEntitiesWithinAABB(EntityXPOrb.class, this.getEntityBoundingBox().grow(0.5D))) {
+			this.combineOrbs(orb);
+		}
+	}
+
+	@Unique
+	private void combineOrbs(EntityXPOrb orb) {
+		if ((EntityXPOrb) (Object) this == orb) {
+			return;
+		}
+
+		if (orb.isEntityAlive()) {
+			final si.bismuth.utils.IEntityXPOrb iorb = ((si.bismuth.utils.IEntityXPOrb) orb);
+			this.xpValue += orb.getXpValue();
+			this.xpValues.addAll(iorb.getXpValues());
+			orb.setDead();
+			this.resetAge();
+		}
+	}
+
+	@Unique
+	private void resetAge() {
+		((IEntityXPOrb) this).setXpOrbAge(0);
+		this.maxAge = (int) (6000 * (1 + Math.log(this.xpValues.size()) / LOG_32));
+	}
+
+	@ModifyConstant(method = "onUpdate", constant = @Constant(intValue = 6000))
+	private int getMaxAge(int value) {
+		return this.maxAge;
+	}
+
 	@Inject(method = "writeEntityToNBT", at = @At("RETURN"))
 	private void onWriteEntityToNBT(NBTTagCompound compound, CallbackInfo ci) {
 		compound.setIntArray("xpValues", this.xpValues.toIntArray());
+		compound.setInteger("maxAge", this.maxAge);
 	}
 
 	@Inject(method = "readEntityFromNBT", at = @At("RETURN"))
 	private void readEntityFromNBT(NBTTagCompound compound, CallbackInfo ci) {
 		this.xpValues = new IntArrayList(compound.getIntArray("xpValues"));
-	}
-
-	private void resetAge() {
-		((IEntityXPOrb) this).setXpOrbAge(0);
+		this.maxAge = compound.getInteger("maxAge");
 	}
 
 	@Override
