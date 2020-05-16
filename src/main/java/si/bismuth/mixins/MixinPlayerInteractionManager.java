@@ -25,9 +25,9 @@ public abstract class MixinPlayerInteractionManager {
 	@Shadow
 	public EntityPlayerMP player;
 
-	@Inject(method = "onBlockClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;sendBlockBreakProgress(ILnet/minecraft/util/math/BlockPos;I)V", shift = At.Shift.BEFORE))
+	@Inject(method = "onBlockClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;sendBlockBreakProgress(ILnet/minecraft/util/math/BlockPos;I)V"))
 	private void notifyUpdate(BlockPos pos, EnumFacing face, CallbackInfo ci) {
-		this.player.connection.sendPacket(new SPacketBlockChange(world, BlockPos.ORIGIN));
+		this.player.connection.sendPacket(new SPacketBlockChange(this.world, pos));
 	}
 
 	@Redirect(method = "processRightClickBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onBlockActivated(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/EnumHand;Lnet/minecraft/util/EnumFacing;FFF)Z"))
