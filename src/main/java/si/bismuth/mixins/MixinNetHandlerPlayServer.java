@@ -47,6 +47,11 @@ public abstract class MixinNetHandlerPlayServer {
 		return -1D;
 	}
 
+	@Redirect(method = "processUseEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayerMP;canEntityBeSeen(Lnet/minecraft/entity/Entity;)Z"))
+	private boolean mc107103(EntityPlayerMP player, Entity entity) {
+		return true;
+	}
+
 	@Redirect(method = "processUseEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayerMP;interactOn(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/EnumHand;)Lnet/minecraft/util/EnumActionResult;"))
 	private EnumActionResult onRightClickVillager(EntityPlayerMP player, Entity entity, EnumHand hand) {
 		if (this.player.isSneaking() && entity instanceof EntityVillager) {
