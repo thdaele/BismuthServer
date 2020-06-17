@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScoreboardHelper {
-	final static ServerScoreboard board = (ServerScoreboard) MCServer.server.getWorld(0).getScoreboard();
+	private static final ServerScoreboard board = (ServerScoreboard) MCServer.server.getWorld(0).getScoreboard();
 
 	public static void setSidebarScoreboard(List<String> args) {
 		final ScoreObjective objective = ScoreboardHelper.getObjective(args, board);
@@ -19,19 +19,18 @@ public class ScoreboardHelper {
 	}
 
 	public static ScoreObjective getObjective(List<String> args, Scoreboard board) {
-		final Collection<String> objectives = getObjectiveNames();
+		final Collection<String> objectives = board.getScoreObjectives().stream().map(ScoreObjective::getName).collect(Collectors.toList());
 		return args.size() > 2 ? board.getObjective(getClosestMatch(objectives, args.get(2))) : null;
-	}
-
-	private static List<String> getObjectiveNames() {
-		final Collection<ScoreObjective> collection = board.getScoreObjectives();
-		return collection.stream().filter(o -> !o.getCriteria().isReadOnly()).map(ScoreObjective::getName).collect(Collectors.toList());
 	}
 
 	private static String getClosestMatch(Collection<String> collection, String target) {
 		int distance = Integer.MAX_VALUE;
 		String closest = "";
-		for (String s : collection) {
+		for (final String s : collection) {
+			if (target.equalsIgnoreCase(s)) {
+				return s;
+			}
+
 			int currentDistance = StringUtils.getLevenshteinDistance(s, target);
 			if (currentDistance < distance) {
 				distance = currentDistance;
