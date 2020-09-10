@@ -84,10 +84,12 @@ public class DCBot extends ListenerAdapter {
 			symbol.getStyle().setColor(TextFormatting.BLUE).setHoverEvent(hoverText).setClickEvent(clickText);
 			final ITextComponent text = new TextComponentTranslation("chat.type.text", name, content);
 			for (Message.Attachment file : attachments) {
-				final String url = file.getUrl();
-				final ITextComponent fileUrl = new TextComponentString(" " + url);
-				fileUrl.getStyle().setColor(TextFormatting.BLUE).setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
-				text.appendSibling(fileUrl);
+				final ITextComponent fileName = new TextComponentString(" " + file.getFileName());
+				fileName.getStyle()
+						.setColor(TextFormatting.BLUE)
+						.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Open attachment")))
+						.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, file.getUrl()));
+				text.appendSibling(fileName);
 			}
 
 			MCServer.server.addScheduledTask(() -> MCServer.server.getPlayerList().sendMessage(new TextComponentString("").appendSibling(symbol).appendSibling(text)));
