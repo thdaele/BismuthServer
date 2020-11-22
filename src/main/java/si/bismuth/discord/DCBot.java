@@ -33,7 +33,7 @@ public class DCBot extends ListenerAdapter {
 	private final static String channelURL = String.format("https://discordapp.com/channels/%d/%d/", BismuthID, ChannelID);
 	private final static String PREFIX = ";";
 	private final boolean isTestServer;
-	private JDA jda;
+	private final JDA jda;
 
 	public DCBot(String token, boolean isOnlineMode) throws LoginException, InterruptedException {
 		isTestServer = !isOnlineMode;
