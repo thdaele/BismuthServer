@@ -46,7 +46,6 @@ public class DCBot extends ListenerAdapter {
 	}
 
 	public void sendToDiscord(String message) {
-		System.out.println(message);
 		final TextChannel channel = this.jda.getTextChannelById(DCBot.ChannelID);
 		if (channel != null) {
 			if (isTestServer) {
