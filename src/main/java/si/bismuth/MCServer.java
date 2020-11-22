@@ -54,7 +54,7 @@ public class MCServer {
 		MCServer.server = server;
 	}
 
-	public static void onServerLoaded(MinecraftServer server) throws LoginException {
+	public static void onServerLoaded(MinecraftServer server) throws LoginException, InterruptedException {
 		server.setMOTD("v" + BISMUTH_SERVER_VERSION + " \u2014 " + server.getMOTD());
 		LoggerRegistry.initLoggers(server);
 		MCServer.bot = new DCBot(((DedicatedServer) server).getStringProperty("botToken", ""), server.isServerInOnlineMode());

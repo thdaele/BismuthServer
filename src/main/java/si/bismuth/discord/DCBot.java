@@ -1,6 +1,5 @@
 package si.bismuth.discord;
 
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.EmbedType;
@@ -34,18 +33,20 @@ public class DCBot extends ListenerAdapter {
 	private final static String channelURL = String.format("https://discordapp.com/channels/%d/%d/", BismuthID, ChannelID);
 	private final static String PREFIX = ";";
 	private final boolean isTestServer;
-	private final JDA jda;
+	private JDA jda;
 
-	public DCBot(String token, boolean isOnlineMode) throws LoginException {
+	public DCBot(String token, boolean isOnlineMode) throws LoginException, InterruptedException {
 		isTestServer = !isOnlineMode;
-		this.jda = new JDABuilder(AccountType.BOT)
-				.setToken(token)
+		this.jda = JDABuilder
+				.createDefault(token)
 				.addEventListeners(this)
-				.build();
+				.build()
+				.awaitReady();
 		this.sendToDiscord("Server started!");
 	}
 
 	public void sendToDiscord(String message) {
+		System.out.println(message);
 		final TextChannel channel = this.jda.getTextChannelById(DCBot.ChannelID);
 		if (channel != null) {
 			if (isTestServer) {
