@@ -1,8 +1,8 @@
 buildscript {
 	repositories {
 		mavenCentral()
-		maven { url = "https://files.minecraftforge.net/maven" }
-		maven { url = "https://repo.spongepowered.org/maven" }
+		maven { url = "https://maven.minecraftforge.net" }
+		maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
 		maven { url = "https://plugins.gradle.org/m2" }
 	}
 
@@ -50,13 +50,13 @@ mixin {
 sourceSets.main.ext.refMap = "mixins.bismuthserver.refmap.json"
 
 repositories {
-	maven { url = "https://repo.spongepowered.org/maven" }
-	jcenter()
+	maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
+	mavenCentral()
 }
 
 dependencies {
 	compile "net.dv8tion:JDA:4.2.0_168"
-	compile "org.spongepowered:mixin:0.8.1-SNAPSHOT"
+	compile "org.spongepowered:mixin:0.8.3"
 	compile "org.ow2.asm:asm-debug-all:5.2"
 	compile "net.sf.jopt-simple:jopt-simple:5.0.3"
 	compile "com.eclipsesource.minimal-json:minimal-json:0.9.5"
