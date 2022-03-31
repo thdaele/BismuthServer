@@ -5,7 +5,6 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardSaveData;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +15,8 @@ import java.util.Map;
 
 @Mixin(ScoreboardSaveData.class)
 public class MixinScoreboardSaveData {
-    @Shadow @Final Scoreboard scoreboard;
+    @Shadow
+    private Scoreboard scoreboard;
 
     @Inject(method="setScoreboard", at=@At(value="TAIL", target="Lnet/minecraft/scoreboard/ScoreboardSaveData;readFromNBT(Lnet/minecraft/nbt/NBTTagCompound;)V"))
     private void updateTotals(CallbackInfo ci){
