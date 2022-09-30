@@ -42,7 +42,8 @@ public class DCBot extends ListenerAdapter {
 
 		EnumSet<GatewayIntent> intents = EnumSet.of(
 				// Enables MessageReceivedEvent for guild (also known as servers)
-				GatewayIntent.GUILD_MESSAGES
+				GatewayIntent.GUILD_MESSAGES,
+				GatewayIntent.MESSAGE_CONTENT
 		);
 
 		this.jda = JDABuilder
