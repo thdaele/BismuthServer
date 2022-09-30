@@ -45,6 +45,10 @@ public class DCBot extends ListenerAdapter {
 		this.sendToDiscord("Server started!");
 	}
 
+	public void shutDownBot() {
+		this.jda.shutdown();
+	}
+
 	public void sendToDiscord(String message) {
 		final TextChannel channel = this.jda.getTextChannelById(DCBot.ChannelID);
 		if (channel != null) {
