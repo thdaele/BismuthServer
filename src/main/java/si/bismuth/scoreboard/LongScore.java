@@ -1,88 +1,87 @@
 package si.bismuth.scoreboard;
 
-import net.minecraft.scoreboard.ScoreObjective;
-
 import java.util.Comparator;
+import net.minecraft.scoreboard.ScoreboardObjective;
 
 public class LongScore {
     public static final Comparator<LongScore> SCORE_COMPARATOR = new Comparator<LongScore>() {
-        public int compare(LongScore p_compare_1_, LongScore p_compare_2_) {
-            if (p_compare_1_.getScorePoints() > p_compare_2_.getScorePoints()) {
+        public int compare(LongScore score1, LongScore score2) {
+            if (score1.get() > score2.get()) {
                 return 1;
             } else {
-                return p_compare_1_.getScorePoints() < p_compare_2_.getScorePoints() ? -1 : p_compare_2_.getPlayerName().compareToIgnoreCase(p_compare_1_.getPlayerName());
+                return score1.get() < score2.get() ? -1 : score2.getOwner().compareToIgnoreCase(score1.getOwner());
             }
         }
     };
     private final IScoreboard scoreboard;
-    private final ScoreObjective objective;
-    private final String scorePlayerName;
-    private long scorePoints;
+    private final ScoreboardObjective objective;
+    private final String owner;
+    private long score;
     private boolean locked;
     private boolean forceUpdate;
 
-    public LongScore(IScoreboard p_i2309_1_, ScoreObjective p_i2309_2_, String p_i2309_3_) {
-        this.scoreboard = p_i2309_1_;
-        this.objective = p_i2309_2_;
-        this.scorePlayerName = p_i2309_3_;
+    public LongScore(IScoreboard scoreboard, ScoreboardObjective objective, String owner) {
+        this.scoreboard = scoreboard;
+        this.objective = objective;
+        this.owner = owner;
         this.forceUpdate = true;
     }
 
-    public void increaseScore(long p_increaseScore_1_) {
-        if (this.objective.getCriteria().isReadOnly()) {
+    public void increase(long amount) {
+        if (this.objective.getCriterion().isReadOnly()) {
             throw new IllegalStateException("Cannot modify read-only score");
         } else {
-            this.setScorePoints(this.getScorePoints() + p_increaseScore_1_);
-            if (!"Total".equals(scorePlayerName)){
+            this.set(this.get() + amount);
+            if (!"Total".equals(owner)){
                 final IScoreboard scoreboard = this.scoreboard;
-                final LongScore totalScore = scoreboard.getOrCreateScore("Total", objective);
-                if (totalScore.getScorePoints() > -1){
-                    totalScore.increaseScore(p_increaseScore_1_);
+                final LongScore totalScore = scoreboard.getLongScore("Total", objective);
+                if (totalScore.get() > -1){
+                    totalScore.increase(amount);
                 }
             }
         }
     }
 
-    public void decreaseScore(long p_decreaseScore_1_) {
-        if (this.objective.getCriteria().isReadOnly()) {
+    public void decrease(long amount) {
+        if (this.objective.getCriterion().isReadOnly()) {
             throw new IllegalStateException("Cannot modify read-only score");
         } else {
-            this.setScorePoints(this.getScorePoints() - p_decreaseScore_1_);
+            this.set(this.get() - amount);
         }
     }
 
-    public void incrementScore() {
-        if (this.objective.getCriteria().isReadOnly()) {
+    public void increment() {
+        if (this.objective.getCriterion().isReadOnly()) {
             throw new IllegalStateException("Cannot modify read-only score");
         } else {
-            this.increaseScore(1);
+            this.increase(1);
         }
     }
 
-    public long getScorePoints() {
-        return this.scorePoints;
+    public long get() {
+        return this.score;
     }
 
-    public void setScorePoints(long p_setScorePoints_1_) {
-        long lvt_2_1_ = this.scorePoints;
-        this.scorePoints = p_setScorePoints_1_;
-        if (lvt_2_1_ != p_setScorePoints_1_ || this.forceUpdate) {
+    public void set(long score) {
+        long prev = this.score;
+        this.score = score;
+        if (prev != score || this.forceUpdate) {
             //TODO Calculate the change and apply that to the total score
             this.forceUpdate = false;
-            IServerScoreboard scoreboard = (IServerScoreboard) this.getScoreScoreboard();
+            IServerScoreboard scoreboard = (IServerScoreboard) this.getScoreboard();
             scoreboard.onScoreUpdated(this);
         }
     }
 
-    public ScoreObjective getObjective() {
+    public ScoreboardObjective getObjective() {
         return this.objective;
     }
 
-    public String getPlayerName() {
-        return this.scorePlayerName;
+    public String getOwner() {
+        return this.owner;
     }
 
-    public IScoreboard getScoreScoreboard() {
+    public IScoreboard getScoreboard() {
         return this.scoreboard;
     }
 
@@ -90,7 +89,7 @@ public class LongScore {
         return this.locked;
     }
 
-    public void setLocked(boolean p_setLocked_1_) {
-        this.locked = p_setLocked_1_;
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }

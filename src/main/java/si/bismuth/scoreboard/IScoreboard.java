@@ -1,16 +1,15 @@
 package si.bismuth.scoreboard;
 
-import net.minecraft.scoreboard.ScoreObjective;
-
 import java.util.Collection;
 import java.util.Map;
+import net.minecraft.scoreboard.ScoreboardObjective;
 
 public interface IScoreboard {
-    LongScore getOrCreateScore(String playerName, ScoreObjective objective);
+    LongScore getLongScore(String owner, ScoreboardObjective objective);
 
-    Collection<LongScore> getSortedScores(ScoreObjective p_getSortedScores_1_);
+    Collection<LongScore> getLongScores(ScoreboardObjective objective);
 
-    Collection<LongScore> getScores();
+    Collection<LongScore> getLongScores();
 
-    Map<ScoreObjective, LongScore> getObjectivesForEntity(String p_getObjectivesForEntity_1_);
+    Map<ScoreboardObjective, LongScore> getLongScores(String owner);
 }

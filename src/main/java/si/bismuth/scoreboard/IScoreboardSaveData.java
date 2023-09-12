@@ -1,9 +1,9 @@
 package si.bismuth.scoreboard;
 
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NbtList;
 
 public interface IScoreboardSaveData {
-    void readScores(NBTTagList p_readScores_1_);
+    void readScores(NbtList p_readScores_1_);
 
-    NBTTagList scoresToNbt();
+    NbtList scoresToNbt();
 }

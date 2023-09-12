@@ -3,20 +3,16 @@ package si.bismuth.network;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketCustomPayload;
-import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ServerScoreboard;
-import net.minecraft.world.WorldServer;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
+import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.server.entity.living.player.ServerPlayerEntity;
+import net.minecraft.server.scoreboard.ServerScoreboard;
+import net.minecraft.server.world.ServerWorld;
 import org.apache.commons.lang3.StringUtils;
 import si.bismuth.MCServer;
-import si.bismuth.scoreboard.IScoreboard;
-import si.bismuth.scoreboard.IServerScoreboard;
-import si.bismuth.scoreboard.LongScore;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -28,11 +24,11 @@ public class PluginChannelsManager {
 	private final Map<UUID, List<String>> channelList = new HashMap<>();
 
 	public PluginChannelsManager() {
-		this.registerPacket(BisPacketGetInventory.class);
-		this.registerPacket(BisPacketRegister.class);
-		this.registerPacket(BisPacketSearchForItem.class);
-		this.registerPacket(BisPacketSort.class);
-		this.registerPacket(BisPacketUpdateScore.class);
+		this.registerPacket(GetInventoryPacket.class);
+		this.registerPacket(RegisterPacket.class);
+		this.registerPacket(SearchForItemPacket.class);
+		this.registerPacket(SortPacket.class);
+		this.registerPacket(UpdateScorePacket.class);
 		this.registerPacket(FakeCarpetClientSupport.class);
 	}
 
@@ -50,63 +46,69 @@ public class PluginChannelsManager {
 		}
 	}
 
-	public void sendRegisterToPlayer(EntityPlayerMP player) {
+	public void sendRegisterToPlayer(ServerPlayerEntity player) {
 		final String channels = StringUtils.join(this.allChannels.keySet(), CHANNEL_SEPARATOR);
-		final SPacketCustomPayload packet = new SPacketCustomPayload(REGISTER_CHANNELS, new PacketBuffer(Unpooled.buffer().writeBytes(channels.getBytes())));
-		player.connection.sendPacket(packet);
+		final CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(REGISTER_CHANNELS, new PacketByteBuf(Unpooled.buffer().writeBytes(channels.getBytes())));
+		player.networkHandler.sendPacket(packet);
 	}
 
-	public void sendPacketToPlayer(EntityPlayerMP player, BisPacket packet) {
+	public void sendPacketToPlayer(ServerPlayerEntity player, BisPacket packet) {
 		//TODO: plz fix
 		final String channel = this.getChannelFromPacket(packet);
-		if (this.getChannelsForPlayer(player.getUniqueID()).contains(channel)) {
+		if (this.getChannelsForPlayer(player.getUuid()).contains(channel)) {
 			packet.writePacketData();
-			player.connection.sendPacket(new SPacketCustomPayload(channel, packet.getPacketBuffer()));
+			player.networkHandler.sendPacket(new CustomPayloadS2CPacket(channel, packet.getPacketBuffer()));
 		}
 	}
 
-	public void processIncoming(EntityPlayerMP player, CPacketCustomPayload packetIn) {
-		final UUID uuid = player.getUniqueID();
-		final String channel = packetIn.getChannelName();
-		final PacketBuffer data = packetIn.getBufferData();
+	public boolean processIncoming(ServerPlayerEntity player, CustomPayloadC2SPacket packetIn) {
+		final UUID uuid = player.getUuid();
+		final String channel = packetIn.getChannel();
+		final PacketByteBuf data = packetIn.getData();
 		data.resetReaderIndex();
 
 		if (channel.equals(REGISTER_CHANNELS)) {
 			final List<String> incomingChannels = this.getChannelsFromBuffer(data);
 			this.addChannelsForPlayer(uuid, incomingChannels);
 
-			if (incomingChannels.contains(this.getChannelFromPacket(BisPacketUpdateScore.class))) {
+			if (incomingChannels.contains(this.getChannelFromPacket(UpdateScorePacket.class))) {
 				//TODO fix
-				Set<ScoreObjective> set = Sets.newHashSet();
-				WorldServer worldServer = player.getServerWorld();
+				Set<ScoreboardObjective> set = Sets.newHashSet();
+				ServerWorld worldServer = player.getServerWorld();
 
 				for (int i = 0; i < 19; ++i)
 				{
-					ScoreObjective scoreobjective = worldServer.getScoreboard().getObjectiveInDisplaySlot(i);
+					ScoreboardObjective scoreobjective = worldServer.getScoreboard().getDisplayObjective(i);
 
 					if (scoreobjective != null && !set.contains(scoreobjective))
 					{
-						for (Packet<?> packet : ((ServerScoreboard)worldServer.getScoreboard()).getCreatePackets(scoreobjective))
+						for (Packet<?> packet : ((ServerScoreboard)worldServer.getScoreboard()).createStartDisplayingObjectivePackets(scoreobjective))
 						{
-							player.connection.sendPacket(packet);
+							player.networkHandler.sendPacket(packet);
 						}
 
 						set.add(scoreobjective);
 					}
 				}
 			}
+
+			return true;
 		} else if (this.getChannelsForPlayer(uuid).contains(channel)) {
 			try {
 				final BisPacket packet = this.allChannels.get(channel).newInstance();
 				packet.readPacketData(data);
 				packet.processPacket(player);
+
+				return true;
 			} catch (Exception ignored) {
 				// meh, noop
 			}
 		}
+
+		return false;
 	}
 
-	private List<String> getChannelsFromBuffer(PacketBuffer data) {
+	private List<String> getChannelsFromBuffer(PacketByteBuf data) {
 		final byte[] bytes = new byte[data.readableBytes()];
 		data.readBytes(bytes);
 		final String channels = new String(bytes, StandardCharsets.UTF_8);

@@ -4,15 +4,15 @@
     "minVersion": "0.7.3",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-        "MixinCommandResultStats",
-        "MixinCommandScoreboard",
-        "MixinCommandTrigger",
-        "MixinEntityHasScore",
-        "MixinEntityPlayerMP",
-        "MixinEntitySelector",
-        "MixinScoreboard",
-        "MixinScoreboardSaveData",
-        "MixinServerScoreboard",
-        "MixinTextComponentScore"
+        "CommandResultsMixin",
+        "EntityScoresConditionMixin",
+        "SavedScoreboardDataMixin",
+        "ScoreboardCommandMixin",
+        "ScoreboardMixin",
+        "ScoreTextMixin",
+        "ServerPlayerEntityMixin",
+        "ServerScoreboardMixin",
+        "TargetSelectorMixin",
+        "TriggerCommandMixin"
     ]
 }
