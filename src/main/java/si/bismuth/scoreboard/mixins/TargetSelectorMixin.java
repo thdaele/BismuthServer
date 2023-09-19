@@ -9,7 +9,9 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.command.TargetSelector;
 import net.minecraft.server.command.source.CommandSource;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -17,71 +19,79 @@ import si.bismuth.scoreboard.IScoreboard;
 import si.bismuth.scoreboard.LongScore;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 @Mixin(TargetSelector.class)
 public class TargetSelectorMixin {
-    private static long getLong(String p_getInt_0_, long p_getInt_1_) {
+    @Unique
+    private static long getLong(String string, long defaultValue) {
         try {
-            return Long.parseLong(p_getInt_0_);
+            return Long.parseLong(string);
         } catch (Throwable var3) {
-            return p_getInt_1_;
+            return defaultValue;
         }
     }
 
-    private static Map<String, Long> getLongScoreMap(Map<String, String> p_getScoreMap_0_) {
-        Map<String, Long> lvt_1_1_ = Maps.newHashMap();
+    @Unique
+    private static Map<String, Long> getLongScoreMap(Map<String, String> args) {
+        Map<String, Long> map = Maps.newHashMap();
 
-        for(String lvt_3_1_ : p_getScoreMap_0_.keySet()) {
-            if (lvt_3_1_.startsWith("score_") && lvt_3_1_.length() > "score_".length()) {
-                lvt_1_1_.put(lvt_3_1_.substring("score_".length()), getLong((String)p_getScoreMap_0_.get(lvt_3_1_), 1L));
+        for(String arg : args.keySet()) {
+            if (arg.startsWith("score_") && arg.length() > "score_".length()) {
+                args.put(arg.substring("score_".length()), String.valueOf(getLong(args.get(arg), 1L)));
             }
         }
 
-        return lvt_1_1_;
+        return map;
     }
 
     @Inject(method = "getScoreboardPredicates", at = @At(value = "HEAD"), cancellable = true)
     private static void getScoreboardPredicates(CommandSource source, Map<String, String> args, CallbackInfoReturnable<List<Predicate<Entity>>> cir) {
-        final Map<String, Long> lvt_2_1_ = getLongScoreMap(args);
-        cir.setReturnValue ((List<Predicate<Entity>>)(lvt_2_1_.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate[]{new Predicate<Entity>() {
-            public boolean apply(Entity p_apply_1_) {
-                if (p_apply_1_ == null) {
+        final Map<String, Long> map = getLongScoreMap(args);
+        cir.setReturnValue ((List)(map.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate[]{new Predicate<Entity>() {
+            public boolean apply(@Nullable Entity entity) {
+                if (entity == null) {
                     return false;
                 } else {
                     Scoreboard scoreboard = source.getServer().getWorld(0).getScoreboard();
+                    Iterator var3 = map.entrySet().iterator();
 
-                    for(Map.Entry<String, Long> lvt_4_1_ : lvt_2_1_.entrySet()) {
-                        String lvt_5_1_ = (String)lvt_4_1_.getKey();
-                        boolean lvt_6_1_ = false;
-                        if (lvt_5_1_.endsWith("_min") && lvt_5_1_.length() > 4) {
-                            lvt_6_1_ = true;
-                            lvt_5_1_ = lvt_5_1_.substring(0, lvt_5_1_.length() - 4);
+                    Map.Entry entry;
+                    boolean bl;
+                    long i;
+                    do {
+                        if (!var3.hasNext()) {
+                            return true;
                         }
 
-                        ScoreboardObjective lvt_7_1_ = scoreboard.getObjective(lvt_5_1_);
-                        if (lvt_7_1_ == null) {
+                        entry = (Map.Entry)var3.next();
+                        String string = (String)entry.getKey();
+                        bl = false;
+                        if (string.endsWith("_min") && string.length() > 4) {
+                            bl = true;
+                            string = string.substring(0, string.length() - 4);
+                        }
+
+                        ScoreboardObjective scoreboardObjective = scoreboard.getObjective(string);
+                        if (scoreboardObjective == null) {
                             return false;
                         }
 
-                        String lvt_8_1_ = p_apply_1_ instanceof ServerPlayerEntity ? p_apply_1_.getName() : p_apply_1_.getScoreboardName();
-                        if (!scoreboard.hasScore(lvt_8_1_, lvt_7_1_)) {
+                        String string2 = entity instanceof ServerPlayerEntity ? entity.getName() : entity.getScoreboardName();
+                        if (!scoreboard.hasScore(string2, scoreboardObjective)) {
                             return false;
                         }
 
-                        LongScore lvt_9_1_ = ((IScoreboard)scoreboard).getLongScore(lvt_8_1_, lvt_7_1_);
-                        long lvt_10_1_ = lvt_9_1_.get();
-                        if (lvt_10_1_ < lvt_4_1_.getValue() && lvt_6_1_) {
+                        LongScore scoreboardScore = ((IScoreboard)scoreboard).getLongScore(string2, scoreboardObjective);
+                        i = scoreboardScore.get();
+                        if (i < (Integer)entry.getValue() && bl) {
                             return false;
                         }
+                    } while(i <= (Integer)entry.getValue() || bl);
 
-                        if (lvt_10_1_ > lvt_4_1_.getValue() && !lvt_6_1_) {
-                            return false;
-                        }
-                    }
-
-                    return true;
+                    return false;
                 }
             }
         }})));

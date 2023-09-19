@@ -17,7 +17,7 @@ public abstract class ItemEntityMixin implements IRecipeBookItemDuper {
 	@Shadow
 	public abstract ItemStack getItemStack();
 
-	@Inject(method = "onPlayerCollision", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/item/ItemEntity;pickupDelay:I", opcode = Opcodes.GETFIELD))
+	@Inject(method = "onPlayerCollision", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/ItemEntity;pickUpDelay:I", opcode = Opcodes.GETFIELD))
 	private void startDupe(PlayerEntity player, CallbackInfo ci) {
 		((IRecipeBookItemDuper) player).dupeItemScan(true);
 	}

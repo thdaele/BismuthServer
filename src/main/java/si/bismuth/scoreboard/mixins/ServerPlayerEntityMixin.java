@@ -68,13 +68,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         lvt_6_1_.increment();
     }
 
-    @Redirect(method = "onKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
+    @Redirect(method = "onKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreboardObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
     private ScoreboardScore onDeath2(Scoreboard instance, String p_getOrCreateScore_1_, ScoreboardObjective p_getOrCreateScore_2_) {
         // Return dummy score that will be garbage collected later on to prevent filling up the old scoreboard datastructure
         return new ScoreboardScore(instance, p_getOrCreateScore_2_, p_getOrCreateScore_1_);
     }
 
-    @Redirect(method = "m_0114784", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
+    @Redirect(method = "m_0114784", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreboardObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
     private ScoreboardScore awardKillScore(Scoreboard instance, String p_getOrCreateScore_1_, ScoreboardObjective p_getOrCreateScore_2_) {
         ((IScoreboard) instance).getLongScore(p_getOrCreateScore_1_, p_getOrCreateScore_2_).increment();
         // Return dummy score that will be garbage collected later on to prevent filling up the old scoreboard datastructure
@@ -87,13 +87,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         longScore.increment();
     }
 
-    @Redirect(method = "m_0114784", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
+    @Redirect(method = "m_0114784", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreboardObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
     private ScoreboardScore awardTeamKillScores2(Scoreboard instance, String p_getOrCreateScore_1_, ScoreboardObjective p_getOrCreateScore_2_) {
         // Return dummy score that will be garbage collected later on to prevent filling up the old scoreboard datastructure
         return new ScoreboardScore(instance, p_getOrCreateScore_2_, p_getOrCreateScore_1_);
     }
 
-    @Redirect(method = "incrementStat", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
+    @Redirect(method = "incrementStat", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreboardObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
     private ScoreboardScore addStat(Scoreboard instance, String p_getOrCreateScore_1_, ScoreboardObjective p_getOrCreateScore_2_) {
         ((IScoreboard) instance).getLongScore(p_getOrCreateScore_1_, p_getOrCreateScore_2_).increment();
         // Return dummy score that will be garbage collected later on to prevent filling up the old scoreboard datastructure

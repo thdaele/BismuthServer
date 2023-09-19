@@ -29,7 +29,7 @@ public class NaturalSpawnerMixin {
 		SpawnReporter.mobcaps.get(server.dimension.getType().getId()).put(mobCategory, new Pair<>(loadedOfMobCategory, mobCap));
 	}
 
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/MobCategory;values()[Lnet/minecraft/entity/MobCategory;"))
+	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/living/mob/MobCategory;values()[Lnet/minecraft/entity/living/mob/MobCategory;"))
 	private MobCategory[] preventUselessMobSpawningAttemptsInIncorrectDimensions(ServerWorld world) {
 		return world.dimension.isOverworld() ? OVERWORLD : OTHERWORLD;
 	}

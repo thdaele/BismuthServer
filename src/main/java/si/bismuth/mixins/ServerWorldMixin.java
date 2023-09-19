@@ -92,13 +92,13 @@ public abstract class ServerWorldMixin extends World {
 		Profiler.start_section(this.worldName, "portals");
 	}
 
-	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;doBlockEvents()V"))
+	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;doBlockEvents()V"))
 	private void preBlockEvents(CallbackInfo ci) {
 		Profiler.end_current_section();
 		Profiler.start_section(this.worldName, "blockevents");
 	}
 
-	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldServer;doBlockEvents()V", shift = At.Shift.AFTER))
+	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;doBlockEvents()V", shift = At.Shift.AFTER))
 	private void postBlockEvents(CallbackInfo ci) {
 		Profiler.end_current_section();
 	}

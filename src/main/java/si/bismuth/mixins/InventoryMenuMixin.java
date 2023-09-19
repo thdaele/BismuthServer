@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -21,7 +22,7 @@ public class InventoryMenuMixin {
 	@Shadow
 	public List<InventorySlot> slots;
 
-	@Redirect(method = "onClickSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/Slot;getHasStack()Z", ordinal = 0), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/inventory/ActionType;THROW:Lnet/minecraft/inventory/ActionType;", opcode = Opcodes.GETSTATIC)))
+	@Redirect(method = "onClickSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/slot/InventorySlot;hasStack()Z", ordinal = 0), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/inventory/menu/ActionType;THROW:Lnet/minecraft/inventory/menu/ActionType;", opcode = Opcodes.GETSTATIC)))
 	private boolean onClickSlot(InventorySlot slot, int id, int clickData, ActionType action, PlayerEntity player) {
 		if (slot != null && slot.hasStack() && slot.canPickUp(player)) {
 			final ItemStack stack = slot.removeStack(slot.getStack().getSize());
@@ -52,6 +53,7 @@ public class InventoryMenuMixin {
 		}
 	}
 
+	@Unique
 	private ItemStack dropAllCrafting(PlayerEntity player, int index, List<InventorySlot> inventorySlotsParam) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		final InventorySlot slot = inventorySlotsParam.get(index);

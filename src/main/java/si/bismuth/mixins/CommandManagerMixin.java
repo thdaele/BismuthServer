@@ -43,7 +43,7 @@ public abstract class CommandManagerMixin extends CommandRegistry implements Com
 		}
 	}
 
-	@Inject(method = "sendSuccess", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/text/Style;setItalic(Ljava/lang/Boolean;)Lnet/minecraft/util/text/Style;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+	@Inject(method = "sendSuccess", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/Style;setItalic(Ljava/lang/Boolean;)Lnet/minecraft/text/Style;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void logAdminCommands(CommandSource source, Command command, int flags, String message, Object[] args, CallbackInfo ci, boolean flag, MinecraftServer server, Text adminMessage) {
 		if (server.isOnlineMode()) {
 			MCServer.bot.sendToDiscord(adminMessage.buildString());

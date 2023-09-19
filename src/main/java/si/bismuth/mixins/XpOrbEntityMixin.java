@@ -112,7 +112,7 @@ public abstract class XpOrbEntityMixin extends Entity implements si.bismuth.util
 		if (orb.isAlive()) {
 			final si.bismuth.utils.IXpOrbEntity iorb = ((si.bismuth.utils.IXpOrbEntity) orb);
 			this.xp += orb.getXp();
-			this.xpValues.addAll(iorb.getXpValues());
+			this.xpValues.addAll(iorb.bismuthServer$getXpValues());
 			orb.remove();
 			this.resetAge();
 		}
@@ -129,20 +129,20 @@ public abstract class XpOrbEntityMixin extends Entity implements si.bismuth.util
 		return this.maxAge;
 	}
 
-	@Inject(method = "writeEntityNbt", at = @At("RETURN"))
+	@Inject(method = "writeCustomNbt", at = @At("RETURN"))
 	private void onWriteEntityToNBT(NbtCompound compound, CallbackInfo ci) {
 		compound.putIntArray("xpValues", this.xpValues.toIntArray());
 		compound.putInt("maxAge", this.maxAge);
 	}
 
-	@Inject(method = "readEntityNbt", at = @At("RETURN"))
+	@Inject(method = "readCustomNbt", at = @At("RETURN"))
 	private void readEntityFromNBT(NbtCompound compound, CallbackInfo ci) {
 		this.xpValues = new IntArrayList(compound.getIntArray("xpValues"));
 		this.maxAge = compound.getInt("maxAge");
 	}
 
 	@Override
-	public IntArrayList getXpValues() {
+	public IntArrayList bismuthServer$getXpValues() {
 		return this.xpValues;
 	}
 }

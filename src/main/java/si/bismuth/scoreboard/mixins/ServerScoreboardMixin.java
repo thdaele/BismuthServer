@@ -32,7 +32,7 @@ public abstract class ServerScoreboardMixin extends Scoreboard implements IServe
     @Shadow protected abstract void markDirty();
 
     @Override
-    public void onScoreUpdated(LongScore longScore) {
+    public void bismuthServer$onScoreUpdated(LongScore longScore) {
         if (this.displayedObjectives.contains(longScore.getObjective())) {
             // TODO send the BisPacketUpdateScore to clients that support 64bit scoreboard
             ScoreboardScore score = new ScoreboardScore((Scoreboard) longScore.getScoreboard(), longScore.getObjective(), longScore.getOwner());
