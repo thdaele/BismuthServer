@@ -1,0 +1,24 @@
+{
+	"schemaVersion": 1,
+	"id": "bismuthserver",
+	"version": "${version}",
+	"name": "Bismuth Server",
+	"description": "Custom server for Bismuth's needs.",
+	"authors": [
+		"Bismuth!"
+	],
+	"contact": {
+		"homepage": "https://github.com/BismuthServer",
+		"sources": "https://github.com/BismuthServer/BismuthServer"
+	},
+	"environment": "*",
+	"mixins": [
+		"mixins.bismuthserver.json",
+		"mixins.bismuthserver.movablete.json",
+		"mixins.bismuthserver.scoreboard.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "1.12.2"
+	}
+}
