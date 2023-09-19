@@ -1,5 +1,5 @@
 package si.bismuth.scoreboard;
 
 public interface IServerScoreboard {
-    void onScoreUpdated(LongScore score);
+    void bismuthServer$onScoreUpdated(LongScore score);
 }

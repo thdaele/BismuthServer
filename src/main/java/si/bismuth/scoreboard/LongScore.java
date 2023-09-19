@@ -1,7 +1,8 @@
 package si.bismuth.scoreboard;
 
-import java.util.Comparator;
 import net.minecraft.scoreboard.ScoreboardObjective;
+
+import java.util.Comparator;
 
 public class LongScore {
     public static final Comparator<LongScore> SCORE_COMPARATOR = new Comparator<LongScore>() {
@@ -69,7 +70,7 @@ public class LongScore {
             //TODO Calculate the change and apply that to the total score
             this.forceUpdate = false;
             IServerScoreboard scoreboard = (IServerScoreboard) this.getScoreboard();
-            scoreboard.onScoreUpdated(this);
+            scoreboard.bismuthServer$onScoreUpdated(this);
         }
     }
 
