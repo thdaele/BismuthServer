@@ -43,7 +43,7 @@ public class PlayerManagerMixin {
 		}
 	}
 
-	@Redirect(method = "onLogin", at = @At(value = "NEW", target = "net/minecraft/server/network/handler/ServerPlayNetworkHandler"))
+	@Redirect(method = "onLogin", at = @At(value = "NEW", target = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/network/Connection;Lnet/minecraft/server/entity/living/player/ServerPlayerEntity;)Lnet/minecraft/server/network/handler/ServerPlayNetworkHandler;"))
 	private ServerPlayNetworkHandler replaceNetworkHandlerForFakePlayers(MinecraftServer server, Connection connection, ServerPlayerEntity player) {
 		return player instanceof FakeServerPlayerEntity ? new FakeServerPlayNetworkHandler(server, connection, player) : new ServerPlayNetworkHandler(server, connection, player);
 	}

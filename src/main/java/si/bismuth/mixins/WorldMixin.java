@@ -11,6 +11,7 @@ import net.minecraft.world.storage.WorldStorage;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -27,14 +28,14 @@ import java.util.Set;
 @Mixin(World.class)
 public class WorldMixin {
 	// @formatter:off
-	private String worldName;
-	private Iterator<BlockEntity> myIterator;
+	@Unique private String worldName;
+	@Unique private Iterator<BlockEntity> myIterator;
 	@Shadow @Final public Dimension dimension;
 	@Shadow @Final public List<BlockEntity> blockEntities;
 	@Shadow @Final public List<BlockEntity> tickingBlockEntities;
 	@Shadow @Final private List<BlockEntity> removedBlockEntities;
-	@Shadow private WorldChunk getChunk(BlockPos pos) { return null; }
-	@Shadow private boolean isChunkLoaded(BlockPos pos) { return false; }
+	@Shadow public WorldChunk getChunk(BlockPos pos) { return null; }
+	@Shadow public boolean isChunkLoaded(BlockPos pos) { return false; }
 	// @formatter:on
 
 	@Inject(method = "<init>", at = @At("RETURN"))

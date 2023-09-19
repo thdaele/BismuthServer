@@ -30,7 +30,7 @@ public class ServerPlayerInteractionManagerMixin {
 		this.player.networkHandler.sendPacket(new BlockUpdateS2CPacket(this.world, pos));
 	}
 
-	@Redirect(method = "useItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;use(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/BlockState;Lnet/minecraft/entity/living/player/PlayerEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/util/math/Direction;FFF)Z"))
+	@Redirect(method = "useBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;use(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/BlockState;Lnet/minecraft/entity/living/player/PlayerEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/util/math/Direction;FFF)Z"))
 	private boolean onUseItemOnBlock(Block block, World world, BlockPos pos, BlockState state, PlayerEntity player, InteractionHand hand, Direction face, float hitX, float hitY, float hitZ) {
 		final boolean flipped = BlockRotator.flipBlockWithCactus(world, pos, state, player, face, hitX, hitY, hitZ);
 		if (flipped) {

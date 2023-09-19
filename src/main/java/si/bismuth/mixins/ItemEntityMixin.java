@@ -19,12 +19,12 @@ public abstract class ItemEntityMixin implements IRecipeBookItemDuper {
 
 	@Inject(method = "onPlayerCollision", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/ItemEntity;pickUpDelay:I", opcode = Opcodes.GETFIELD))
 	private void startDupe(PlayerEntity player, CallbackInfo ci) {
-		((IRecipeBookItemDuper) player).dupeItemScan(true);
+		((IRecipeBookItemDuper) player).bismuthServer$dupeItemScan(true);
 	}
 
 	@Inject(method = "onPlayerCollision", at = @At("RETURN"))
 	private void endDupe(PlayerEntity player, CallbackInfo ci) {
-		((IRecipeBookItemDuper) player).dupeItemScan(false);
+		((IRecipeBookItemDuper) player).bismuthServer$dupeItemScan(false);
 	}
 
 	@Inject(method = "tryMerge", at = @At("HEAD"), cancellable = true)

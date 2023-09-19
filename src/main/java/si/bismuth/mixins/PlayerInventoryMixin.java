@@ -18,11 +18,11 @@ public class PlayerInventoryMixin {
 
 	@Inject(method = "putStackInInventory", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerInventory;getEmptySlot()I"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void putStackInInventory(ItemStack stack, CallbackInfoReturnable<Integer> cir, int i) {
-		((IRecipeBookItemDuper) this.player).dupeItem(i);
+		((IRecipeBookItemDuper) this.player).bismuthServer$dupeItem(i);
 	}
 
 	@Inject(method = "insertStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;getEmptySlot()I", shift = At.Shift.AFTER))
 	private void megaDupe(int i, ItemStack item, CallbackInfoReturnable<Boolean> cir) {
-		((IRecipeBookItemDuper) this.player).dupeItem(i);
+		((IRecipeBookItemDuper) this.player).bismuthServer$dupeItem(i);
 	}
 }

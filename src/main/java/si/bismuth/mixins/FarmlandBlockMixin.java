@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
+import java.util.Objects;
+
 @Mixin(FarmlandBlock.class)
 public class FarmlandBlockMixin {
 	/**
@@ -20,7 +22,7 @@ public class FarmlandBlockMixin {
 	public static void setDirt(World world, BlockPos pos) {
 		final BlockState state = Blocks.DIRT.defaultState();
 		world.setBlockState(pos, state);
-		final Box shape = state.getCollisionShape(world, pos).move(pos);
+		final Box shape = Objects.requireNonNull(state.getCollisionShape(world, pos)).move(pos);
 
 		for (final Entity entity : world.getEntities((Entity) null, shape)) {
 			entity.setPosition(entity.x, shape.maxY, entity.z);

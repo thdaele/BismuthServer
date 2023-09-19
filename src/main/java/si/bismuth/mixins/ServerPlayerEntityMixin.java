@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -36,37 +37,39 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IR
 		super(world, profile);
 	}
 
+	@Unique
 	private int dupe;
+	@Unique
 	private boolean scanForDuping;
 
 	@Shadow
 	public abstract Entity teleportToDimension(int dim);
 
 	@Override
-	public void clearDupeItem() {
+	public void bismuthServer$clearDupeItem() {
 		this.dupe = Integer.MIN_VALUE;
 	}
 
 	@Override
-	public void dupeItem(int slot) {
+	public void bismuthServer$dupeItem(int slot) {
 		if (this.scanForDuping) {
 			this.dupe = slot;
 		}
 	}
 
 	@Override
-	public int getDupeItem() {
+	public int bismuthServer$getDupeItem() {
 		return this.dupe;
 	}
 
 	@Override
-	public void dupeItemScan(boolean s) {
+	public void bismuthServer$dupeItemScan(boolean s) {
 		this.scanForDuping = s;
 	}
 
 	@Inject(method = "tick", at = @At("RETURN"))
 	private void postTick(CallbackInfo ci) {
-		this.clearDupeItem();
+		this.bismuthServer$clearDupeItem();
 		if (this.isSpectator() && this.getCamera() == this) {
 			final BlockPos pos = this.getSourceBlockPos();
 			final Block block = this.world.getBlockState(pos).getBlock();

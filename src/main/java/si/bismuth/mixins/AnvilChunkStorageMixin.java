@@ -10,6 +10,7 @@ import net.minecraft.world.chunk.storage.io.FileIoThread;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -24,18 +25,24 @@ import java.util.Map;
 
 @Mixin(AnvilChunkStorage.class)
 public class AnvilChunkStorageMixin implements FileIoCallback {
+	@Unique
 	private final Map<ChunkPos, NbtCompound> chunksToSave = new HashMap<>();
+	@Unique
 	private final Map<ChunkPos, NbtCompound> chunksInWrite = new HashMap<>();
+	@Unique
 	private ChunkPos copyOfChunkPos1;
+	@Unique
 	private ChunkPos copyOfChunkPos2;
 
 	@Shadow
 	private void saveChunk(ChunkPos pos, NbtCompound compound) { }
 
+	@Unique
 	synchronized private void queueChunkToRemove(ChunkPos pos, NbtCompound compound) {
 		chunksToSave.put(pos, compound);
 	}
 
+	@Unique
 	synchronized private Map.Entry<ChunkPos, NbtCompound> fetchChunkToWrite() {
 		if (this.chunksToSave.isEmpty()) {
 			return null;
@@ -48,10 +55,12 @@ public class AnvilChunkStorageMixin implements FileIoCallback {
 		return entry;
 	}
 
+	@Unique
 	synchronized private void retireChunkToWrite(ChunkPos pos) {
 		this.chunksInWrite.remove(pos);
 	}
 
+	@Unique
 	synchronized private NbtCompound reloadChunkFromRemoveQueues(ChunkPos pos) {
 		final NbtCompound data = this.chunksToSave.get(pos);
 		if (data != null) {

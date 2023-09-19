@@ -35,7 +35,7 @@ public class MinecraftServerMixin {
 		// noop
 	}
 
-	@Inject(method = "tick", at = @At(value = "FIELD", ordinal = 0, shift = At.Shift.AFTER, target = "Lnet/minecraft/server/MinecraftServer;ticksk:I"))
+	@Inject(method = "tick", at = @At(value = "FIELD", ordinal = 0, shift = At.Shift.AFTER, target = "Lnet/minecraft/server/MinecraftServer;ticks:I"))
 	private void onTick(CallbackInfo ci) {
 		MCServer.tick((MinecraftServer) (Object) this);
 

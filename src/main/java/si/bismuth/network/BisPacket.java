@@ -1,12 +1,13 @@
 package si.bismuth.network;
 
 import io.netty.buffer.Unpooled;
-import java.io.IOException;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 
+import java.io.IOException;
+
 public abstract class BisPacket {
-	private PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
+	private final PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
 
 	public abstract void writePacketData();
 

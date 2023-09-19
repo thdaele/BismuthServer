@@ -17,21 +17,21 @@ import si.bismuth.utils.BlockRotator;
 @Mixin(Entity.class)
 public class EntityMixin {
 	// @formatter:off
-	@Shadow private double x;
-	@Shadow private double y;
-	@Shadow private double z;
-	@Shadow private float yaw;
-	@Shadow private Box getShape() { return null; }
-	@Shadow private boolean shouldSetPositionOnLoad() { return false; }
-	@Shadow private void setShape(Box shape) { }
-	@Shadow private void setPosition(double x, double y, double z) { }
-	@Shadow private NbtList toNbtList(double... numbers) { return null; }
+	@Shadow public double x;
+	@Shadow public double y;
+	@Shadow public double z;
+	@Shadow public float yaw;
+	@Shadow public Box getShape() { return null; }
+	@Shadow protected boolean shouldSetPositionOnLoad() { return false; }
+	@Shadow public void setShape(Box shape) { }
+	@Shadow public void setPosition(double x, double y, double z) { }
+	@Shadow protected NbtList toNbtList(double... numbers) { return null; }
 	// @formatter:on
 
 	@Inject(method = "getHorizontalFacing", at = @At("HEAD"), cancellable = true)
 	private void onGetHorizontalFacing(CallbackInfoReturnable<Direction> cir) {
 		if (BlockRotator.flippinEligibility((Entity) (Object) this)) {
-			cir.setReturnValue(Direction.byIdHorizontal(MathHelper.floor((double) (this.yaw * 1F / 90F) + 0.5D) & 3).getOpposite());
+			cir.setReturnValue(Direction.byIdHorizontal(MathHelper.floor((double) (this.yaw / 90F) + 0.5D) & 3).getOpposite());
 		}
 	}
 
