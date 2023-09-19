@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(ServerLoginNetworkHandler.class)
-public class ServerLoginNEtworkHandlerMixin {
+public class ServerLoginNetworkHandlerMixin {
 	@ModifyConstant(method = "tick", constant = @Constant(intValue = 600))
 	private int disableLoginTimeout(int value) {
 		return -1;
