@@ -15,8 +15,7 @@
 	"mixins": [
 		"mixins.bismuthserver.json",
 		"mixins.bismuthserver.movablete.json",
-		"mixins.bismuthserver.scoreboard.json",
-		"mixins.bismuthserver.ebictranslononation.json"
+		"mixins.bismuthserver.scoreboard.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.14.21",
