@@ -92,7 +92,7 @@ public class DCBot extends ListenerAdapter {
 		if (channel.getIdLong() == ChannelID && !content.startsWith(PREFIX)) {
 			final String name = event.getMember().getEffectiveName();
 			final Text symbol = new LiteralText("\u24B9");
-			final HoverEvent hoverText = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(member.getUser().getAsTag()));
+			final HoverEvent hoverText = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(member.getUser().getName()));
 			final ClickEvent clickText = new ClickEvent(ClickEvent.Action.OPEN_URL, channelURL);
 			symbol.getStyle().setColor(Formatting.BLUE).setHoverEvent(hoverText).setClickEvent(clickText);
 			final Text text = new TranslatableText("chat.type.text", name, content);
