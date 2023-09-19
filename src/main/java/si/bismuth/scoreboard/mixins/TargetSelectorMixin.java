@@ -84,7 +84,7 @@ public class TargetSelectorMixin {
                             return false;
                         }
 
-                        LongScore scoreboardScore = ((IScoreboard)scoreboard).getLongScore(string2, scoreboardObjective);
+                        LongScore scoreboardScore = ((IScoreboard)scoreboard).bismuthServer$getLongScore(string2, scoreboardObjective);
                         i = scoreboardScore.get();
                         if (i < (Integer)entry.getValue() && bl) {
                             return false;

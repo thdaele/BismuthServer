@@ -29,7 +29,7 @@ public class SavedScoreboardDataMixin implements IScoreboardSaveData {
         final Map<ScoreboardObjective, Long> totalsMap = Maps.<ScoreboardObjective, Long>newHashMap();
         IScoreboard scoreboard = (IScoreboard) this.scoreboard;
 
-        for (LongScore longScore : scoreboard.getLongScores()){
+        for (LongScore longScore : scoreboard.bismuthServer$getLongScores()){
             if (!"Total".equals(longScore.getOwner())){
                 totalsMap.put(longScore.getObjective(), totalsMap.getOrDefault(longScore.getObjective(), 0L) + longScore.get());
             }
@@ -37,24 +37,24 @@ public class SavedScoreboardDataMixin implements IScoreboardSaveData {
 
         for (ScoreboardObjective objective : totalsMap.keySet()){
             long total = totalsMap.get(objective);
-            scoreboard.getLongScore("Total", objective).set(total);
+            scoreboard.bismuthServer$getLongScore("Total", objective).set(total);
         }
     }
 
     @Redirect(method = "readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/SavedScoreboardData;readScoresFromNbt(Lnet/minecraft/nbt/NbtList;)V"))
     private void readFromNBT(SavedScoreboardData instance, NbtList p_readScores_1_) {
         IScoreboardSaveData scoreboardSaveData = (IScoreboardSaveData) instance;
-        scoreboardSaveData.readScores(p_readScores_1_);
+        scoreboardSaveData.bismuthServer$readScores(p_readScores_1_);
     }
 
     @Redirect(method = "writeNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/SavedScoreboardData;scoresToNbt()Lnet/minecraft/nbt/NbtList;"))
     private NbtList writeToNBT(SavedScoreboardData instance) {
         IScoreboardSaveData scoreboardSaveData = (IScoreboardSaveData) instance;
-        return scoreboardSaveData.scoresToNbt();
+        return scoreboardSaveData.bismuthServer$scoresToNbt();
     }
 
     @Override
-    public void readScores(NbtList p_readScores_1_) {
+    public void bismuthServer$readScores(NbtList p_readScores_1_) {
         for(int lvt_2_1_ = 0; lvt_2_1_ < p_readScores_1_.size(); ++lvt_2_1_) {
             NbtCompound lvt_3_1_ = p_readScores_1_.getCompound(lvt_2_1_);
             ScoreboardObjective lvt_4_1_ = this.scoreboard.getObjective(lvt_3_1_.getString("Objective"));
@@ -64,7 +64,7 @@ public class SavedScoreboardDataMixin implements IScoreboardSaveData {
             }
 
             IScoreboard scoreboard = (IScoreboard) this.scoreboard;
-            LongScore lvt_6_1_ = scoreboard.getLongScore(lvt_5_1_, lvt_4_1_);
+            LongScore lvt_6_1_ = scoreboard.bismuthServer$getLongScore(lvt_5_1_, lvt_4_1_);
             lvt_6_1_.set(lvt_3_1_.getLong("Score"));
             if (lvt_3_1_.contains("Locked")) {
                 lvt_6_1_.setLocked(lvt_3_1_.getBoolean("Locked"));
@@ -73,10 +73,10 @@ public class SavedScoreboardDataMixin implements IScoreboardSaveData {
     }
 
     @Override
-    public NbtList scoresToNbt() {
+    public NbtList bismuthServer$scoresToNbt() {
         NbtList lvt_1_1_ = new NbtList();
         IScoreboard scoreboard = (IScoreboard) this.scoreboard;
-        Collection<LongScore> lvt_2_1_ = scoreboard.getLongScores();
+        Collection<LongScore> lvt_2_1_ = scoreboard.bismuthServer$getLongScores();
 
         for (LongScore lvt_4_1_ : lvt_2_1_) {
             if (lvt_4_1_.getObjective() != null) {

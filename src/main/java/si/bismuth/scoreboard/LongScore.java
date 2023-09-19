@@ -35,7 +35,7 @@ public class LongScore {
             this.set(this.get() + amount);
             if (!"Total".equals(owner)){
                 final IScoreboard scoreboard = this.scoreboard;
-                final LongScore totalScore = scoreboard.getLongScore("Total", objective);
+                final LongScore totalScore = scoreboard.bismuthServer$getLongScore("Total", objective);
                 if (totalScore.get() > -1){
                     totalScore.increase(amount);
                 }

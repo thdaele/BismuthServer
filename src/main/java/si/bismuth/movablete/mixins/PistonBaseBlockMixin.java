@@ -32,6 +32,7 @@ public class PistonBaseBlockMixin {
 		return block.hasBlockEntity() && !isMovableBlockEntityBlock(block);
 	}
 
+	@Unique
 	private static boolean isMovableBlockEntityBlock(Block block) {
 		return block != Blocks.ENDER_CHEST && block != Blocks.ENCHANTING_TABLE && block != Blocks.END_GATEWAY
 				&& block != Blocks.END_PORTAL && block != Blocks.MOB_SPAWNER && block != Blocks.MOVING_BLOCK;
@@ -54,7 +55,7 @@ public class PistonBaseBlockMixin {
 	private void setBlockEntitiesToMove(World world, BlockPos p, Direction d, boolean ex, CallbackInfoReturnable<Boolean> cir, PistonMoveStructureResolver bpsh, List<BlockPos> list, List<BlockState> lbs, List<BlockPos> lbp, int i, BlockState[] abs, Direction enumfacing, int l, BlockPos pos) {
 		final BlockEntity be = world.getBlockEntity(pos);
 		if (be instanceof MovingBlockEntity) {
-			((IMovingBlockEntity) be).setCarriedBlockEntity(this.blockEntitiesToMove.get(l));
+			((IMovingBlockEntity) be).bismuthServer$setCarriedBlockEntity(this.blockEntitiesToMove.get(l));
 		}
 	}
 }

@@ -6,6 +6,7 @@ import net.minecraft.scoreboard.criterion.ScoreboardCriterion;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -17,6 +18,7 @@ import java.util.*;
 
 @Mixin(Scoreboard.class)
 public abstract class ScoreboardMixin implements IScoreboard {
+    @Unique
     private final Map<String, Map<ScoreboardObjective, LongScore>> longScores = new HashMap<>();
 
     @Shadow @Final
@@ -42,7 +44,7 @@ public abstract class ScoreboardMixin implements IScoreboard {
 
 
     @Override
-    public LongScore getLongScore(String owner, ScoreboardObjective objective) {
+    public LongScore bismuthServer$getLongScore(String owner, ScoreboardObjective objective) {
         if (owner.length() > 40) {
             throw new IllegalArgumentException("The player name '" + owner + "' is too long!");
         } else {
@@ -59,7 +61,7 @@ public abstract class ScoreboardMixin implements IScoreboard {
     }
 
     @Override
-    public Collection<LongScore> getLongScores(ScoreboardObjective objective) {
+    public Collection<LongScore> bismuthServer$getLongScores(ScoreboardObjective objective) {
         List<LongScore> collectedScores = new ArrayList<>();
 
         for (Map<ScoreboardObjective, LongScore> scores : this.longScores.values()) {
@@ -74,7 +76,7 @@ public abstract class ScoreboardMixin implements IScoreboard {
     }
 
     @Override
-    public Collection<LongScore> getLongScores() {
+    public Collection<LongScore> bismuthServer$getLongScores() {
         Collection<Map<ScoreboardObjective, LongScore>> scoreMaps = this.longScores.values();
         List<LongScore> collectedScores = new ArrayList<>();
 
@@ -86,7 +88,7 @@ public abstract class ScoreboardMixin implements IScoreboard {
     }
 
     @Override
-    public Map<ScoreboardObjective, LongScore> getLongScores(String owner) {
+    public Map<ScoreboardObjective, LongScore> bismuthServer$getLongScores(String owner) {
         Map<ScoreboardObjective, LongScore> scores = this.longScores.get(owner);
         if (scores == null) {
             scores = new HashMap<>();

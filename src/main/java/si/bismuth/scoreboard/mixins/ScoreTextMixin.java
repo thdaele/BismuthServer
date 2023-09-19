@@ -31,7 +31,7 @@ public abstract class ScoreTextMixin {
             Scoreboard scoreboard = server.getWorld(0).getScoreboard();
             ScoreboardObjective objective = scoreboard.getObjective(this.objective);
             if (scoreboard.hasScore(this.owner, objective)) {
-                LongScore score = ((IScoreboard)scoreboard).getLongScore(this.owner, objective);
+                LongScore score = ((IScoreboard)scoreboard).bismuthServer$getLongScore(this.owner, objective);
                 this.setValue(String.format("%d", score.get()));
             } else {
                 this.value = "";

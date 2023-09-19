@@ -41,7 +41,7 @@ public abstract class ScoreboardCommandMixin extends AbstractCommand {
         Scoreboard scoreboard = this.getScoreboard(server);
         if (args.length > index) {
             String name = parseEntityName(server, source, args[index]);
-            Map<ScoreboardObjective, LongScore> scores = ((IScoreboard)scoreboard).getLongScores(name);
+            Map<ScoreboardObjective, LongScore> scores = ((IScoreboard)scoreboard).bismuthServer$getLongScores(name);
             source.addResult(CommandResults.Type.QUERY_RESULT, scores.size());
             if (scores.isEmpty()) {
                 throw new CommandException("commands.scoreboard.players.list.player.empty", new Object[]{name});
@@ -103,7 +103,7 @@ public abstract class ScoreboardCommandMixin extends AbstractCommand {
             }
 
             Scoreboard lvt_10_2_ = this.getScoreboard(server);
-            LongScore lvt_11_3_ = ((IScoreboard)lvt_10_2_).getLongScore(lvt_7_1_, lvt_8_1_);
+            LongScore lvt_11_3_ = ((IScoreboard)lvt_10_2_).bismuthServer$getLongScore(lvt_7_1_, lvt_8_1_);
             if ("set".equalsIgnoreCase(lvt_5_1_)) {
                 lvt_11_3_.set(lvt_9_1_);
             } else if ("add".equalsIgnoreCase(lvt_5_1_)) {
@@ -137,7 +137,7 @@ public abstract class ScoreboardCommandMixin extends AbstractCommand {
                 long lvt_9_1_ = index < args.length && !args[index].equals("*")
                         ? parseLong(args[index], lvt_8_1_, Long.MAX_VALUE)
                         : Long.MAX_VALUE;
-                LongScore lvt_10_1_ = ((IScoreboard)lvt_5_1_).getLongScore(lvt_6_1_, lvt_7_1_);
+                LongScore lvt_10_1_ = ((IScoreboard)lvt_5_1_).bismuthServer$getLongScore(lvt_6_1_, lvt_7_1_);
                 if (lvt_10_1_.get() >= lvt_8_1_ && lvt_10_1_.get() <= lvt_9_1_) {
                     sendSuccess(
                             source, this, "commands.scoreboard.players.test.success", new Object[]{lvt_10_1_.get(), lvt_8_1_, lvt_9_1_}
@@ -163,11 +163,11 @@ public abstract class ScoreboardCommandMixin extends AbstractCommand {
         } else if (lvt_9_1_.length() > 40) {
             throw new CommandSyntaxException("commands.scoreboard.players.name.tooLong", new Object[]{lvt_9_1_, 40});
         } else {
-            LongScore lvt_11_1_ = ((IScoreboard)lvt_5_1_).getLongScore(lvt_6_1_, lvt_7_1_);
+            LongScore lvt_11_1_ = ((IScoreboard)lvt_5_1_).bismuthServer$getLongScore(lvt_6_1_, lvt_7_1_);
             if (!lvt_5_1_.hasScore(lvt_9_1_, lvt_10_1_)) {
                 throw new CommandException("commands.scoreboard.players.operation.notFound", new Object[]{lvt_10_1_.getName(), lvt_9_1_});
             } else {
-                LongScore lvt_12_1_ = ((IScoreboard)lvt_5_1_).getLongScore(lvt_9_1_, lvt_10_1_);
+                LongScore lvt_12_1_ = ((IScoreboard)lvt_5_1_).bismuthServer$getLongScore(lvt_9_1_, lvt_10_1_);
                 if ("+=".equals(lvt_8_1_)) {
                     lvt_11_1_.set(lvt_11_1_.get() + lvt_12_1_.get());
                 } else if ("-=".equals(lvt_8_1_)) {

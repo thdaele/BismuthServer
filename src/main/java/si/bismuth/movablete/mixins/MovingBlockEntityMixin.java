@@ -64,7 +64,7 @@ public class MovingBlockEntityMixin extends BlockEntity implements IMovingBlockE
 
 	@Unique
 	@Override
-	public void setCarriedBlockEntity(BlockEntity blockEntity) {
+	public void bismuthServer$setCarriedBlockEntity(BlockEntity blockEntity) {
 		this.carriedBlockEntity = blockEntity;
 	}
 

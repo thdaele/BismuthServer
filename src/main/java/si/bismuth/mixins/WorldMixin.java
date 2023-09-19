@@ -103,7 +103,7 @@ public class WorldMixin {
 		Profiler.end_current_section();
 	}
 
-	@Redirect(method = "tickEntity(Lnet/minecraft/entity/Entity;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setPositionNonDirty()Z"))
+	@Redirect(method = "tickEntity(Lnet/minecraft/entity/Entity;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;m_8699128()Z"))
 	private boolean alwaysLoadChunk(Entity entity) {
 		return true;
 	}

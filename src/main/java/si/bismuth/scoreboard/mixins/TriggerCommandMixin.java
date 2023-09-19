@@ -44,7 +44,7 @@ public abstract class TriggerCommandMixin extends AbstractCommand {
                 if (!lvt_5_2_.hasScore(lvt_4_1_.getName(), lvt_6_1_)) {
                     throw new CommandException("commands.trigger.invalidObjective", new Object[]{args[0]});
                 } else {
-                    LongScore lvt_8_1_ = ((IScoreboard)lvt_5_2_).getLongScore(lvt_4_1_.getName(), lvt_6_1_);
+                    LongScore lvt_8_1_ = ((IScoreboard)lvt_5_2_).bismuthServer$getLongScore(lvt_4_1_.getName(), lvt_6_1_);
                     if (lvt_8_1_.isLocked()) {
                         throw new CommandException("commands.trigger.disabled", new Object[]{args[0]});
                     } else {

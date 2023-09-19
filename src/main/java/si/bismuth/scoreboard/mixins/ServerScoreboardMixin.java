@@ -62,7 +62,7 @@ public abstract class ServerScoreboardMixin extends Scoreboard implements IServe
         }
 
         IScoreboard scoreboard = (IScoreboard) this;
-        for (LongScore longScore : scoreboard.getLongScores(objective)) {
+        for (LongScore longScore : scoreboard.bismuthServer$getLongScores(objective)) {
             // TODO Change this to only send to subscribed players in a better way
             for (ServerPlayerEntity player : this.server.getPlayerManager().getAll()) {
                 System.out.println("test");

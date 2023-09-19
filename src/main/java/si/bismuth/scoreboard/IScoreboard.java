@@ -5,11 +5,11 @@ import java.util.Map;
 import net.minecraft.scoreboard.ScoreboardObjective;
 
 public interface IScoreboard {
-    LongScore getLongScore(String owner, ScoreboardObjective objective);
+    LongScore bismuthServer$getLongScore(String owner, ScoreboardObjective objective);
 
-    Collection<LongScore> getLongScores(ScoreboardObjective objective);
+    Collection<LongScore> bismuthServer$getLongScores(ScoreboardObjective objective);
 
-    Collection<LongScore> getLongScores();
+    Collection<LongScore> bismuthServer$getLongScores();
 
-    Map<ScoreboardObjective, LongScore> getLongScores(String owner);
+    Map<ScoreboardObjective, LongScore> bismuthServer$getLongScores(String owner);
 }
