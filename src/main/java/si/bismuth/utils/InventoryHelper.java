@@ -140,6 +140,6 @@ public class InventoryHelper {
 			}
 		}
 
-		MCServer.pcm.sendPacketToPlayer(player, new SearchForItemPacket(positions));
+		MCServer.networking.sendPacket(player, new SearchForItemPacket(positions));
 	}
 }

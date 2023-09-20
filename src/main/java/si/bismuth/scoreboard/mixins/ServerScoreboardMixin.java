@@ -8,7 +8,6 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardScore;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.server.scoreboard.ServerScoreboard;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,15 +33,11 @@ public abstract class ServerScoreboardMixin extends Scoreboard implements IServe
     @Override
     public void bismuthServer$onScoreUpdated(LongScore longScore) {
         if (this.displayedObjectives.contains(longScore.getObjective())) {
-            // TODO send the BisPacketUpdateScore to clients that support 64bit scoreboard
             ScoreboardScore score = new ScoreboardScore((Scoreboard) longScore.getScoreboard(), longScore.getObjective(), longScore.getOwner());
             score.set((int)score.get());
             this.server.getPlayerManager().sendPacket(new ScoreboardScoreS2CPacket(score));
 
-            // TODO Change this to only send to subscribed players in a better way
-            for (ServerPlayerEntity player : this.server.getPlayerManager().getAll()) {
-                MCServer.pcm.sendPacketToPlayer(player, new UpdateScorePacket(longScore));
-            }
+            MCServer.networking.sendPacket(new UpdateScorePacket(longScore));
         }
         this.markDirty();
     }
@@ -63,11 +58,7 @@ public abstract class ServerScoreboardMixin extends Scoreboard implements IServe
 
         IScoreboard scoreboard = (IScoreboard) this;
         for (LongScore longScore : scoreboard.bismuthServer$getLongScores(objective)) {
-            // TODO Change this to only send to subscribed players in a better way
-            for (ServerPlayerEntity player : this.server.getPlayerManager().getAll()) {
-                System.out.println("test");
-                MCServer.pcm.sendPacketToPlayer(player, new UpdateScorePacket(longScore));
-            }
+            MCServer.networking.sendPacket(new UpdateScorePacket(longScore));
             ScoreboardScore score = new ScoreboardScore((Scoreboard) longScore.getScoreboard(), longScore.getObjective(), longScore.getOwner());
             score.set((int)longScore.get());
             packets.add(new ScoreboardScoreS2CPacket(score));

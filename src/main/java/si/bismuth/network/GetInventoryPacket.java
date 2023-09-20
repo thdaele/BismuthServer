@@ -1,5 +1,7 @@
 package si.bismuth.network;
 
+import java.io.IOException;
+
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -9,8 +11,7 @@ import net.minecraft.util.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import si.bismuth.MCServer;
 
-@PacketChannelName("getinventory")
-public class GetInventoryPacket extends BisPacket {
+public class GetInventoryPacket implements BisPacket {
 	private BlockPos pos;
 	private DefaultedList<ItemStack> result;
 
@@ -23,21 +24,25 @@ public class GetInventoryPacket extends BisPacket {
 	}
 
 	@Override
-	public void writePacketData() {
-		final PacketByteBuf buf = this.getPacketBuffer();
-		buf.writeVarInt(this.result.size());
+	public void read(PacketByteBuf buffer) throws IOException {
+		this.pos = buffer.readBlockPos();
+	}
+
+	@Override
+	public void write(PacketByteBuf buffer) throws IOException {
+		buffer.writeVarInt(this.result.size());
 		for (ItemStack stack : this.result) {
-			buf.writeItemStack(stack);
+			buffer.writeItemStack(stack);
 		}
 	}
 
 	@Override
-	public void readPacketData(PacketByteBuf buf) {
-		this.pos = buf.readBlockPos();
+	public String getChannel() {
+		return "Bis|getinventory";
 	}
 
 	@Override
-	public void processPacket(ServerPlayerEntity player) {
+	public void handle(ServerPlayerEntity player) {
 		final Inventory container = HopperBlockEntity.getInventoryAt(player.world, this.pos.getX(), this.pos.getY(), this.pos.getZ());
 		// silence inspection since it falsely claims that container cannot be null. :(
 		// noinspection ConstantConditions
@@ -50,6 +55,6 @@ public class GetInventoryPacket extends BisPacket {
 			inventory.set(i, container.getStack(i));
 		}
 
-		MCServer.pcm.sendPacketToPlayer(player, new GetInventoryPacket(inventory));
+		MCServer.networking.sendPacket(player, new GetInventoryPacket(inventory));
 	}
 }

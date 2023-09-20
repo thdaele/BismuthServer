@@ -2,21 +2,26 @@ package si.bismuth.network;
 
 import si.bismuth.MCServer;
 
+import java.io.IOException;
 import java.util.Arrays;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 
-@PacketChannelName(value = "carpet:client", isCustom = true)
-public class FakeCarpetClientSupport extends BisPacket {
+public class FakeCarpetClientSupport implements BisPacket {
 	public FakeCarpetClientSupport() {
 		// noop
 	}
 
 	@Override
-	public void writePacketData() {
-		final PacketByteBuf buf = this.getPacketBuffer();
+	public void read(PacketByteBuf buffer) throws IOException {
+		System.out.println(Arrays.toString(buffer.readByteArray()));
+		// noop
+	}
+
+	@Override
+	public void write(PacketByteBuf buffer) throws IOException {
 		final NbtCompound nbt = new NbtCompound();
 		nbt.putString("carpetVersion", "bismuth");
 		nbt.putFloat("tickrate", 20F);
@@ -28,18 +33,17 @@ public class FakeCarpetClientSupport extends BisPacket {
 		final NbtList carpetRules = new NbtList();
 		carpetRules.add(ctrlQCrafting);
 		nbt.put("ruleList", carpetRules);
-		buf.writeInt(1);
-		buf.writeNbtCompound(nbt);
+		buffer.writeInt(1);
+		buffer.writeNbtCompound(nbt);
 	}
 
 	@Override
-	public void readPacketData(PacketByteBuf buf) {
-		System.out.println(Arrays.toString(buf.readByteArray()));
-		// noop
+	public String getChannel() {
+		return "carpet:client";
 	}
 
 	@Override
-	public void processPacket(ServerPlayerEntity player) {
-		MCServer.pcm.sendPacketToPlayer(player, new FakeCarpetClientSupport());
+	public void handle(ServerPlayerEntity player) {
+		MCServer.networking.sendPacket(player, new FakeCarpetClientSupport());
 	}
 }

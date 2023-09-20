@@ -9,8 +9,7 @@ import si.bismuth.utils.InventoryHelper;
 
 import java.io.IOException;
 
-@PacketChannelName("searchforitem")
-public class SearchForItemPacket extends BisPacket {
+public class SearchForItemPacket implements BisPacket {
 	private ItemStack stack;
 	private DefaultedList<BlockPos> result;
 
@@ -18,26 +17,30 @@ public class SearchForItemPacket extends BisPacket {
 		// noop
 	}
 
-	public SearchForItemPacket(DefaultedList<BlockPos> listIn) {
-		this.result = listIn;
+	public SearchForItemPacket(DefaultedList<BlockPos> result) {
+		this.result = result;
 	}
 
 	@Override
-	public void writePacketData() {
-		final PacketByteBuf buf = this.getPacketBuffer();
-		buf.writeVarInt(this.result.size());
+	public void read(PacketByteBuf buffer) throws IOException {
+		this.stack = buffer.readItemStack();
+	}
+
+	@Override
+	public void write(PacketByteBuf buffer) throws IOException {
+		buffer.writeVarInt(this.result.size());
 		for (BlockPos pos : this.result) {
-			buf.writeBlockPos(pos);
+			buffer.writeBlockPos(pos);
 		}
 	}
 
 	@Override
-	public void readPacketData(PacketByteBuf buf) throws IOException {
-		this.stack = buf.readItemStack();
+	public String getChannel() {
+		return "Bis|searchforitem";
 	}
 
 	@Override
-	public void processPacket(ServerPlayerEntity player) {
+	public void handle(ServerPlayerEntity player) {
 		InventoryHelper.processFindItem(player, this.stack);
 	}
 }

@@ -1,13 +1,14 @@
 package si.bismuth.network;
 
+import java.io.IOException;
+
 import net.minecraft.inventory.Inventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import si.bismuth.utils.InventoryHelper;
 
 // Stolen from/based on code from https://github.com/kyrptonaught/Inventory-Sorter
-@PacketChannelName("sort")
-public class SortPacket extends BisPacket {
+public class SortPacket implements BisPacket {
 	private boolean isPlayerInv;
 
 	public SortPacket() {
@@ -15,17 +16,22 @@ public class SortPacket extends BisPacket {
 	}
 
 	@Override
-	public void writePacketData() {
+	public void read(PacketByteBuf buffer) throws IOException {
+		this.isPlayerInv = buffer.readBoolean();
+	}
+
+	@Override
+	public void write(PacketByteBuf buffer) throws IOException {
 		// noop
 	}
 
 	@Override
-	public void readPacketData(PacketByteBuf buf) {
-		this.isPlayerInv = buf.readBoolean();
+	public String getChannel() {
+		return "Bis|sort";
 	}
 
 	@Override
-	public void processPacket(ServerPlayerEntity player) {
+	public void handle(ServerPlayerEntity player) {
 		if (player.isSpectator()) {
 			return;
 		}
