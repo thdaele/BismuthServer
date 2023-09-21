@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import si.bismuth.BismuthClient;
-import si.bismuth.network.client.GetInventoryPacket;
-import si.bismuth.network.client.SearchForItemPacket;
-import si.bismuth.network.client.SortPacket;
+import si.bismuth.network.server.QueryInventoryPacket;
+import si.bismuth.network.server.FindItemPacket;
+import si.bismuth.network.server.SortPacket;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
@@ -34,7 +34,7 @@ public class MinecraftMixin {
         } else if (i == BismuthClient.sortContainer.getKeyCode()) {
             BismuthClient.networking.sendPacket(new SortPacket(false));
         } else if (i == BismuthClient.getinv.getKeyCode()) {
-            BismuthClient.networking.sendPacket(new GetInventoryPacket(this.crosshairTarget.getPos()));
+            BismuthClient.networking.sendPacket(new QueryInventoryPacket(this.crosshairTarget.getPos()));
         } else if (i == BismuthClient.finditem.getKeyCode()) {
             final Screen screen = Minecraft.getInstance().screen;
             if (screen instanceof InventoryMenuScreen) {
@@ -43,7 +43,7 @@ public class MinecraftMixin {
                 if (mouse != null) {
                     final ItemStack stack = mouse.getStack();
                     if (!stack.isEmpty()) {
-                        BismuthClient.networking.sendPacket(new SearchForItemPacket(stack));
+                        BismuthClient.networking.sendPacket(new FindItemPacket(stack));
                     }
                 }
             }

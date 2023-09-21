@@ -26,16 +26,6 @@ import java.util.List;
 public class PlayerManagerMixin {
 	private ServerPlayerEntity mycopy;
 
-	@Inject(method = "add", at = @At(value = "RETURN"))
-	private void add(ServerPlayerEntity player, CallbackInfo ci) {
-		BismuthServer.playerConnected(player);
-	}
-
-	@Inject(method = "remove", at = @At(value = "HEAD"))
-	private void remove(ServerPlayerEntity player, CallbackInfo ci) {
-		BismuthServer.playerDisconnected(player);
-	}
-
 	@Inject(method = "onLogin", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/server/PlayerManager;load(Lnet/minecraft/server/entity/living/player/ServerPlayerEntity;)Lnet/minecraft/nbt/NbtCompound;"))
 	private void onLogin(Connection connection, ServerPlayerEntity player, CallbackInfo ci) {
 		if (player instanceof FakeServerPlayerEntity) {

@@ -1,24 +1,21 @@
 package si.bismuth.network.server;
 
+import java.io.IOException;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
-import net.minecraft.util.DefaultedList;
-import net.minecraft.util.math.BlockPos;
 import si.bismuth.utils.InventoryHelper;
 
-import java.io.IOException;
+public class FindItemPacket implements ServerPacket {
 
-public class SearchForItemPacket implements ServerPacket {
 	private ItemStack stack;
-	private DefaultedList<BlockPos> result;
 
-	public SearchForItemPacket() {
-		// noop
+	public FindItemPacket() {
 	}
 
-	public SearchForItemPacket(DefaultedList<BlockPos> result) {
-		this.result = result;
+	public FindItemPacket(ItemStack stack) {
+		this.stack = stack;
 	}
 
 	@Override
@@ -28,15 +25,12 @@ public class SearchForItemPacket implements ServerPacket {
 
 	@Override
 	public void write(PacketByteBuf buffer) throws IOException {
-		buffer.writeVarInt(this.result.size());
-		for (BlockPos pos : this.result) {
-			buffer.writeBlockPos(pos);
-		}
+		buffer.writeItemStack(this.stack);
 	}
 
 	@Override
 	public String getChannel() {
-		return "Bis|searchforitem";
+		return "Bis|FindItem";
 	}
 
 	@Override

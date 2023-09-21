@@ -9,6 +9,7 @@ import net.ornithemc.osl.networking.api.server.ServerConnectionEvents;
 import net.ornithemc.osl.networking.api.server.ServerPlayNetworking;
 import si.bismuth.BismuthServer;
 import si.bismuth.network.BisPacket;
+import si.bismuth.network.client.ScorePacket;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,16 +19,15 @@ public class ServerNetworking {
 	private final Set<String> allChannels = new HashSet<>();
 
 	public ServerNetworking() {
-		this.registerPacket(GetInventoryPacket::new);
-		this.registerPacket(SearchForItemPacket::new);
-		this.registerPacket(SortPacket::new);
-		this.registerPacket(UpdateScorePacket::new);
-		this.registerPacket(FakeCarpetClientSupport::new);
+		this.registerListener(QueryInventoryPacket::new);
+		this.registerListener(FindItemPacket::new);
+		this.registerListener(SortPacket::new);
+		this.registerListener(FakeCarpetClientSupport::new);
 
 		this.init();
 	}
 
-	private <T extends ServerPacket> void registerPacket(Supplier<T> initializer) {
+	private <T extends ServerPacket> void registerListener(Supplier<T> initializer) {
 		BisPacket p = initializer.get();
 		String channel = p.getChannel();
 
@@ -47,7 +47,7 @@ public class ServerNetworking {
 		// TODO: perhaps move this to an event that is dispatched
 		// to the server whenever compatible clients connect
 		ServerConnectionEvents.PLAY_READY.register((server, player) -> {
-			String scoreChannel = new UpdateScorePacket().getChannel();
+			String scoreChannel = new ScorePacket().getChannel();
 
 			if (ServerPlayNetworking.canSend(player, scoreChannel)) {
 				Set<ScoreboardObjective> objectives = new HashSet<>();

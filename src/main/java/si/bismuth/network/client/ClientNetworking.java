@@ -12,10 +12,12 @@ public class ClientNetworking {
 	private final Set<String> allChannels = new HashSet<>();
 
 	public ClientNetworking() {
-
+		this.registerListener(InventoryContentsPacket::new);
+		this.registerListener(ItemLocationsPacket::new);
+		this.registerListener(ScorePacket::new);
 	}
 
-	private <T extends ClientPacket> void registerPacket(Supplier<T> initializer) {
+	private <T extends ClientPacket> void registerListener(Supplier<T> initializer) {
 		BisPacket p = initializer.get();
 		String channel = p.getChannel();
 
@@ -25,7 +27,7 @@ public class ClientNetworking {
 			this.allChannels.add(channel);
 
 			ClientPlayNetworking.registerListener(channel, initializer, (minecraft, handler, packet) -> {
-				packet.handle(minecraft);
+				packet.handle();
 				return true;
 			});
 		}

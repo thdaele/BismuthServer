@@ -8,28 +8,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import si.bismuth.BismuthServer;
 import si.bismuth.utils.Profiler;
-
-import javax.security.auth.login.LoginException;
 
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
-	@Inject(method = "<init>", at = @At("RETURN"))
-	private void onCtor(CallbackInfo ci) {
-		BismuthServer.init((MinecraftServer) (Object) this);
-	}
-
-	@Inject(method = "loadWorld", at = @At("HEAD"))
-	private void onLoadWorld(CallbackInfo ci) throws LoginException, InterruptedException {
-		BismuthServer.onServerLoaded((MinecraftServer) (Object) this);
-	}
-
-	@Inject(method = "stop", at = @At("HEAD"))
-	private void onStopServer(CallbackInfo ci) {
-		BismuthServer.onServerStop((MinecraftServer) (Object) this);
-	}
-
 	@Redirect(method = "run", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 0, remap = false))
 	private void silenceCantKeepUp(Logger logger, String message, Object p0, Object p1) {
 		// noop
@@ -37,8 +19,6 @@ public class MinecraftServerMixin {
 
 	@Inject(method = "tick", at = @At(value = "FIELD", ordinal = 0, shift = At.Shift.AFTER, target = "Lnet/minecraft/server/MinecraftServer;ticks:I"))
 	private void onTick(CallbackInfo ci) {
-		BismuthServer.tick((MinecraftServer) (Object) this);
-
 		if (Profiler.tick_health_requested != 0L) {
 			Profiler.start_tick_profiling();
 		}
