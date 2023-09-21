@@ -17,7 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import si.bismuth.discord.DCBot;
 import si.bismuth.logging.LoggerRegistry;
-import si.bismuth.network.PluginChannelsManager;
+import si.bismuth.network.BismuthNetworking;
 import si.bismuth.utils.HUDController;
 
 import javax.security.auth.login.LoginException;
@@ -25,7 +25,7 @@ import javax.security.auth.login.LoginException;
 public class MCServer {
 	public static final String BISMUTH_SERVER_VERSION = "1.2.6";
 	public static final Logger log = LogManager.getLogger("Bismuth");
-	public static final PluginChannelsManager pcm = new PluginChannelsManager();
+	public static final BismuthNetworking networking = new BismuthNetworking();
 	public static MinecraftServer server;
 	public static DCBot bot;
 	private static final Ingredient PAPER = Ingredient.of(Items.PAPER);
@@ -78,7 +78,6 @@ public class MCServer {
 
 		LoggerRegistry.playerConnected(player);
 		unlockCustomRecipes(player);
-		pcm.sendRegisterToPlayer(player);
 	}
 
 	public static void playerDisconnected(ServerPlayerEntity player) {

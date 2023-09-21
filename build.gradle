@@ -25,6 +25,7 @@ dependencies {
 
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+	ploceus.dependOsl(project.osl_version)
 	include(implementation("net.dv8tion:JDA:${project.jda_version}"))
 }
 

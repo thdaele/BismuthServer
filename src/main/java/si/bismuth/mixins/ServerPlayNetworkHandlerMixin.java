@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.living.mob.passive.VillagerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 import net.minecraft.network.packet.s2c.play.TitlesS2CPacket;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.server.network.handler.ServerPlayNetworkHandler;
@@ -16,22 +15,12 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import si.bismuth.MCServer;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
 	@Shadow
 	public ServerPlayerEntity player;
-
-	@Inject(method = "handleCustomPayload", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket;getChannel()Ljava/lang/String;"), cancellable = true)
-	private void handleCustomPayload(CustomPayloadC2SPacket packet, CallbackInfo ci) {
-		if (MCServer.pcm.processIncoming(this.player, packet)) {
-			ci.cancel();
-		}
-	}
 
 	@Redirect(method = "handlePlayerMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/entity/living/player/ServerPlayerEntity;isInTeleportationState()Z"))
 	private boolean preventPlayerMovedWronglyOrTooQuickly(ServerPlayerEntity player) {
