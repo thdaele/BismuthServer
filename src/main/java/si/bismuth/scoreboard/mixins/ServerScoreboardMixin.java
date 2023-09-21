@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import si.bismuth.BismuthServer;
-import si.bismuth.network.server.UpdateScorePacket;
+import si.bismuth.network.client.ScorePacket;
 import si.bismuth.scoreboard.IScoreboard;
 import si.bismuth.scoreboard.IServerScoreboard;
 import si.bismuth.scoreboard.LongScore;
@@ -37,7 +37,7 @@ public abstract class ServerScoreboardMixin extends Scoreboard implements IServe
             score.set((int)score.get());
             this.server.getPlayerManager().sendPacket(new ScoreboardScoreS2CPacket(score));
 
-            BismuthServer.networking.sendPacket(new UpdateScorePacket(longScore));
+            BismuthServer.networking.sendPacket(new ScorePacket(longScore));
         }
         this.markDirty();
     }
@@ -58,7 +58,7 @@ public abstract class ServerScoreboardMixin extends Scoreboard implements IServe
 
         IScoreboard scoreboard = (IScoreboard) this;
         for (LongScore longScore : scoreboard.bismuthServer$getLongScores(objective)) {
-            BismuthServer.networking.sendPacket(new UpdateScorePacket(longScore));
+            BismuthServer.networking.sendPacket(new ScorePacket(longScore));
             ScoreboardScore score = new ScoreboardScore((Scoreboard) longScore.getScoreboard(), longScore.getObjective(), longScore.getOwner());
             score.set((int)longScore.get());
             packets.add(new ScoreboardScoreS2CPacket(score));

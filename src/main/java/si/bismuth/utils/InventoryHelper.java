@@ -12,7 +12,7 @@ import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import si.bismuth.BismuthServer;
-import si.bismuth.network.server.SearchForItemPacket;
+import si.bismuth.network.client.ItemLocationsPacket;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -140,6 +140,6 @@ public class InventoryHelper {
 			}
 		}
 
-		BismuthServer.networking.sendPacket(player, new SearchForItemPacket(positions));
+		BismuthServer.networking.sendPacket(player, new ItemLocationsPacket(positions));
 	}
 }

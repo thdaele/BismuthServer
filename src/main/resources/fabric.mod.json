@@ -12,6 +12,14 @@
 		"sources": "https://github.com/BismuthServer/BismuthServer"
 	},
 	"environment": "*",
+	"entrypoints": {
+		"init": [
+			"si.bismuth.BismuthServer"
+		],
+		"client-init": [
+			"si.bismuth.BismuthClient"
+		]
+	},
 	"mixins": [
 		"mixins.bismuthserver.json",
 		"mixins.bismuthserver.movablete.json",
@@ -22,6 +30,7 @@
 		"minecraft": "1.12.2",
 		"osl-networking": ">=0.6.0",
 		"osl-entrypoints": ">=0.4.0",
-		"osl-keybinds": ">=0.1.0"
+		"osl-keybinds": ">=0.1.0",
+		"osl-lifecycle-events": ">=0.5.0"
 	}
 }
