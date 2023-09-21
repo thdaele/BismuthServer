@@ -17,15 +17,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import si.bismuth.discord.DCBot;
 import si.bismuth.logging.LoggerRegistry;
-import si.bismuth.network.BismuthNetworking;
+import si.bismuth.network.server.ServerNetworking;
 import si.bismuth.utils.HUDController;
 
 import javax.security.auth.login.LoginException;
 
-public class MCServer {
+public class BismuthServer {
 	public static final String BISMUTH_SERVER_VERSION = "1.2.6";
 	public static final Logger log = LogManager.getLogger("Bismuth");
-	public static final BismuthNetworking networking = new BismuthNetworking();
+	public static final ServerNetworking networking = new ServerNetworking();
 	public static MinecraftServer server;
 	public static DCBot bot;
 	private static final Ingredient PAPER = Ingredient.of(Items.PAPER);
@@ -51,17 +51,17 @@ public class MCServer {
 	}
 
 	public static void init(MinecraftServer server) {
-		MCServer.server = server;
+		BismuthServer.server = server;
 	}
 
 	public static void onServerLoaded(MinecraftServer server) throws LoginException, InterruptedException {
 		server.setMotd("v" + BISMUTH_SERVER_VERSION + " \u2014 " + server.getServerMotd());
 		LoggerRegistry.initLoggers(server);
-		MCServer.bot = new DCBot(((DedicatedServer) server).getPropertyOrDefault("botToken", ""), server.isOnlineMode());
+		BismuthServer.bot = new DCBot(((DedicatedServer) server).getPropertyOrDefault("botToken", ""), server.isOnlineMode());
 	}
 
 	public static void onServerStop(MinecraftServer server) {
-		MCServer.bot.shutDownBot();
+		BismuthServer.bot.shutDownBot();
 	}
 
 	public static void tick(MinecraftServer server) {

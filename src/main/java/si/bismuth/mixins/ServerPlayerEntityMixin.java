@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 import si.bismuth.utils.IRecipeBookItemDuper;
 
 @Mixin(ServerPlayerEntity.class)
@@ -89,7 +89,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements IR
 	@Redirect(method = "onKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;sendSystemMessage(Lnet/minecraft/text/Text;)V"))
 	private void sendMessage(PlayerManager manager, Text message) {
 		manager.sendSystemMessage(message);
-		MCServer.bot.sendDeathMessage(message);
-		MCServer.log.info("Player {} died at {} {} {} in {}", this.getName(), this.x, this.y, this.z, this.world.dimension.getType().getKey());
+		BismuthServer.bot.sendDeathMessage(message);
+		BismuthServer.log.info("Player {} died at {} {} {} in {}", this.getName(), this.x, this.y, this.z, this.world.dimension.getType().getKey());
 	}
 }

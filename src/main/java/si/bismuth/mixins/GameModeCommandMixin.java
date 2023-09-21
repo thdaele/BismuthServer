@@ -7,13 +7,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 
 @Mixin(GameModeCommand.class)
 public class GameModeCommandMixin {
 	@Inject(method = "parseGameMode", at = @At("RETURN"), cancellable = true)
 	private void onParseGameMode(CommandSource source, String s, CallbackInfoReturnable<GameMode> cir) {
-		if (!MCServer.server.isOnlineMode()) {
+		if (!BismuthServer.server.isOnlineMode()) {
 			return;
 		}
 

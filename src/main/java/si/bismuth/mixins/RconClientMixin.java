@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class RconClientMixin extends RconBase {
 							if (this.authenticated) {
 								final String command = BufferHelper.getString(this.packetBuffer, 12, i);
 
-								MCServer.server.submit(() -> {
+								BismuthServer.server.submit(() -> {
 									try {
 										execute(id, server.runRconCommand(command));
 									} catch (Exception exception) {

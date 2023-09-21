@@ -1,6 +1,4 @@
-package si.bismuth.network;
-
-import java.io.IOException;
+package si.bismuth.network.server;
 
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.inventory.Inventory;
@@ -9,9 +7,11 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 
-public class GetInventoryPacket implements BisPacket {
+import java.io.IOException;
+
+public class GetInventoryPacket implements ServerPacket {
 	private BlockPos pos;
 	private DefaultedList<ItemStack> result;
 
@@ -55,6 +55,6 @@ public class GetInventoryPacket implements BisPacket {
 			inventory.set(i, container.getStack(i));
 		}
 
-		MCServer.networking.sendPacket(player, new GetInventoryPacket(inventory));
+		BismuthServer.networking.sendPacket(player, new GetInventoryPacket(inventory));
 	}
 }

@@ -1,15 +1,15 @@
-package si.bismuth.network;
+package si.bismuth.network.server;
 
-import si.bismuth.MCServer;
-
-import java.io.IOException;
-import java.util.Arrays;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
+import si.bismuth.BismuthServer;
 
-public class FakeCarpetClientSupport implements BisPacket {
+import java.io.IOException;
+import java.util.Arrays;
+
+public class FakeCarpetClientSupport implements ServerPacket {
 	public FakeCarpetClientSupport() {
 		// noop
 	}
@@ -44,6 +44,6 @@ public class FakeCarpetClientSupport implements BisPacket {
 
 	@Override
 	public void handle(ServerPlayerEntity player) {
-		MCServer.networking.sendPacket(player, new FakeCarpetClientSupport());
+		BismuthServer.networking.sendPacket(player, new FakeCarpetClientSupport());
 	}
 }

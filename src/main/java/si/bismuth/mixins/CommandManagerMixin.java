@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 import si.bismuth.commands.AllowGatewayCommand;
 import si.bismuth.commands.DisplayItemCommand;
 import si.bismuth.commands.LogCommand;
@@ -46,7 +46,7 @@ public abstract class CommandManagerMixin extends CommandRegistry implements Com
 	@Inject(method = "sendSuccess", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/Style;setItalic(Ljava/lang/Boolean;)Lnet/minecraft/text/Style;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void logAdminCommands(CommandSource source, Command command, int flags, String message, Object[] args, CallbackInfo ci, boolean flag, MinecraftServer server, Text adminMessage) {
 		if (server.isOnlineMode()) {
-			MCServer.bot.sendToDiscord(adminMessage.buildString());
+			BismuthServer.bot.sendToDiscord(adminMessage.buildString());
 		}
 	}
 }

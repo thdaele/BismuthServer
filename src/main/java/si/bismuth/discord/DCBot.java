@@ -21,7 +21,7 @@ import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 
 import javax.security.auth.login.LoginException;
 import java.util.Arrays;
@@ -105,7 +105,7 @@ public class DCBot extends ListenerAdapter {
 				text.append(fileName);
 			}
 
-			MCServer.server.submit(() -> MCServer.server.getPlayerManager().sendSystemMessage(new LiteralText("").append(symbol).append(text)));
+			BismuthServer.server.submit(() -> BismuthServer.server.getPlayerManager().sendSystemMessage(new LiteralText("").append(symbol).append(text)));
 			return;
 		}
 
@@ -117,20 +117,20 @@ public class DCBot extends ListenerAdapter {
 		final String command = args[0];
 
 		if (this.isCommand(command, new String[]{"lazy"})) {
-			MCServer.server.submit(() -> channel.sendMessage("no u").queue());
+			BismuthServer.server.submit(() -> channel.sendMessage("no u").queue());
 		}
 
 		if (this.isCommand(command, new String[]{"tps"})) {
-			MCServer.server.submit(() -> {
-				final double MSPT = MathHelper.average(MCServer.server.averageTickTimes) * 1E-6D;
+			BismuthServer.server.submit(() -> {
+				final double MSPT = MathHelper.average(BismuthServer.server.averageTickTimes) * 1E-6D;
 				final double TPS = 1000D / Math.max(50, MSPT);
 				channel.sendMessage(String.format("**TPS: %.2f MSPT: %.2f**", TPS, MSPT)).queue();
 			});
 		}
 
 		if (this.isCommand(command, new String[]{"list", "players", "online"})) {
-			MCServer.server.submit(() -> {
-				final String[] players = MCServer.server.getPlayerNames();
+			BismuthServer.server.submit(() -> {
+				final String[] players = BismuthServer.server.getPlayerNames();
 				final String title = String.format("%d player%s online:", players.length, players.length != 1 ? "s" : "");
 				final MessageEmbed.AuthorInfo author = new MessageEmbed.AuthorInfo("BismuthBot", null, "https://i.imgur.com/a2w3DjI.png", null);
 				final MessageEmbed embed = new MessageEmbed(null, title, StringUtils.join(players, "\n").replaceAll("_", "\\\\_"), EmbedType.RICH, null, 0x8665BD, null, null, author, null, null, null, null);

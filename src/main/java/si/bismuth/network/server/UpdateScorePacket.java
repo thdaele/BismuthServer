@@ -1,12 +1,13 @@
-package si.bismuth.network;
+package si.bismuth.network.server;
 
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import si.bismuth.scoreboard.LongScore;
 
 import java.io.IOException;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.entity.living.player.ServerPlayerEntity;
+import java.util.Arrays;
 
-public class UpdateScorePacket implements BisPacket {
+public class UpdateScorePacket implements ServerPacket {
     private String name = "";
     private String objective = "";
     private long value;
@@ -22,9 +23,8 @@ public class UpdateScorePacket implements BisPacket {
 
     @Override
 	public void read(PacketByteBuf buffer) throws IOException {
-		this.name = buffer.readString(40);
-        this.objective = buffer.readString(16);
-        this.value = buffer.readVarLong();
+        System.out.println(Arrays.toString(buffer.readByteArray()));
+        // noop
 	}
 
 	@Override

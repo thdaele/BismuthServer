@@ -1,6 +1,6 @@
 package si.bismuth.logging;
 
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 import si.bismuth.utils.HUDController;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public abstract class LogHandler {
 
 		@Override
 		public void onRemovePlayer(String playerName) {
-			ServerPlayerEntity player = MCServer.server.getPlayerManager().get(playerName);
+			ServerPlayerEntity player = BismuthServer.server.getPlayerManager().get(playerName);
 			if (player != null)
 				HUDController.clear_player(player);
 		}

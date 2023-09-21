@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 import si.bismuth.commands.AllowGatewayCommand;
 
 @Mixin(EndGatewayBlockEntity.class)
@@ -40,7 +40,7 @@ public class EndGatewayBlockEntityMixin extends EndPortalBlockEntity {
 					shouldBlockTeleport = false;
 					this.findExitPortal();
 					AllowGatewayCommand.canEnterPortal = false;
-					MCServer.bot.sendToDiscord("**" + player.getName() + " generated gateway " + this.pos + "**");
+					BismuthServer.bot.sendToDiscord("**" + player.getName() + " generated gateway " + this.pos + "**");
 				} else {
 					if (this.world.getTime() % 20L == 0L) {
 						player.sendMessage(DENY);

@@ -1,14 +1,14 @@
-package si.bismuth.network;
-
-import java.io.IOException;
+package si.bismuth.network.server;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import si.bismuth.utils.InventoryHelper;
 
+import java.io.IOException;
+
 // Stolen from/based on code from https://github.com/kyrptonaught/Inventory-Sorter
-public class SortPacket implements BisPacket {
+public class SortPacket implements ServerPacket {
 	private boolean isPlayerInv;
 
 	public SortPacket() {

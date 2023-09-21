@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 import si.bismuth.patches.FakeServerPlayerEntity;
 import si.bismuth.patches.FakeServerPlayNetworkHandler;
 import si.bismuth.utils.ScoreboardHelper;
@@ -28,12 +28,12 @@ public class PlayerManagerMixin {
 
 	@Inject(method = "add", at = @At(value = "RETURN"))
 	private void add(ServerPlayerEntity player, CallbackInfo ci) {
-		MCServer.playerConnected(player);
+		BismuthServer.playerConnected(player);
 	}
 
 	@Inject(method = "remove", at = @At(value = "HEAD"))
 	private void remove(ServerPlayerEntity player, CallbackInfo ci) {
-		MCServer.playerDisconnected(player);
+		BismuthServer.playerDisconnected(player);
 	}
 
 	@Inject(method = "onLogin", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/server/PlayerManager;load(Lnet/minecraft/server/entity/living/player/ServerPlayerEntity;)Lnet/minecraft/nbt/NbtCompound;"))
@@ -74,7 +74,7 @@ public class PlayerManagerMixin {
 	private void onSendMessage(Text component, boolean isSystem, CallbackInfo ci) {
 		if (!isSystem) {
 			final String text = component.buildString().replaceFirst("^<(\\S*?)>", "\u02F9`$1`\u02FC");
-			MCServer.bot.sendToDiscord(text);
+			BismuthServer.bot.sendToDiscord(text);
 			final List<String> args = Arrays.asList(text.split(" "));
 			if (args.size() > 1 && args.get(1).equals(";s")) {
 				ScoreboardHelper.setScoreboard(args, 1);

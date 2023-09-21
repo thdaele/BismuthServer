@@ -11,8 +11,8 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.util.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import si.bismuth.MCServer;
-import si.bismuth.network.SearchForItemPacket;
+import si.bismuth.BismuthServer;
+import si.bismuth.network.server.SearchForItemPacket;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -140,6 +140,6 @@ public class InventoryHelper {
 			}
 		}
 
-		MCServer.networking.sendPacket(player, new SearchForItemPacket(positions));
+		BismuthServer.networking.sendPacket(player, new SearchForItemPacket(positions));
 	}
 }

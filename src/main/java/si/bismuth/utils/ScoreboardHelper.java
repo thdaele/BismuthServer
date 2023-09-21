@@ -4,14 +4,14 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.scoreboard.ServerScoreboard;
 import org.apache.commons.lang3.StringUtils;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScoreboardHelper {
-	private static final ServerScoreboard board = (ServerScoreboard) MCServer.server.getWorld(0).getScoreboard();
+	private static final ServerScoreboard board = (ServerScoreboard) BismuthServer.server.getWorld(0).getScoreboard();
 
 	public static void setScoreboard(List<String> args, int displaySlot) {
 		final ScoreboardObjective objective = ScoreboardHelper.getObjective(args, board);

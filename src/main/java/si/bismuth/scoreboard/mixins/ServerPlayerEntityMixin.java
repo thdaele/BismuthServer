@@ -87,6 +87,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         longScore.increment();
     }
 
+    // TODO fix redirect conflict
     @Redirect(method = "m_0114784", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreboardObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
     private ScoreboardScore awardTeamKillScores2(Scoreboard instance, String p_getOrCreateScore_1_, ScoreboardObjective p_getOrCreateScore_2_) {
         // Return dummy score that will be garbage collected later on to prevent filling up the old scoreboard datastructure

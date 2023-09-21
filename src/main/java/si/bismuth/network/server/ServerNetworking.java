@@ -1,23 +1,23 @@
-package si.bismuth.network;
+package si.bismuth.network.server;
 
 import net.minecraft.network.packet.Packet;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.server.scoreboard.ServerScoreboard;
 import net.minecraft.server.world.ServerWorld;
-
 import net.ornithemc.osl.networking.api.server.ServerConnectionEvents;
 import net.ornithemc.osl.networking.api.server.ServerPlayNetworking;
+import si.bismuth.BismuthServer;
+import si.bismuth.network.BisPacket;
 
-import si.bismuth.MCServer;
-
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
-public class BismuthNetworking {
+public class ServerNetworking {
 	private final Set<String> allChannels = new HashSet<>();
 
-	public BismuthNetworking() {
+	public ServerNetworking() {
 		this.registerPacket(GetInventoryPacket::new);
 		this.registerPacket(SearchForItemPacket::new);
 		this.registerPacket(SortPacket::new);
@@ -27,12 +27,12 @@ public class BismuthNetworking {
 		this.init();
 	}
 
-	private <T extends BisPacket> void registerPacket(Supplier<T> initializer) {
+	private <T extends ServerPacket> void registerPacket(Supplier<T> initializer) {
 		BisPacket p = initializer.get();
 		String channel = p.getChannel();
 
 		if (this.allChannels.contains(channel)) {
-			MCServer.log.error("attempted to register packet '{}' on channel '{}' but it already exists!", p.getClass().getSimpleName(), channel);
+			BismuthServer.log.error("attempted to register packet '{}' on channel '{}' but it already exists!", p.getClass().getSimpleName(), channel);
 		} else {
 			this.allChannels.add(channel);
 

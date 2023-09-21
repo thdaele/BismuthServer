@@ -1,4 +1,4 @@
-package si.bismuth.network;
+package si.bismuth.network.server;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -9,7 +9,7 @@ import si.bismuth.utils.InventoryHelper;
 
 import java.io.IOException;
 
-public class SearchForItemPacket implements BisPacket {
+public class SearchForItemPacket implements ServerPacket {
 	private ItemStack stack;
 	private DefaultedList<BlockPos> result;
 

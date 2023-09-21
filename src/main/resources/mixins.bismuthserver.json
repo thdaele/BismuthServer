@@ -7,7 +7,6 @@
 		"AnvilChunkStorageMixin",
 		"CommandManagerMixin",
 		"ConnectionListener4Mixin",
-		"DedicatedServerMixin",
 		"DirectionMixin",
 		"EndGatewayBlockEntityMixin",
 		"EntityMixin",
@@ -30,7 +29,6 @@
 		"PlayerInventoryMixin",
 		"PlayerManagerMixin",
 		"PumpkinBlockMixin",
-		"RconClientMixin",
 		"RecipePlacementHelperMixin",
 		"SayCommandMixin",
 		"ServerLoginNetworkHandlerMixin",
@@ -45,5 +43,14 @@
 		"WorldChunkMixin",
 		"WorldMixin",
 		"XpOrbEntityMixin"
+	],
+	"client": [
+		"IInventoryMenuScreenMixin",
+		"LocalClientPlayerEntityMixin",
+		"MinecraftMixin"
+	],
+	"server": [
+		"DedicatedServerMixin",
+		"RconClientMixin"
 	]
 }

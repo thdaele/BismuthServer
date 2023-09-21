@@ -8,7 +8,7 @@
 		"Bismuth!"
 	],
 	"contact": {
-		"homepage": "https://github.com/BismuthServer",
+		"homepage": "https://bismuth.se/",
 		"sources": "https://github.com/BismuthServer/BismuthServer"
 	},
 	"environment": "*",
@@ -20,6 +20,8 @@
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "1.12.2",
-		"osl-networking": ">=0.6.0"
+		"osl-networking": ">=0.6.0",
+		"osl-entrypoints": ">=0.4.0",
+		"osl-keybinds": ">=0.1.0"
 	}
 }

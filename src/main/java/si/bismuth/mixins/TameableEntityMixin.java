@@ -6,13 +6,13 @@ import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 
 @Mixin(TameableEntity.class)
 public class TameableEntityMixin {
 	@Redirect(method = "onKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/living/LivingEntity;sendMessage(Lnet/minecraft/text/Text;)V"))
 	private void sendMessage(LivingEntity entity, Text message) {
-		MCServer.server.getPlayerManager().sendSystemMessage(message);
-		MCServer.bot.sendDeathMessage(message);
+		BismuthServer.server.getPlayerManager().sendSystemMessage(message);
+		BismuthServer.bot.sendDeathMessage(message);
 	}
 }

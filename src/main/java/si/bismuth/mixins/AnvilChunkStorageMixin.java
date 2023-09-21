@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import si.bismuth.MCServer;
+import si.bismuth.BismuthServer;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -117,7 +117,7 @@ public class AnvilChunkStorageMixin implements FileIoCallback {
 		try {
 			this.saveChunk(chunkpos, compound);
 		} catch (Exception exception) {
-			MCServer.log.error("Failed to save chunk", exception);
+			BismuthServer.log.error("Failed to save chunk", exception);
 		}
 
 		this.retireChunkToWrite(chunkpos);
