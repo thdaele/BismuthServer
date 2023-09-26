@@ -7,6 +7,7 @@
 		"AnvilChunkStorageMixin",
 		"CommandManagerMixin",
 		"ConnectionListener4Mixin",
+		"CraftingManagerMixin",
 		"DirectionMixin",
 		"EndGatewayBlockEntityMixin",
 		"EntityMixin",
