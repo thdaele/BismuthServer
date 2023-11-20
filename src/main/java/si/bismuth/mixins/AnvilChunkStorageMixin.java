@@ -5,8 +5,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.chunk.storage.AnvilChunkStorage;
+import net.minecraft.world.chunk.storage.io.ChunkIo;
 import net.minecraft.world.chunk.storage.io.ChunkIoCallback;
-import net.minecraft.world.chunk.storage.io.ChunkIoThread;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -96,7 +96,7 @@ public class AnvilChunkStorageMixin implements ChunkIoCallback {
 			queueChunkToRemove(pos, compound);
 		}
 
-		ChunkIoThread.getInstance().registerCallback(this);
+		ChunkIo.getInstance().registerCallback(this);
 		ci.cancel();
 	}
 

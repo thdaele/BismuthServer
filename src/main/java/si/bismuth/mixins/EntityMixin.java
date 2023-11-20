@@ -47,7 +47,7 @@ public class EntityMixin {
 			this.setPosition(this.x, this.y, this.z);
 		}
 
-		if (compound.isType("AABB", 9)) {
+		if (compound.contains("AABB", 9)) {
 			final NbtList bb = compound.getList("AABB", 6);
 			this.setShape(new Box(bb.getDouble(0), bb.getDouble(1), bb.getDouble(2), bb.getDouble(3), bb.getDouble(4), bb.getDouble(5)));
 		}

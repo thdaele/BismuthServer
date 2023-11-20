@@ -28,7 +28,7 @@ public class MovingBlockEntityMixin extends BlockEntity {
 
 	@Inject(method = "readNbt", at = @At(value = "FIELD", target = "Lnet/minecraft/block/entity/MovingBlockEntity;lastProgress:F", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER))
 	private void readNbt(NbtCompound compound, CallbackInfo ci) {
-		if (compound.isType("lastProgress", 5)) {
+		if (compound.contains("lastProgress", 5)) {
 			this.lastProgress = this.progress;
 		}
 	}
@@ -47,6 +47,6 @@ public class MovingBlockEntityMixin extends BlockEntity {
 
 	@Inject(method = "moveEntities", at = @At(value = "INVOKE", target = "Ljava/lang/ThreadLocal;set(Ljava/lang/Object;)V", ordinal = 1, shift = At.Shift.AFTER, remap = false), locals = LocalCapture.CAPTURE_FAILHARD)
 	public void tickEntity(float f, CallbackInfo ci, Direction face, double d0, List<Box> list, Box bb, List<Entity> list1, boolean isSlime, int i, Entity entity) {
-		this.world.tickEntity(entity, false);
+		this.world.updateEntity(entity, false);
 	}
 }

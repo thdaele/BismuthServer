@@ -63,7 +63,7 @@ public class PlayerManagerMixin {
 	@Inject(method = "sendMessage(Lnet/minecraft/text/Text;Z)V", at = @At("HEAD"))
 	private void onSendMessage(Text component, boolean isSystem, CallbackInfo ci) {
 		if (!isSystem) {
-			final String text = component.buildString().replaceFirst("^<(\\S*?)>", "\u02F9`$1`\u02FC");
+			final String text = component.getString().replaceFirst("^<(\\S*?)>", "\u02F9`$1`\u02FC");
 			BismuthServer.bot.sendToDiscord(text);
 			final List<String> args = Arrays.asList(text.split(" "));
 			if (args.size() > 1 && args.get(1).equals(";s")) {
