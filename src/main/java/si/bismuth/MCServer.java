@@ -21,6 +21,8 @@ import si.bismuth.network.PluginChannelsManager;
 import si.bismuth.utils.HUDController;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class MCServer {
 	public static final String BISMUTH_SERVER_VERSION = "@BISMUTHVERSION@";
@@ -34,6 +36,7 @@ public class MCServer {
 	private static final IRecipe duration2 = new ShapelessRecipes("rocket", makeFirework(2), NonNullList.from(Ingredient.EMPTY, PAPER, SULPHUR, SULPHUR));
 	private static final IRecipe duration3 = new ShapelessRecipes("rocket", makeFirework(3), NonNullList.from(Ingredient.EMPTY, PAPER, SULPHUR, SULPHUR, SULPHUR));
 
+	public static final ArrayList<UUID> joinedPlayers = new ArrayList<>();
 	static {
 		CraftingManager.register("bismuth:durationone", duration1);
 		CraftingManager.register("bismuth:durationtwo", duration2);
@@ -75,6 +78,13 @@ public class MCServer {
 		LoggerRegistry.playerConnected(player);
 		unlockCustomRecipes(player);
 		pcm.sendRegisterToPlayer(player);
+
+		// TODO make a proper implementation to keep logs persistent
+		if (!joinedPlayers.contains(player.getUniqueID())) {
+			joinedPlayers.add(player.getUniqueID());
+			player.server.commandManager.executeCommand(player.getCommandSenderEntity(), "/log tps");
+			player.server.commandManager.executeCommand(player.getCommandSenderEntity(), "/log mobcaps");
+		}
 	}
 
 	public static void playerDisconnected(EntityPlayerMP player) {
