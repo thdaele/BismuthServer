@@ -124,7 +124,7 @@ public class InventoryHelper {
 							break;
 						} else if (Block.byItem(stackInSlot.getItem()) instanceof ShulkerBoxBlock) {
 							final NbtCompound tag = stackInSlot.getNbt();
-							if (tag != null && tag.isType("BlockEntityTag", 10)) {
+							if (tag != null && tag.contains("BlockEntityTag", 10)) {
 								final NbtList list = tag.getCompound("BlockEntityTag").getList("Items", 10);
 								for (int b = 0; b < list.size(); b++) {
 									final NbtCompound compound = list.getCompound(b);

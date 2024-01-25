@@ -25,7 +25,7 @@ public abstract class ScoreboardMixin implements IScoreboard {
     private Map<String, ScoreboardObjective> objectivesByName;
 
     @Shadow @Final
-    private Map<ScoreboardCriterion, List<ScoreboardObjective>> objectivesByCreaterion;
+    private Map<ScoreboardCriterion, List<ScoreboardObjective>> objectivesByCriterion;
 
     @Shadow
     public abstract void onScoresRemoved(String scoreName);
@@ -160,7 +160,7 @@ public abstract class ScoreboardMixin implements IScoreboard {
             }
         }
 
-        List<ScoreboardObjective> objectives = this.objectivesByCreaterion.get(objective.getCriterion());
+        List<ScoreboardObjective> objectives = this.objectivesByCriterion.get(objective.getCriterion());
 
         if (objectives != null)
         {

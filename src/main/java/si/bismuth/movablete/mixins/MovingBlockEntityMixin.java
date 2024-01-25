@@ -43,7 +43,7 @@ public class MovingBlockEntityMixin extends BlockEntity implements IMovingBlockE
 
 	@Inject(method = "readNbt", at = @At("RETURN"))
 	private void readNbt(NbtCompound compound, CallbackInfo ci) {
-		if (compound.isType("carriedTileEntity", 10)) {
+		if (compound.contains("carriedTileEntity", 10)) {
 			final Block block = this.movedState.getBlock();
 			if (block instanceof BlockEntityProvider) {
 				this.carriedBlockEntity = ((BlockEntityProvider) block).createBlockEntity(this.world, block.getMetadataFromState(this.movedState));
