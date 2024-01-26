@@ -30,7 +30,7 @@ public abstract class SavedScoreboardDataMixin {
     @Shadow
     private Scoreboard scoreboard;
 
-    @Inject(method="setScoreboard", at=@At(value="TAIL", target="Lnet/minecraft/scoreboard/ScoreboardSaveData;readFromNBT(Lnet/minecraft/nbt/NBTTagCompound;)V"))
+    @Inject(method = "setScoreboard", at=@At("TAIL"))
     private void updateTotals(CallbackInfo ci){
         final Map<ScoreboardObjective, Long> totalsMap = Maps.newHashMap();
 

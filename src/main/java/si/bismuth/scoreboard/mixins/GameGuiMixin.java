@@ -26,7 +26,7 @@ public class GameGuiMixin {
 //        long score = ((IScoreboardScore) scoreboardScore).bismuthServer$getLongScore();
 //
 //        return 0;
-        return value;
+        return null;
     }
 
     @ModifyVariable(method = "renderScoreboardObjective", at = @At("STORE"), ordinal = 2)
@@ -34,5 +34,6 @@ public class GameGuiMixin {
 //        long score = ((IScoreboardScore) scoreboardScore).bismuthServer$getLongScore();
 //
 //        return 0;
+        return null;
     }
 }
