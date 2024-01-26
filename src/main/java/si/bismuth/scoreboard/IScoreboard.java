@@ -7,8 +7,8 @@ import java.util.Collection;
 
 public interface IScoreboard {
     Long bismuthServer$getLongScore(String owner, ScoreboardObjective objective);
-    public Collection<ScoreboardScore> bismuthServer$getScores(ScoreboardObjective objective);
-    public Collection<ScoreboardScore> bismuthServer$getScores();
+    Collection<ScoreboardScore> bismuthServer$getScores(ScoreboardObjective objective);
+    Collection<ScoreboardScore> bismuthServer$getScores();
 
 
 }

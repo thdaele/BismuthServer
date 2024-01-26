@@ -30,7 +30,7 @@ public abstract class SavedScoreboardDataMixin {
     @Shadow
     private Scoreboard scoreboard;
 
-    @Inject(method = "setScoreboard", at=@At("TAIL"))
+    @Inject(method = "setScoreboard", at = @At("TAIL"))
     private void updateTotals(CallbackInfo ci){
         final Map<ScoreboardObjective, Long> totalsMap = Maps.newHashMap();
 
