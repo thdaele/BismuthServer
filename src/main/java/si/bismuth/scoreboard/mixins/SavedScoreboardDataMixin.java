@@ -1,6 +1,11 @@
 package si.bismuth.scoreboard.mixins;
 
 import com.google.common.collect.Maps;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalLongRef;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.scoreboard.SavedScoreboardData;
@@ -12,37 +17,33 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import si.bismuth.scoreboard.IScoreboard;
+import si.bismuth.scoreboard.IScoreboardScore;
 
+import java.util.Collection;
 import java.util.Map;
 
-import static si.bismuth.utils.ScoreboardHelper.getUpperScoreboardScoreName;
-import static si.bismuth.utils.ScoreboardHelper.upperScoreboardScorePrefix;
-
 @Mixin(SavedScoreboardData.class)
-public class SavedScoreboardDataMixin {
+public abstract class SavedScoreboardDataMixin {
     @Shadow
     private Scoreboard scoreboard;
 
     @Inject(method="setScoreboard", at=@At(value="TAIL", target="Lnet/minecraft/scoreboard/ScoreboardSaveData;readFromNBT(Lnet/minecraft/nbt/NBTTagCompound;)V"))
     private void updateTotals(CallbackInfo ci){
-        // TODO update to make sure it still works with the 64bit scoreboard
         final Map<ScoreboardObjective, Long> totalsMap = Maps.newHashMap();
 
-        for (ScoreboardScore score : scoreboard.getScores()){
+        for (ScoreboardScore score : ((IScoreboard) scoreboard).bismuthServer$getScores()){
             if (!"Total".equals(score.getOwner())){
-                totalsMap.put(score.getObjective(), totalsMap.getOrDefault(score.getObjective(), (long) 0) + score.get());
+                totalsMap.put(score.getObjective(), totalsMap.getOrDefault(score.getObjective(), (long) 0) + ((IScoreboardScore) score).bismuthServer$getLongScore());
             }
         }
 
         for (ScoreboardObjective objective : totalsMap.keySet()){
             long total = totalsMap.get(objective);
 
-            if (total > Integer.MAX_VALUE){
-                total = -1;
-            }
-
-            scoreboard.getScore("Total", objective).set((int) total);
+            ((IScoreboardScore) scoreboard.getScore("Total", objective)).bismuthServer$setLongScore(total, "Total", objective);
         }
     }
 
@@ -50,60 +51,68 @@ public class SavedScoreboardDataMixin {
      * @author thdaele
      * @reason Force storing the 64bit scoreboard as single long
      */
-    @Overwrite
-    protected NbtList scoresToNbt() {
-        NbtList nbtList = new NbtList();
+//    @Overwrite
+//    protected NbtList scoresToNbt() {
+//        NbtList nbtList = new NbtList();
+//
+//        // TODO convert this to redirect
+//        for(ScoreboardScore scoreboardScore : ((IScoreboard) this.scoreboard).bismuthServer$getScores()) {
+//            if (scoreboardScore.getObjective() != null) {
+//                NbtCompound nbtCompound = new NbtCompound();
+//                nbtCompound.putString("Name", scoreboardScore.getOwner());
+//                nbtCompound.putString("Objective", scoreboardScore.getObjective().getName());
+//                // TODO convert this to redirect
+//                nbtCompound.putLong("Score", ((IScoreboardScore) scoreboardScore).bismuthServer$getLongScore());
+//                nbtCompound.putBoolean("Locked", scoreboardScore.isLocked());
+//                nbtList.add(nbtCompound);
+//            }
+//        }
+//        return nbtList;
+//    }
 
-        for(ScoreboardScore scoreboardScore : this.scoreboard.getScores()) {
-            if (scoreboardScore.getOwner().startsWith(upperScoreboardScorePrefix)) {
-                continue;
-            }
-            if (scoreboardScore.getObjective() != null) {
-                ScoreboardObjective objective = scoreboardScore.getObjective();
-                // TODO improve this to use a reference in ScoreboardScore to upper_score
-                ScoreboardScore higher_score = this.scoreboard.getScore(getUpperScoreboardScoreName(scoreboardScore.getOwner()), objective);
-                int lower_bits = scoreboardScore.get();
-                int higher_bits = higher_score.get();
+    // The two following mixins replace the previous overwrite
 
-                long score = ((long) higher_bits) << 32 & lower_bits;
-                NbtCompound nbtCompound = new NbtCompound();
-                nbtCompound.putString("Name", scoreboardScore.getOwner());
-                nbtCompound.putString("Objective", scoreboardScore.getObjective().getName());
-                nbtCompound.putLong("Score", score);
-                nbtCompound.putBoolean("Locked", scoreboardScore.isLocked());
-                nbtList.add(nbtCompound);
-            }
-        }
-        return nbtList;
+    @Redirect(method = "scoresToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScores()Ljava/util/Collection;"))
+    private Collection<ScoreboardScore> getScores(Scoreboard instance) {
+        return ((IScoreboard) instance).bismuthServer$getScores();
+    }
+
+    @Redirect(method = "scoresToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;putInt(Ljava/lang/String;I)V"))
+    private void get(NbtCompound instance, String key, int value, @Local ScoreboardScore scoreboardScore) {
+        instance.putLong(key, ((IScoreboardScore) scoreboardScore).bismuthServer$getLongScore());
     }
 
     /**
      * @author thdaele
      * @reason Force storing the 64bit scoreboard as single long
      */
-    @Overwrite
-    protected void readScoresFromNbt(NbtList nbt) {
-        for(int i = 0; i < nbt.size(); ++i) {
-            NbtCompound nbtCompound = nbt.getCompound(i);
-            ScoreboardObjective scoreboardObjective = this.scoreboard.getObjective(nbtCompound.getString("Objective"));
-            String string = nbtCompound.getString("Name");
-            if (string.length() > 40) {
-                string = string.substring(0, 40);
-            }
+//    @Overwrite
+//    protected void readScoresFromNbt(NbtList nbt) {
+//        for(int i = 0; i < nbt.size(); ++i) {
+//            NbtCompound nbtCompound = nbt.getCompound(i);
+//            ScoreboardObjective scoreboardObjective = this.scoreboard.getObjective(nbtCompound.getString("Objective"));
+//            String string = nbtCompound.getString("Name");
+//            if (string.length() > 40) {
+//                string = string.substring(0, 40);
+//            }
+//
+//            long score = nbtCompound.getLong("Score");
+//
+//            // Lower bits
+//            ScoreboardScore scoreboardScore = this.scoreboard.getScore(string, scoreboardObjective);
+//            scoreboardScore.setLocked(nbtCompound.getBoolean("Locked"));
+//            ((IScoreboardScore) scoreboardScore).bismuthServer$setLongScore(score, string, scoreboardObjective);
+//        }
+//    }
 
-            long score = nbtCompound.getLong("Score");
-            // Lower bits
-            ScoreboardScore lower_score = this.scoreboard.getScore(string, scoreboardObjective);
-            lower_score.set((int) score);
-            if (nbtCompound.contains("Locked")) {
-                lower_score.setLocked(nbtCompound.getBoolean("Locked"));
-            }
-            // Upper bits
-            ScoreboardScore upper_score = this.scoreboard.getScore(getUpperScoreboardScoreName(string), scoreboardObjective);
-            upper_score.set((int)(score >> 32));
-            if (nbtCompound.contains("Locked")) {
-                upper_score.setLocked(nbtCompound.getBoolean("Locked"));
-            }
-        }
+    @Inject(method = "readScoresFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getScore(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreboardObjective;)Lnet/minecraft/scoreboard/ScoreboardScore;"))
+    private void LongNBT(NbtList nbt, CallbackInfo ci, @Local NbtCompound nbtCompound, @Share("scoreValue") LocalLongRef argRef) {
+        long score = nbtCompound.getLong("Score");
+        argRef.set(score);
+    }
+
+    @WrapOperation(method = "readScoresFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V"))
+    private void setScoreboard(ScoreboardScore instance, int score, Operation<Void> original, @Share("scoreValue") LocalLongRef argRef, @Local String owner, @Local ScoreboardObjective scoreboardObjective) {
+        ((IScoreboardScore) instance).bismuthServer$setLongScore(argRef.get(), owner, scoreboardObjective);
     }
 }
