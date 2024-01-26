@@ -4,19 +4,8 @@
   "minVersion": "0.7.3",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "CommandResultsMixin",
-    "EntityScoresConditionMixin",
-    "SavedScoreboardDataMixin",
-    "ScoreboardCommandMixin",
-    "ScoreboardMixin",
-    "ScoreTextMixin",
-    "ServerPlayerEntityMixin",
-    "ServerScoreboardMixin",
-    "TargetSelectorMixin",
-    "TriggerCommandMixin"
   ],
   "client": [
-    "PlayerTabOverlayMixin"
   ],
   "server": [
   ]
