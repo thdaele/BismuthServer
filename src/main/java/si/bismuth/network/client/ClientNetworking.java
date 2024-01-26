@@ -14,7 +14,6 @@ public class ClientNetworking {
 	public ClientNetworking() {
 		this.registerListener(InventoryContentsPacket::new);
 		this.registerListener(ItemLocationsPacket::new);
-		this.registerListener(ScorePacket::new);
 	}
 
 	private <T extends ClientPacket> void registerListener(Supplier<T> initializer) {
