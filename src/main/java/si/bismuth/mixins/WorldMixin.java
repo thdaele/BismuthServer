@@ -103,7 +103,10 @@ public class WorldMixin {
 		Profiler.end_current_section();
 	}
 
-	@Redirect(method = "tickEntity(Lnet/minecraft/entity/Entity;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;m_8699128()Z"))
+	// TODO fix this when linkie works
+	// old MCP method = updateEntityWithOptionalForce
+	// old MCP target = Lnet/minecraft/entity/Entity;setPositionNonDirty()Z
+	@Redirect(method = "updateEntity(Lnet/minecraft/entity/Entity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;m_8699128()Z"))
 	private boolean alwaysLoadChunk(Entity entity) {
 		return true;
 	}

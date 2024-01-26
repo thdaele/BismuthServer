@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(StainedGlassBlock.class)
 public class StainedGlassBlockMixin {
-	@Inject(method = "getMaterialColor", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "getMapColor", at = @At("HEAD"), cancellable = true)
 	private void remapStainedGlassMapColor(BlockState state, WorldView world, BlockPos pos, CallbackInfoReturnable<MapColor> cir) {
 		cir.setReturnValue(MapColor.AIR);
 	}
