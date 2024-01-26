@@ -16,6 +16,8 @@ import si.bismuth.network.server.ServerNetworking;
 import si.bismuth.utils.HUDController;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class BismuthServer implements ModInitializer {
 	public static final String BISMUTH_SERVER_VERSION = "1.2.6";
@@ -23,6 +25,8 @@ public class BismuthServer implements ModInitializer {
 	public static final ServerNetworking networking = new ServerNetworking();
 	public static MinecraftServer server;
 	public static DCBot bot;
+
+	public static final ArrayList<UUID> joinedPlayers = new ArrayList<>();
 
 	@Override
     public void init() {
@@ -72,6 +76,13 @@ public class BismuthServer implements ModInitializer {
 
 		LoggerRegistry.playerConnected(player);
 		BismuthRecipeManager.unlockCustomRecipes(player);
+
+		// TODO make a proper implementation to keep logs persistent
+		if (!joinedPlayers.contains(player.getUuid())) {
+			joinedPlayers.add(player.getUuid());
+			player.server.commandHandler.run(player.asEntity(), "/log tps");
+			player.server.commandHandler.run(player.asEntity(), "/log mobcaps");
+		}
 	}
 
 	public static void playerDisconnected(MinecraftServer server, ServerPlayerEntity player) {
