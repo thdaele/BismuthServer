@@ -7,20 +7,21 @@ import net.minecraft.world.GameMode;
 import net.ornithemc.osl.entrypoints.api.ModInitializer;
 import net.ornithemc.osl.lifecycle.api.server.MinecraftServerEvents;
 import net.ornithemc.osl.networking.api.server.ServerConnectionEvents;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import si.bismuth.discord.DCBot;
 import si.bismuth.logging.LoggerRegistry;
 import si.bismuth.network.server.ServerNetworking;
+import si.bismuth.utils.BismuthRecipeManager;
 import si.bismuth.utils.HUDController;
+import si.bismuth.utils.ScoreboardHelper;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class BismuthServer implements ModInitializer {
-	public static final String BISMUTH_SERVER_VERSION = "1.2.6";
+	public static final String BISMUTH_SERVER_VERSION = "2.0.0";
 	public static final Logger log = LogManager.getLogger("Bismuth");
 	public static final ServerNetworking networking = new ServerNetworking();
 	public static MinecraftServer server;
@@ -32,6 +33,7 @@ public class BismuthServer implements ModInitializer {
     public void init() {
 		MinecraftServerEvents.START.register(BismuthServer::init);
 		MinecraftServerEvents.LOAD_WORLD.register(BismuthServer::onServerLoaded);
+		MinecraftServerEvents.PREPARE_WORLD.register(BismuthServer::onWorldLoaded);
 		MinecraftServerEvents.STOP.register(BismuthServer::stop);
 		MinecraftServerEvents.TICK_START.register(BismuthServer::tick);
 
@@ -50,9 +52,13 @@ public class BismuthServer implements ModInitializer {
 			try {
 				BismuthServer.bot = new DCBot(((DedicatedServer) server).getPropertyOrDefault("botToken", ""), server.isOnlineMode());
 			} catch (LoginException | InterruptedException e) {
-				throw new RuntimeException("error setting up discord bot", e);
+				throw new RuntimeException("Error setting up discord bot", e);
 			}
 		}
+	}
+
+	public static void onWorldLoaded(MinecraftServer minecraftServer) {
+		ScoreboardHelper.init();
 	}
 
 	public static void stop(MinecraftServer server) {

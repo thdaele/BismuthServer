@@ -11,7 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScoreboardHelper {
-	private static final ServerScoreboard board = (ServerScoreboard) BismuthServer.server.getWorld(0).getScoreboard();
+	private static ServerScoreboard board;
+
+	public static void init() {
+		board = (ServerScoreboard) BismuthServer.server.getWorld(0).getScoreboard();
+	}
 
 	public static void setScoreboard(List<String> args, int displaySlot) {
 		final ScoreboardObjective objective = ScoreboardHelper.getObjective(args, board);
