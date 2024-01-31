@@ -1,4 +1,4 @@
-package si.bismuth;
+package si.bismuth.utils;
 
 import com.google.common.collect.Lists;
 
@@ -13,7 +13,6 @@ import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.util.DefaultedList;
 
 public class BismuthRecipeManager {
-
 	private static final Ingredient PAPER = Ingredient.of(Items.PAPER);
 	private static final Ingredient SULPHUR = Ingredient.of(Items.GUNPOWDER);
 	private static final Recipe DURATION_1 = new ShapelessRecipe("rocket", makeFirework(1), DefaultedList.of(Ingredient.EMPTY, PAPER, SULPHUR));
