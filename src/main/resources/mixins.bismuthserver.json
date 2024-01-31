@@ -19,7 +19,6 @@
 		"IServerWorld",
 		"IShulkerBoxBlock",
 		"ITabListS2CPacket",
-		"ItemEntityMixin",
 		"IXpOrbEntity",
 		"LivingEntityMixin",
 		"MinecartEntityMixin",
@@ -52,6 +51,7 @@
 	],
 	"server": [
 		"DedicatedServerMixin",
-		"RconClientMixin"
+		"RconClientMixin",
+		"ItemEntityMixin"
 	]
 }
