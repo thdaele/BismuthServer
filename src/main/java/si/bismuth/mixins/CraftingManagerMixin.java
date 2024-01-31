@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.crafting.CraftingManager;
 
-import si.bismuth.BismuthRecipeManager;
+import si.bismuth.utils.BismuthRecipeManager;
 
 @Mixin(CraftingManager.class)
 public class CraftingManagerMixin {

@@ -66,11 +66,11 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
     public Long bismuthServer$getLongScore() {
         int lowerBits = this.get();
         if (upperScore == null) {
-            return (long) lowerBits;
+            bismuthServer$createUpperScore(owner, objective);
         }
         int higher_bits = upperScore.get();
 
-        return ((long) higher_bits) << 32 & lowerBits;
+        return (((long) higher_bits) << 32) | (lowerBits & 0xffffffffL);
     }
 
     public void bismuthServer$setLongScore(Long value, String owner, ScoreboardObjective objective) {

@@ -9,6 +9,4 @@ public interface IScoreboard {
     Long bismuthServer$getLongScore(String owner, ScoreboardObjective objective);
     Collection<ScoreboardScore> bismuthServer$getScores(ScoreboardObjective objective);
     Collection<ScoreboardScore> bismuthServer$getScores();
-
-
 }
