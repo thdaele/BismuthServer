@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(MinecartEntity.class)
 public class MinecartEntityMixin {
 	@ModifyConstant(method = "moveOnRail", constant = @Constant(classValue = LivingEntity.class, ordinal = 0))
-	private Class<? extends LivingEntity> mc64836(Class constant) {
+	private Class<? extends LivingEntity> mc64836(Object object, Class constant) {
 		return PlayerEntity.class;
 	}
 }

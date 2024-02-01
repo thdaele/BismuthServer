@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(SizePrepender.class)
 public class SizePrependerMixin {
-	@ModifyConstant(method = "encode", constant = @Constant(intValue = 3))
+	@ModifyConstant(method = "encode*", constant = @Constant(intValue = 3))
 	private int fixBookBan(int value) {
 		return Integer.MAX_VALUE;
 	}
