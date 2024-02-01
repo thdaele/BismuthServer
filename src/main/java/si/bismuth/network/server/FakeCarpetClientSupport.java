@@ -3,13 +3,12 @@ package si.bismuth.network.server;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.entity.living.player.ServerPlayerEntity;
-import si.bismuth.BismuthServer;
+import si.bismuth.network.BisPacket;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-public class FakeCarpetClientSupport implements ServerPacket {
+public class FakeCarpetClientSupport implements BisPacket {
 	public FakeCarpetClientSupport() {
 		// noop
 	}
@@ -40,10 +39,5 @@ public class FakeCarpetClientSupport implements ServerPacket {
 	@Override
 	public String getChannel() {
 		return "carpet:client";
-	}
-
-	@Override
-	public void handle(ServerPlayerEntity player) {
-		BismuthServer.networking.sendPacket(player, new FakeCarpetClientSupport());
 	}
 }

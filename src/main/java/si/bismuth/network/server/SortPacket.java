@@ -1,13 +1,11 @@
 package si.bismuth.network.server;
 
+import net.minecraft.network.PacketByteBuf;
+import si.bismuth.network.BisPacket;
+
 import java.io.IOException;
 
-import net.minecraft.inventory.Inventory;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.entity.living.player.ServerPlayerEntity;
-import si.bismuth.utils.InventoryHelper;
-
-public class SortPacket implements ServerPacket {
+public class SortPacket implements BisPacket {
 
 	private boolean isPlayerInv;
 
@@ -33,17 +31,7 @@ public class SortPacket implements ServerPacket {
 		return "Bis|Sort";
 	}
 
-	@Override
-	public void handle(ServerPlayerEntity player) {
-		if (player.isSpectator()) {
-			return;
-		}
-
-		if (this.isPlayerInv) {
-			InventoryHelper.sortInv(player.inventory, 9, 27);
-		} else {
-			final Inventory inv = player.menu.getSlot(0).inventory;
-			InventoryHelper.sortInv(inv, 0, inv.getSize());
-		}
+	public boolean isPlayerInv() {
+		return isPlayerInv;
 	}
 }
