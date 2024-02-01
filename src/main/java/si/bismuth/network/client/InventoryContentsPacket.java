@@ -1,12 +1,13 @@
 package si.bismuth.network.client;
 
-import java.io.IOException;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.DefaultedList;
+import si.bismuth.network.BisPacket;
 
-public class InventoryContentsPacket implements ClientPacket {
+import java.io.IOException;
+
+public class InventoryContentsPacket implements BisPacket {
 
 	private DefaultedList<ItemStack> contents;
 
@@ -37,10 +38,5 @@ public class InventoryContentsPacket implements ClientPacket {
 	@Override
 	public String getChannel() {
 		return "Bis|InvContents";
-	}
-
-	@Override
-	public void handle() {
-		// TODO use data for something ig
 	}
 }

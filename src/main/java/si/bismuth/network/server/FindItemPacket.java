@@ -1,13 +1,12 @@
 package si.bismuth.network.server;
 
-import java.io.IOException;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.entity.living.player.ServerPlayerEntity;
-import si.bismuth.utils.InventoryHelper;
+import si.bismuth.network.BisPacket;
 
-public class FindItemPacket implements ServerPacket {
+import java.io.IOException;
+
+public class FindItemPacket implements BisPacket {
 
 	private ItemStack stack;
 
@@ -33,8 +32,7 @@ public class FindItemPacket implements ServerPacket {
 		return "Bis|FindItem";
 	}
 
-	@Override
-	public void handle(ServerPlayerEntity player) {
-		InventoryHelper.processFindItem(player, this.stack);
+	public ItemStack getStack() {
+		return this.stack;
 	}
 }
