@@ -22,7 +22,7 @@ public class RecipePlacementHelperMixin {
 	@Shadow
 	private CraftingInventory craftingInventory;
 
-	@Inject(method = "clickRecipe", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/crafting/RecipePlacementHelper;takeBackIngredients()V", shift = At.Shift.AFTER))
+	@Inject(method = "clickRecipe*", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/crafting/RecipePlacementHelper;takeBackIngredients()V", shift = At.Shift.AFTER))
 	private void dupingBug(ServerPlayerEntity player, Recipe recipe, boolean hasShiftDown, CallbackInfo ci) {
 		this.craftingWindowDupingBugAddedBack(player);
 	}

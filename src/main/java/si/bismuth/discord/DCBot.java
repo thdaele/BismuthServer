@@ -11,16 +11,9 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Formatting;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.*;
 import net.minecraft.util.math.MathHelper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import si.bismuth.BismuthServer;
 
 import javax.security.auth.login.LoginException;
@@ -29,7 +22,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class DCBot extends ListenerAdapter {
-	private final static Logger LOGGER = LogManager.getLogger();
 	private final static long BismuthID = 635252849571266580L;
 	private final static long ChannelID = 635254222916419590L;
 	private final static String channelURL = String.format("https://discordapp.com/channels/%d/%d/", BismuthID, ChannelID);

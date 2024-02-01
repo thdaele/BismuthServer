@@ -73,11 +73,13 @@ public class BismuthServer implements ModInitializer {
 	}
 
 	public static void playerConnected(MinecraftServer server, ServerPlayerEntity player) {
-		final GameMode mode = player.interactionManager.getGameMode();
-		if (mode == GameMode.CREATIVE) {
-			player.setGameMode(GameMode.SPECTATOR);
-		} else if (mode == GameMode.ADVENTURE) {
-			player.setGameMode(GameMode.SURVIVAL);
+		if (BismuthServer.server.isOnlineMode()) {
+			final GameMode mode = player.interactionManager.getGameMode();
+			if (mode == GameMode.CREATIVE) {
+				player.setGameMode(GameMode.SPECTATOR);
+			} else if (mode == GameMode.ADVENTURE) {
+				player.setGameMode(GameMode.SURVIVAL);
+			}
 		}
 
 		LoggerRegistry.playerConnected(player);

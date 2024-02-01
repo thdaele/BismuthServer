@@ -11,7 +11,6 @@ import si.bismuth.utils.BismuthRecipeManager;
 
 @Mixin(CraftingManager.class)
 public class CraftingManagerMixin {
-
 	@Inject(
 		method = "init",
 		cancellable = true,
