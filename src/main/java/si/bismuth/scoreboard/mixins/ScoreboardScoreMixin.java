@@ -38,7 +38,7 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
 
     @Shadow public abstract ScoreboardObjective getObjective();
 
-    @Inject(method= "increase", at = @At("RETURN"))
+    @Inject(method = "increase", at = @At("RETURN"))
     private void increaseTotal(int amount, CallbackInfo ci){
         if (!"Total".equals(owner)) {
             ScoreboardScore totalScore = scoreboard.getScore("Total", objective);

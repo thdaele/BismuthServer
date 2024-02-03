@@ -30,11 +30,11 @@ public abstract class SavedScoreboardDataMixin {
     private Scoreboard scoreboard;
 
     @Inject(method = "setScoreboard", at = @At("TAIL"))
-    private void updateTotals(CallbackInfo ci){
+    private void updateTotals(CallbackInfo ci) {
         final Map<ScoreboardObjective, Long> totalsMap = Maps.newHashMap();
 
-        for (ScoreboardScore score : ((IScoreboard) scoreboard).bismuthServer$getScores()){
-            if (!"Total".equals(score.getOwner())){
+        for (ScoreboardScore score : ((IScoreboard) scoreboard).bismuthServer$getScores()) {
+            if (!"Total".equals(score.getOwner())) {
                 totalsMap.put(score.getObjective(), totalsMap.getOrDefault(score.getObjective(), (long) 0) + ((IScoreboardScore) score).bismuthServer$getLongScore());
             }
         }
