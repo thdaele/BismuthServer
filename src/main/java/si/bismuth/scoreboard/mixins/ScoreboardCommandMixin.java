@@ -1,19 +1,47 @@
 package si.bismuth.scoreboard.mixins;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalLongRef;
 import net.minecraft.scoreboard.ScoreboardScore;
 import net.minecraft.server.command.ScoreboardCommand;
+import net.minecraft.server.command.exception.CommandException;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import si.bismuth.scoreboard.IScoreboardScore;
 
+import static net.minecraft.server.command.AbstractCommand.parseLong;
+
 @Mixin(ScoreboardCommand.class)
 public class ScoreboardCommandMixin {
-    // TODO in same method try to parse a long should be easier with the mixinextras
+    @WrapOperation(method = "setScore", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ScoreboardCommand;parseInt(Ljava/lang/String;)I"))
+    private int parse1(String string, Operation<Integer> original, @Share("long") LocalLongRef localLongRef) throws CommandException {
+        localLongRef.set(parseLong(string));
+        return original.call(string);
+    }
+
+    @WrapOperation(method = "setScore", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/ScoreboardCommand;parseInt(Ljava/lang/String;I)I"))
+    private int parse2(String string, int i, Operation<Integer> original, @Share("long") LocalLongRef localLongRef) throws CommandException {
+        localLongRef.set(parseLong(string, i, Long.MAX_VALUE));
+        return original.call(string, i);
+    }
+
     @Redirect(method = "setScore", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V"))
-    private void setScore(ScoreboardScore instance, int score) {
-        ((IScoreboardScore) instance).bismuthServer$setLongScore((long) score);
+    private void setScore(ScoreboardScore instance, int score, @Share("long") LocalLongRef localLongRef) {
+        ((IScoreboardScore) instance).bismuthServer$setLongScore(localLongRef.get());
+    }
+
+    @Redirect(method = "setScore", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;increase(I)V"))
+    private void increase(ScoreboardScore instance, int amount, @Share("long") LocalLongRef localLongRef) {
+        ((IScoreboardScore) instance).bismuthServer$longIncrease(localLongRef.get());
+    }
+
+    @Redirect(method = "setScore", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;decrease(I)V"))
+    private void decrease(ScoreboardScore instance, int amount, @Share("long") LocalLongRef localLongRef) {
+        ((IScoreboardScore) instance).bismuthServer$longDecrease(localLongRef.get());
     }
 
     @Redirect(method = "modifyScore", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V", ordinal = 0))

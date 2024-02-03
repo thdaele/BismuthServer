@@ -81,4 +81,20 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
     public void bismuthServer$createUpperScore() {
         upperScore = this.scoreboard.getScore(getUpperScoreboardScoreName(owner), objective);
     }
+
+    public void bismuthServer$longIncrease(long amount) {
+        if (this.objective.getCriterion().isReadOnly()) {
+            throw new IllegalStateException("Cannot modify read-only score");
+        } else {
+            this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() + amount);
+        }
+    }
+
+    public void bismuthServer$longDecrease(long amount) {
+        if (this.objective.getCriterion().isReadOnly()) {
+            throw new IllegalStateException("Cannot modify read-only score");
+        } else {
+            this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() - amount);
+        }
+    }
 }
