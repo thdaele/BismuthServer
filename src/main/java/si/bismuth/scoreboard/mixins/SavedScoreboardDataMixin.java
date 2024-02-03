@@ -42,7 +42,7 @@ public abstract class SavedScoreboardDataMixin {
         for (ScoreboardObjective objective : totalsMap.keySet()){
             long total = totalsMap.get(objective);
 
-            ((IScoreboardScore) scoreboard.getScore("Total", objective)).bismuthServer$setLongScore(total, "Total", objective);
+            ((IScoreboardScore) scoreboard.getScore("Total", objective)).bismuthServer$setLongScore(total);
         }
     }
 
@@ -63,7 +63,7 @@ public abstract class SavedScoreboardDataMixin {
     }
 
     @WrapOperation(method = "readScoresFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V"))
-    private void setScoreboard(ScoreboardScore instance, int score, Operation<Void> original, @Share("scoreValue") LocalLongRef argRef, @Local String owner, @Local ScoreboardObjective scoreboardObjective) {
-        ((IScoreboardScore) instance).bismuthServer$setLongScore(argRef.get(), owner, scoreboardObjective);
+    private void setScoreboard(ScoreboardScore instance, int score, Operation<Void> original, @Share("scoreValue") LocalLongRef argRef) {
+        ((IScoreboardScore) instance).bismuthServer$setLongScore(argRef.get());
     }
 }

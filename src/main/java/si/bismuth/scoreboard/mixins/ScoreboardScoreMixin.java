@@ -34,10 +34,6 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
     @Shadow
     public abstract void set(int score);
 
-    @Shadow public abstract String getOwner();
-
-    @Shadow public abstract ScoreboardObjective getObjective();
-
     @Inject(method = "increase", at = @At("RETURN"))
     private void increaseTotal(int amount, CallbackInfo ci){
         if (!"Total".equals(owner)) {
@@ -48,12 +44,12 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
 
     @Redirect(method = "increase", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V"))
     private void increase(ScoreboardScore instance, int score, @Local(argsOnly = true) int amount) {
-        this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() + (long) amount, this.getOwner(), this.getObjective());
+        this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() + (long) amount);
     }
 
     @Redirect(method = "decrease", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V"))
     private void decrease(ScoreboardScore instance, int score, @Local(argsOnly = true) int amount) {
-        this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() - (long) amount, this.getOwner(), this.getObjective());
+        this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() - (long) amount);
     }
 
     @Inject(method = "setLocked", at = @At("TAIL"))
@@ -66,23 +62,23 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
     public Long bismuthServer$getLongScore() {
         int lowerBits = this.get();
         if (upperScore == null) {
-            bismuthServer$createUpperScore(owner, objective);
+            bismuthServer$createUpperScore();
         }
         int higher_bits = upperScore.get();
 
         return (((long) higher_bits) << 32) | (lowerBits & 0xffffffffL);
     }
 
-    public void bismuthServer$setLongScore(Long value, String owner, ScoreboardObjective objective) {
+    public void bismuthServer$setLongScore(Long value) {
         this.set(value.intValue());
 
         if (upperScore == null) {
-            bismuthServer$createUpperScore(owner, objective);
+            bismuthServer$createUpperScore();
         }
         upperScore.set((int)(value >> 32));
     }
 
-    public void bismuthServer$createUpperScore(String owner, ScoreboardObjective objective) {
+    public void bismuthServer$createUpperScore() {
         upperScore = this.scoreboard.getScore(getUpperScoreboardScoreName(owner), objective);
     }
 }
