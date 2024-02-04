@@ -42,6 +42,14 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
         }
     }
 
+    @Inject(method = "decrease", at = @At("RETURN"))
+    private void decreaseTotal(int amount, CallbackInfo ci){
+        if (!"Total".equals(owner)) {
+            ScoreboardScore totalScore = scoreboard.getScore("Total", objective);
+            totalScore.decrease(amount);
+        }
+    }
+
     @Redirect(method = "increase", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V"))
     private void increase(ScoreboardScore instance, int score, @Local(argsOnly = true) int amount) {
         this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() + (long) amount);
@@ -87,6 +95,10 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
             throw new IllegalStateException("Cannot modify read-only score");
         } else {
             this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() + amount);
+            if (!"Total".equals(owner)) {
+                ScoreboardScore totalScore = scoreboard.getScore("Total", objective);
+                ((IScoreboardScore) totalScore).bismuthServer$longIncrease(amount);
+            }
         }
     }
 
@@ -95,6 +107,10 @@ public abstract class ScoreboardScoreMixin implements IScoreboardScore {
             throw new IllegalStateException("Cannot modify read-only score");
         } else {
             this.bismuthServer$setLongScore(this.bismuthServer$getLongScore() - amount);
+            if (!"Total".equals(owner)) {
+                ScoreboardScore totalScore = scoreboard.getScore("Total", objective);
+                ((IScoreboardScore) totalScore).bismuthServer$longDecrease(amount);
+            }
         }
     }
 }

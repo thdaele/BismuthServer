@@ -18,8 +18,11 @@ import static net.minecraft.server.command.AbstractCommand.parseLong;
 public class TriggerCommandMixin {
     @WrapOperation(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/command/TriggerCommand;parseInt(Ljava/lang/String;)I"))
     private int parse(String string, Operation<Integer> original, @Share("long") LocalLongRef localLongRef) throws CommandException {
-        localLongRef.set(parseLong(string));
-        return original.call(string);
+        long value = parseLong(string);
+        localLongRef.set(value);
+
+        // Calling original leads to not valid int exception if we want to parse a long so we cast to an int
+        return (int) value;
     }
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/ScoreboardScore;set(I)V"))
