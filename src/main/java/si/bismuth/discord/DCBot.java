@@ -47,6 +47,7 @@ public class DCBot extends ListenerAdapter {
 	}
 
 	public void shutDownBot() {
+		this.sendToDiscord("Server stopped!");
 		this.jda.shutdown();
 	}
 
