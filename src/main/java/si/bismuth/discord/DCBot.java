@@ -17,6 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import si.bismuth.BismuthServer;
 
 import javax.security.auth.login.LoginException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -28,6 +30,7 @@ public class DCBot extends ListenerAdapter {
 	private final static String PREFIX = ";";
 	private final boolean isTestServer;
 	private final JDA jda;
+	public static final LocalDateTime BOT_START_TIME = LocalDateTime.now();
 
 	public DCBot(String token, boolean isOnlineMode) throws LoginException, InterruptedException {
 		isTestServer = !isOnlineMode;
@@ -130,9 +133,44 @@ public class DCBot extends ListenerAdapter {
 				channel.sendMessageEmbeds(embed).queue();
 			});
 		}
+
+		if (this.isCommand(command, new String[]{"uptime"})) {
+			channel.sendMessage(getUpTime()).queue();
+		}
 	}
 
 	private boolean isCommand(String text, String[] command) {
 		return Arrays.stream(command).anyMatch(s -> text.startsWith(PREFIX + s));
+	}
+
+	public String getUpTime() {
+		LocalDateTime endTime = LocalDateTime.now();
+		Duration botUpTime = Duration.between(BOT_START_TIME, endTime);
+		// Didn't find any way to format it nicely so this will do fine
+		String upTime = "Uptime: ";
+
+		long days = botUpTime.toDays();
+		botUpTime = botUpTime.minusDays(days);
+
+		long hours = botUpTime.toHours();
+		botUpTime = botUpTime.minusHours(hours);
+
+		long minutes = botUpTime.toMinutes();
+		botUpTime = botUpTime.minusMinutes(minutes);
+
+		long seconds = botUpTime.getSeconds();
+		if (days > 0) {
+			upTime += String.format("%s day%s ", days, days > 1 ? "s" : "");
+		}
+		if (hours > 0) {
+			upTime += String.format("%s hour%s ", hours, hours > 1 ? "s" : "");
+		}
+		if (minutes > 0) {
+			upTime += String.format("%s minute%s ", minutes, minutes > 1 ? "s" : "");
+		}
+		if (seconds > 0) {
+			upTime += String.format("%s second%s ", seconds, seconds > 1 ? "s" : "");
+		}
+		return upTime;
 	}
 }
