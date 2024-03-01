@@ -23,8 +23,10 @@
 	"mixins": [
 		"mixins.bismuthserver.json",
 		"mixins.bismuthserver.movablete.json",
-		"mixins.bismuthserver.scoreboard.json"
+		"mixins.bismuthserver.scoreboard.json",
+		"mixins.bismuthserver.stats.json"
 	],
+	"accessWidener": "bismuthserver.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "1.12.2",

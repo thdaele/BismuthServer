@@ -19,6 +19,10 @@ repositories {
 	mavenCentral()
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/bismuthserver.accesswidener")
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.ornithemc:feather:${project.minecraft_version}+build.${project.feather_build}:v2"

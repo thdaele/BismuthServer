@@ -1,0 +1,30 @@
+{
+  "package": "si.bismuth.stats.mixins",
+  "refmap": "mixins.bismuthserver.refmap.json",
+  "minVersion": "0.7.3",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "DistanceFormatterMixin",
+    "DivideByTenFormatterMixin",
+    "NumberFormatterMixin",
+    "PlayerStatsMixin",
+    "ServerPlayerEntityMixin",
+    "ServerPlayerStatsMixin",
+    "StatCounterMixin",
+    "StatMixin",
+    "TimeFormatterMixin"
+  ],
+  "client": [
+    "CraftPlanksTutorialStepMixin",
+    "FindTreeTutorialStepMixin",
+    "StatsScreen.AbstractStatsListWidgetMixin",
+    "StatsScreen.EntityStatsListWidgetMixin",
+    "StatsScreen.GeneralStatsListWidgetMixin",
+    "StatsScreen.ItemStatsListWidgetMixin",
+    "StatsScreen.ItemStatsListWidgetStatComparatorMixin",
+    "StatsScreen.StatsListWidgetMixin",
+    "StatsScreen.StatsListWidgetStatComparatorMixin"
+  ],
+  "server": [
+  ]
+}
