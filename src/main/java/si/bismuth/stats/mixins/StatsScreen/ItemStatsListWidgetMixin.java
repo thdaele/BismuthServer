@@ -62,7 +62,6 @@ class ItemStatsListWidgetStatComparatorMixin {
 
     @Inject(method = "compare(Lnet/minecraft/stat/ItemStat;Lnet/minecraft/stat/ItemStat;)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/PlayerStats;get(Lnet/minecraft/stat/Stat;)I"), cancellable = true)
     public void compare(ItemStat itemStat, ItemStat itemStat2, CallbackInfoReturnable<Integer> cir, @Local(ordinal = 0) Stat stat, @Local(ordinal = 1) Stat stat2, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j) {
-        BismuthClient.log.log(Level.WARN, "Yeeet");
         long k = ((IPlayerStats) f_5153485.stats).bismuthServer$getLongStat(stat);
         long l = ((IPlayerStats) f_5153485.stats).bismuthServer$getLongStat(stat2);
         if (k != l) {

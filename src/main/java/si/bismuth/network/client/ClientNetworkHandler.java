@@ -33,7 +33,6 @@ public class ClientNetworkHandler {
         }
 
         if (BismuthClient.minecraft.screen instanceof StatsListener) {
-            // TODO trace this method and render the long correctly
             ((StatsListener)BismuthClient.minecraft.screen).m_6496620();
         }
     }

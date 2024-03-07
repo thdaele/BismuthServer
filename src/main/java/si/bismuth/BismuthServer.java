@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class BismuthServer implements ModInitializer {
-	public static final String BISMUTH_SERVER_VERSION = "2.0.0";
+	public static final String BISMUTH_SERVER_VERSION = "2.1.0";
 	public static final Logger log = LogManager.getLogger("Bismuth");
 	public static final ServerNetworking networking = new ServerNetworking();
 	public static MinecraftServer server;
