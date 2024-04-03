@@ -4,7 +4,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.entity.living.player.ServerPlayerEntity;
 import net.minecraft.world.GameMode;
-import net.ornithemc.osl.entrypoints.api.ModInitializer;
+import net.ornithemc.osl.entrypoints.api.server.ServerModInitializer;
 import net.ornithemc.osl.lifecycle.api.server.MinecraftServerEvents;
 import net.ornithemc.osl.networking.api.server.ServerConnectionEvents;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +20,7 @@ import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class BismuthServer implements ModInitializer {
+public class BismuthServer implements ServerModInitializer {
 	public static final String BISMUTH_SERVER_VERSION = "2.1.0";
 	public static final Logger log = LogManager.getLogger("Bismuth");
 	public static final ServerNetworking networking = new ServerNetworking();
@@ -30,7 +30,7 @@ public class BismuthServer implements ModInitializer {
 	public static final ArrayList<UUID> joinedPlayers = new ArrayList<>();
 
 	@Override
-    public void init() {
+    public void initServer() {
 		MinecraftServerEvents.START.register(BismuthServer::init);
 		MinecraftServerEvents.LOAD_WORLD.register(BismuthServer::onServerLoaded);
 		MinecraftServerEvents.PREPARE_WORLD.register(BismuthServer::onWorldLoaded);
