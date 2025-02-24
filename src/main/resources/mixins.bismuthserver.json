@@ -42,7 +42,9 @@
 		"TraderMenuMixin",
 		"WorldChunkMixin",
 		"WorldMixin",
-		"XpOrbEntityMixin"
+		"XpOrbEntityMixin",
+		"DispenserBlockMixin",
+		"HopperBlockMixin"
 	],
 	"client": [
 		"IInventoryMenuScreenMixin",
