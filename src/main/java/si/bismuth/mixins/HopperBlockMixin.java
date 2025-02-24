@@ -17,11 +17,6 @@ import java.util.List;
 public class HopperBlockMixin {
     @Inject(method = "neighborChanged", at = @At("TAIL"))
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, CallbackInfo ci) {
-        List<ServerPlayerEntity> players = world.getServer().getPlayerManager().getAll();
-        if (players != null) {
-            for (ServerPlayerEntity player : players) {
-                player.networkHandler.sendPacket(new BlockUpdateS2CPacket(world, pos));
-            }
-        }
+        world.notifyBlockChanged(pos, state, state, 0);
     }
 }
