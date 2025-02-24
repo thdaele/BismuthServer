@@ -11,13 +11,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import java.util.List;
 
 @Mixin(HopperBlock.class)
 public class HopperBlockMixin {
     @Inject(method = "neighborChanged", at = @At("TAIL"))
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighborPos, CallbackInfo ci) {
-        if (world.getServer().getPlayerManager().getAll() != null) {
-            for (ServerPlayerEntity player : world.getServer().getPlayerManager().getAll()) {
+        List<ServerPlayerEntity> players = world.getServer().getPlayerManager().getAll();
+        if (players != null) {
+            for (ServerPlayerEntity player : players) {
                 player.networkHandler.sendPacket(new BlockUpdateS2CPacket(world, pos));
             }
         }
